@@ -1,7 +1,7 @@
 {
   "name": "atom-lint",
   "main": "./lib/atom-lint",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "description": "Generic code linting support",
   "repository": "https://github.com/yujinakayama/atom-lint",
