@@ -7,11 +7,10 @@ class RubocopLinter
   constructor: (@filePath) ->
 
   run: (callback) ->
-    @runRubocop (stdout, error) =>
+    @runRubocop (result, error) =>
       if error
         callback(null, error)
       else
-        result = JSON.parse(stdout)
         file = result.files[0]
         offenses = file.violations || file.offences
         violations = offenses.map(@createViolationFromOffense)
@@ -41,9 +40,13 @@ class RubocopLinter
 
     rubocop.on 'close', (exitCode) ->
       if exitCode == 0 || exitCode == 1
-        callback(stdout, null)
+        try
+          result = JSON.parse(stdout)
+          callback(result, null)
+        catch error
+          callback(null, error)
       else
-        callback(stdout, "Process exited with code #{exitCode}")
+        callback(null, "Process exited with code #{exitCode}")
 
     rubocop.on 'error', (error) ->
       callback(stdout, error)
