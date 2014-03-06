@@ -2,7 +2,7 @@
 
 Generic code linting support for [Atom](https://atom.io).
 
-![Screenshot](doc/screenshot.png)
+![Screenshot](https://raw.github.com/yujinakayama/atom-lint/master/doc/screenshot.png)
 
 `atom-lint` is currently in alpha development.
 
