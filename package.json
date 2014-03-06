@@ -1,0 +1,15 @@
+{
+  "name": "atom-lint",
+  "main": "./lib/atom-lint",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Generic code linting support",
+  "repository": "https://github.com/yujinakayama/atom-lint",
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {
+    "season": "^1.0.2"
+  }
+}

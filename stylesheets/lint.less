@@ -1,0 +1,42 @@
+// The ui-variables file is provided by base themes provided by Atom.
+//
+// See https://github.com/atom/atom-dark-ui/blob/master/stylesheets/ui-variables.less
+// for a full listing of what's available.
+@import 'ui-variables';
+
+.lint {
+  .violation {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-color: transparent;
+    border-top-width: 0;
+
+    &.info {
+      border-bottom-color: @text-color-info;
+    }
+
+    &.warning {
+      border-bottom-color: @text-color-warning;
+    }
+
+    &.error {
+      border-bottom-color: @text-color-error;
+    }
+  }
+
+  .tooltip {
+    font-family: @font-family
+  }
+
+  .tooltip.bottom .tooltip-arrow {
+    left: 0 !important;
+    margin-left: 0 !important;
+    border-left-width: 0 !important;
+  }
+
+  .tooltip.bottom .tooltip-inner {
+    border-top-left-radius: 0 !important;
+  }
+}
