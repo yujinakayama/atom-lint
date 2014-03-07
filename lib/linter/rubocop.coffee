@@ -13,7 +13,7 @@ class Rubocop
         callback(null, error)
       else
         file = result.files[0]
-        offenses = file.violations || file.offences
+        offenses = file.offenses || file.offences
         violations = offenses.map(@createViolationFromOffense)
         callback(violations, null)
 

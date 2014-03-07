@@ -2,6 +2,8 @@
 
 ## Development
 
+* Fix wrong use of key for offenses in RuboCop's JSON result.
+
 ## v0.1.2
 
 * Use `PATH` of the login shell even if Atom is launched from Finder or Dock so that executable `rubocop` can be found properly. ([#1](https://github.com/yujinakayama/atom-lint/issues/1))
