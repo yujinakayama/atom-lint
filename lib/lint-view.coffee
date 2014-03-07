@@ -12,7 +12,11 @@ class RubocopView extends View
 
   initialize: (@editorView) ->
     @editor = @editorView.getEditor()
+    @gutterView = @editorView.gutter
+
+    @violations = []
     @violationViews = []
+
     @enableIfSupportedGrammar()
     @subscribe @editor, 'grammar-changed', =>
       @enableIfSupportedGrammar()
@@ -29,23 +33,33 @@ class RubocopView extends View
     linterPath = "./linter/#{linterName}"
     @linterConstructor = require linterPath
 
-    @update()
+    @lint()
     @bufferSubscription = @subscribe @editor.getBuffer(), 'saved', =>
-      @update()
+      @lint()
+    # http://discuss.atom.io/t/decorating-the-left-gutter/1321/4
+    @editorViewSubscription = @subscribe @editorView, 'editor:display-updated', =>
+      @updateGutterMarkers()
 
   disable: ->
-    @bufferSubscription?.off()
-    @removeViolationViews()
+    @violations = []
 
-  update: ->
+    @editorViewSubscription?.off()
+    @bufferSubscription?.off()
+
+    @removeViolationViews()
+    @updateGutterMarkers()
+
+  lint: ->
     filePath = @editor.getBuffer().getUri()
     linter = new @linterConstructor(filePath)
     linter.run (violations, error) =>
+      @violations = violations
       if error
         console.log(error)
       else
         @removeViolationViews()
         @addViolationViews(violations)
+        @updateGutterMarkers()
 
   addViolationViews: (violations) ->
     for violation in violations
@@ -56,6 +70,19 @@ class RubocopView extends View
   removeViolationViews: ->
     while view = @violationViews.shift()
       view.remove()
+
+  updateGutterMarkers: ->
+    return unless @gutterView.isVisible()
+
+    @gutterView.removeClassFromAllLines('lint-warning')
+    @gutterView.removeClassFromAllLines('lint-error')
+
+    return unless @violations
+
+    for violation in @violations
+      line = violation.bufferRange.start.row
+      klass = "lint-#{violation.severity}"
+      @gutterView.addClassToLine(line, klass)
 
   beforeRemove: ->
     @disable()

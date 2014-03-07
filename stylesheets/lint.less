@@ -4,6 +4,9 @@
 // for a full listing of what's available.
 @import 'ui-variables';
 
+// https://github.com/styleguide/css/7.0
+@import 'octicon-utf-codes';
+
 .lint {
   .violation {
     position: absolute;
@@ -38,5 +41,25 @@
 
   .tooltip.bottom .tooltip-inner {
     border-top-left-radius: 0 !important;
+  }
+}
+
+.editor .gutter .line-number {
+  &.lint-warning .icon-right {
+    visibility: visible;
+
+    &:before {
+      content: @alert;
+      color: @text-color-warning;
+    }
+  }
+
+  &.lint-error .icon-right {
+    visibility: visible;
+
+    &:before {
+      content: @alert;
+      color: @text-color-error;
+    }
   }
 }
