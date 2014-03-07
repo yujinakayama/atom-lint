@@ -2,6 +2,8 @@
 
 ## Development
 
+## v0.2.0
+
 * Display violation marks for each line on gutter.
 * Fix wrong use of key for offenses in RuboCop's JSON result.
 
