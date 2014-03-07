@@ -64,7 +64,59 @@ describe 'CommandRunner', ->
         waitsFor ->
           hasFetched
 
+  describe 'getPathEnvOfLoginShell', ->
+    beforeEach ->
+      CommandRunner._cachedPathEnvOfLoginShell = undefined
+
+    describe 'on first invocation', ->
+      it 'invokes fetchPathEnvOfLoginShell and passes the result', ->
+        spyOn(CommandRunner, 'fetchPathEnvOfLoginShell').andCallThrough()
+
+        hasGotten = false
+
+        CommandRunner.getPathEnvOfLoginShell (path) ->
+          expect(path).toMatch(/\/[^:]+(?::\/[^:]+)/)
+          expect(CommandRunner.fetchPathEnvOfLoginShell).toHaveBeenCalled()
+          hasGotten = true
+
+        waitsFor ->
+          hasGotten
+
+    describe 'on second invocation', ->
+      itReturnsCachedResultOfFetchPathEnvOfLoginShell = ->
+        it 'returns cached result of fetchPathEnvOfLoginShell', ->
+          hasGotten = false
+
+          CommandRunner.getPathEnvOfLoginShell (path) ->
+            hasGotten = true
+
+          waitsFor ->
+            hasGotten
+
+          runs ->
+            hasGotten = false
+            spyOn(CommandRunner, 'fetchPathEnvOfLoginShell').andCallThrough()
+
+            CommandRunner.getPathEnvOfLoginShell (path) ->
+              expect(CommandRunner.fetchPathEnvOfLoginShell).not.toHaveBeenCalled()
+              hasGotten = true
+
+          waitsFor ->
+            hasGotten
+
+      describe 'and the result of fetchPathEnvOfLoginShell is valid PATH', ->
+        itReturnsCachedResultOfFetchPathEnvOfLoginShell()
+
+      describe 'and the result of fetchPathEnvOfLoginShell is null', ->
+        beforeEach ->
+          process.env.SHELL = ''
+
+        itReturnsCachedResultOfFetchPathEnvOfLoginShell()
+
   describe 'run', ->
+    beforeEach ->
+      CommandRunner._cachedPathEnvOfLoginShell = undefined
+
     run = (command, callback) ->
       hasRun = false
 

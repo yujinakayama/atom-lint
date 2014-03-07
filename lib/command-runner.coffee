@@ -6,6 +6,8 @@ fs = require 'fs'
 
 module.exports =
 class CommandRunner
+  CommandRunner._cachedPathEnvOfLoginShell = undefined
+
   CommandRunner.fetchPathEnvOfLoginShell = (callback) ->
     if !process.env.SHELL
       return callback(null, "SHELL environment variable is not set.")
@@ -23,13 +25,21 @@ class CommandRunner
         return callback(null, readError) if readError?
         callback(data.toString(), null)
 
+  CommandRunner.getPathEnvOfLoginShell = (callback) ->
+    if @_cachedPathEnvOfLoginShell == undefined
+      CommandRunner.fetchPathEnvOfLoginShell (path, error) =>
+        @_cachedPathEnvOfLoginShell = path
+        callback(path)
+    else
+      callback(@_cachedPathEnvOfLoginShell)
+
   constructor: (@command) ->
 
   run: (callback) ->
     if @command[0].indexOf('/') == 0
       @runWithEnv(process.env, callback)
     else
-      CommandRunner.fetchPathEnvOfLoginShell (path, error) =>
+      CommandRunner.getPathEnvOfLoginShell (path) =>
         env = if path?
                 $.extend({}, process.env, { PATH: path })
               else
