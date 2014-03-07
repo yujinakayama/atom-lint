@@ -3,7 +3,7 @@ child_process = require 'child_process'
 fs = require 'fs'
 
 module.exports =
-class RubocopLinter
+class Rubocop
   constructor: (@filePath) ->
 
   run: (callback) ->
