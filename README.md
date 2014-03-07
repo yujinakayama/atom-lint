@@ -1,10 +1,10 @@
-# atom-lint
+# Atom-Lint
 
 Generic code linting support for [Atom](https://atom.io).
 
 ![Screenshot](https://raw.github.com/yujinakayama/atom-lint/master/doc/screenshot.png)
 
-`atom-lint` is currently in alpha development.
+Atom-Lint is currently in alpha development.
 
 ## Supported Linters
 
@@ -30,7 +30,7 @@ You can see the detail of the violation by moving the cursor to it.
 
 ## Configuration
 
-You can configure atom-lint by editing `config.cson` file (choose **Open Your Config** in **Atom** menu):
+You can configure Atom-Lint by editing `config.cson` file (choose **Open Your Config** in **Atom** menu):
 
 ```cson
 # Some other settings...
@@ -43,7 +43,7 @@ You can configure atom-lint by editing `config.cson` file (choose **Open Your Co
 
 Specify an executable path for `rubocop` command.
 
-Normally `atom-lint` automatically refers the environement variable `PATH` of your login shell
+By default Atom-Lint automatically refers the environement variable `PATH` of your login shell
 if it's `bash` or `zsh`, and invokes `rubocop` command.
 If you got a problem with `PATH`, use this setting.
 
