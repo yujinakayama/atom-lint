@@ -1,9 +1,10 @@
 {Range, Point} = require 'atom'
 child_process = require 'child_process'
 fs = require 'fs'
+CommandRunner = require '../command-runner'
 
 module.exports =
-class RubocopLinter
+class Rubocop
   constructor: (@filePath) ->
 
   run: (callback) ->
@@ -30,38 +31,28 @@ class RubocopLinter
     bufferRange: bufferRange
 
   runRubocop: (callback) ->
-    command = @getCommand()
-    rubocop = child_process.spawn(command[0], command.splice(1))
+    runner = new CommandRunner(@constructCommand())
 
-    stdout = ''
+    runner.run (result) ->
+      return callback(null, result.error) if result.error?
 
-    rubocop.stdout.on 'data', (data) ->
-      stdout += data
-
-    rubocop.on 'close', (exitCode) ->
-      if exitCode == 0 || exitCode == 1
+      if result.exitCode == 0 || result.exitCode == 1
         try
-          result = JSON.parse(stdout)
-          callback(result, null)
+          callback(JSON.parse(result.stdout), null)
         catch error
           callback(null, error)
       else
-        callback(null, "Process exited with code #{exitCode}")
+        callback(null, "Process exited with code #{result.exitCode}")
 
-    rubocop.on 'error', (error) ->
-      callback(stdout, error)
-
-  getCommand: (filePath) ->
+  constructCommand: ->
     command = []
 
-    # TODO: Make configurable
-    rbenvPath = "#{process.env.HOME}/.rbenv/bin/rbenv"
-    if fs.existsSync(rbenvPath)
-      command.push(rbenvPath, 'exec', 'rubocop')
+    userRubocopPath = atom.config.get('atom-lint.rubocop.path')
+
+    if userRubocopPath?
+      command.push(userRubocopPath)
     else
       command.push('rubocop')
 
-    command.push('--format', 'json')
-    command.push(@filePath)
-
+    command.push('--format', 'json', @filePath)
     command
