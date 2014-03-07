@@ -45,4 +45,14 @@ class Rubocop
         callback(null, "Process exited with code #{result.exitCode}")
 
   constructCommand: ->
-    ['rubocop', '--format', 'json', @filePath]
+    command = []
+
+    userRubocopPath = atom.config.get('atom-lint.rubocop.path')
+
+    if userRubocopPath?
+      command.push(userRubocopPath)
+    else
+      command.push('rubocop')
+
+    command.push('--format', 'json', @filePath)
+    command

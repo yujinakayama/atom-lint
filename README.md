@@ -28,6 +28,25 @@ You can see the detail of the violation by moving the cursor to it.
 
 * `Ctrl-Alt-L` for global toggle
 
+## Configuration
+
+You can configure atom-lint by editing `config.cson` file (choose **Open Your Config** in **Atom** menu):
+
+```cson
+# Some other settings...
+'atom-lint':
+  'rubocop':
+    'path': '/path/to/bin/rubocop'
+```
+
+### `atom-lint.rubocop.path`
+
+Specify an executable path for `rubocop` command.
+
+Normally `atom-lint` automatically refers the environement variable `PATH` of your login shell
+if it's `bash` or `zsh`, and invokes `rubocop` command.
+If you got a problem with `PATH`, use this setting.
+
 ## License
 
 Copyright (c) 2014 Yuji Nakayama
