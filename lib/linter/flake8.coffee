@@ -1,5 +1,3 @@
-# Copyright 2014 Daniel G. Taylor, MIT-licensed
-
 {Range, Point} = require 'atom'
 child_process = require 'child_process'
 fs = require 'fs'
