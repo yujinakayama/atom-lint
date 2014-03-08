@@ -54,6 +54,10 @@ If you got a problem with `PATH`, use this setting.
 
 Specify an executable path for `flake8` command. Similar to the `rubocop` path argument described above.
 
+## Contributors
+
+Here's a [list](https://github.com/yujinakayama/atom-lint/graphs/contributors) of all contributors to Atom-Lint.
+
 ## License
 
 Copyright (c) 2014 Yuji Nakayama
