@@ -8,14 +8,14 @@ class Rubocop
   constructor: (@filePath) ->
 
   run: (callback) ->
-    @runRubocop (result, error) =>
-      if error
-        callback(null, error)
+    @runRubocop (error, result) =>
+      if error?
+        callback(error)
       else
         file = result.files[0]
         offenses = file.offenses || file.offences
         violations = offenses.map(@createViolationFromOffense)
-        callback(violations, null)
+        callback(null, violations)
 
   createViolationFromOffense: (offense) ->
     bufferPoint = new Point(offense.location.line - 1, offense.location.column - 1)
@@ -33,16 +33,16 @@ class Rubocop
   runRubocop: (callback) ->
     runner = new CommandRunner(@constructCommand())
 
-    runner.run (result) ->
-      return callback(null, result.error) if result.error?
+    runner.run (error, result) ->
+      return callback(error) if error?
 
       if result.exitCode == 0 || result.exitCode == 1
         try
-          callback(JSON.parse(result.stdout), null)
+          callback(null, JSON.parse(result.stdout))
         catch error
-          callback(null, error)
+          callback(error)
       else
-        callback(null, "Process exited with code #{result.exitCode}")
+        callback(new Error("Process exited with code #{result.exitCode}"))
 
   constructCommand: ->
     command = []

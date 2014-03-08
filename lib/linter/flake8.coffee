@@ -8,17 +8,17 @@ class Flake8
   constructor: (@filePath) ->
 
   run: (callback) ->
-    @runFlake8 (err, violations) =>
-      if err
-        callback(null, err)
+    @runFlake8 (error, violations) =>
+      if error?
+        callback(error)
       else
-        callback(violations, null)
+        callback(null, violations)
 
   runFlake8: (callback) ->
     runner = new CommandRunner(@constructCommand())
 
-    runner.run (result) ->
-      return callback(null, result.error) if result.error?
+    runner.run (error, result) ->
+      return callback(error) if error?
 
       if result.exitCode == 0 || result.exitCode == 1
         # Flake8 returns errors as colon-delimited strings, so here
@@ -44,9 +44,9 @@ class Flake8
             message: msg
             bufferRange: new Range bufferPoint, bufferPoint
 
-        callback null, violations
+        callback(null, violations)
       else
-        callback(new Error "Process exited with code #{result.exitCode}")
+        callback(new Error("Process exited with code #{result.exitCode}"))
 
   constructCommand: ->
     command = []

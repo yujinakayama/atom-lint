@@ -52,9 +52,9 @@ class RubocopView extends View
   lint: ->
     filePath = @editor.getBuffer().getUri()
     linter = new @linterConstructor(filePath)
-    linter.run (violations, error) =>
+    linter.run (error, violations) =>
       @violations = violations
-      if error
+      if error?
         console.log(error)
       else
         @removeViolationViews()

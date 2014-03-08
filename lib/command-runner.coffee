@@ -10,25 +10,25 @@ class CommandRunner
 
   CommandRunner.fetchPathEnvOfLoginShell = (callback) ->
     if !process.env.SHELL
-      return callback(null, "SHELL environment variable is not set.")
+      return callback(new Error("SHELL environment variable is not set."))
 
     if process.env.SHELL.match(/csh$/)
       # csh/tcsh does not allow to execute a command (-c) in a login shell (-l).
-      return callback(null, "#{process.env.SHELL} is not supported.")
+      return callback(new Error("#{process.env.SHELL} is not supported."))
 
     outputPath = path.join(os.tmpdir(), 'CommandRunner_fetchPathEnvOfLoginShell.txt')
     command = "#{process.env.SHELL} -l -i -c 'echo -n \"$PATH\" > #{outputPath}'"
 
     child_process.exec command, (execError, stdout, stderr) ->
-      return callback(null, execError) if execError?
+      return callback(execError) if execError?
       fs.readFile outputPath, (readError, data) ->
-        return callback(null, readError) if readError?
-        callback(data.toString(), null)
+        return callback(readError) if readError?
+        callback(null, data.toString())
 
   CommandRunner.getPathEnvOfLoginShell = (callback) ->
     if @_cachedPathEnvOfLoginShell == undefined
-      CommandRunner.fetchPathEnvOfLoginShell (path, error) =>
-        @_cachedPathEnvOfLoginShell = path
+      CommandRunner.fetchPathEnvOfLoginShell (error, path) =>
+        @_cachedPathEnvOfLoginShell = path || null
         callback(path)
     else
       callback(@_cachedPathEnvOfLoginShell)
@@ -65,11 +65,10 @@ class CommandRunner
     proc.on 'close', (exitCode) ->
       return if hasInvokedCallback
       result.exitCode = exitCode
-      callback(result)
+      callback(null, result)
       hasInvokedCallback = true
 
     proc.on 'error', (error) ->
       return if hasInvokedCallback
-      result.error = error
-      callback(result)
+      callback(error, result)
       hasInvokedCallback = true
