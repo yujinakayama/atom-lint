@@ -11,6 +11,7 @@ Atom-Lint is currently in alpha development.
 More linters will be supported in the future.
 
 * [RuboCop](https://github.com/bbatsov/rubocop) for Ruby
+* [flake8](https://flake8.readthedocs.org/) for Python
 
 ## Installation
 
@@ -37,6 +38,8 @@ You can configure Atom-Lint by editing `config.cson` file (choose **Open Your Co
 'atom-lint':
   'rubocop':
     'path': '/path/to/bin/rubocop'
+  'flake8':
+    'path': '/path/to/bin/flake8'
 ```
 
 ### `atom-lint.rubocop.path`
@@ -46,6 +49,10 @@ Specify an executable path for `rubocop` command.
 By default Atom-Lint automatically refers the environement variable `PATH` of your login shell
 if it's `bash` or `zsh`, and invokes `rubocop` command.
 If you got a problem with `PATH`, use this setting.
+
+### `atom-lint.flake8.path`
+
+Specify an executable path for `flake8` command. Similar to the `rubocop` path argument described above.
 
 ## License
 

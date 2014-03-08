@@ -1,2 +1,3 @@
 'source.ruby': 'rubocop'
 'source.ruby.rails': 'rubocop'
+'source.python': 'flake8'
