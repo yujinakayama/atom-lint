@@ -51,10 +51,10 @@ class Flake8
   constructCommand: ->
     command = []
 
-    userRubocopPath = atom.config.get('atom-lint.flake8.path')
+    userFlake8Path = atom.config.get('atom-lint.flake8.path')
 
-    if userRubocopPath?
-      command.push(userRubocopPath)
+    if userFlake8Path?
+      command.push(userFlake8Path)
     else
       command.push('flake8')
 
