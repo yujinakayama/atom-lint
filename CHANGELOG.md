@@ -2,6 +2,10 @@
 
 ## Development
 
+## v0.3.0
+
+* Add Python support via `flake8`. ([#9](https://github.com/yujinakayama/atom-lint/pull/9))
+
 ## v0.2.0
 
 * Display violation marks for each line on gutter.
