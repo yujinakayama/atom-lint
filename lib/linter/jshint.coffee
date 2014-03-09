@@ -7,31 +7,28 @@ class JsHint
   constructor: (@filePath) ->
 
   run: (callback) ->
-    @runJsHint (error, violations) =>
-      callback(error) if error?
-      callback(null, violations)
-
-  runJsHint: (callback) ->
     runner = new CommandRunner(@constructCommand())
     runner.run (error, result) =>
       return callback(error) if error?
       # JSHint returns an exit code of 2 when everything worked, but the check failed.
       if result.exitCode == 0 || result.exitCode == 2
-        callback(null, @parseErrorsIntoViolations(result.stdout))
+        parseString result.stdout, (xmlError, result) =>
+          return callback(xmlError) if xmlError?
+          callback(null, @parseJsHintResultToViolations(result))
       else
         callback(new Error("Process exited with code #{result.exitCode}"))
 
-  parseErrorsIntoViolations: (errorXml) ->
+  parseJsHintResultToViolations: (jsHintResults) ->
     violations = []
-    parseString errorXml, (err, result) ->
-      for err in result.checkstyle.file[0].error
-        # JSHint only returns one point instead of a range, so we're going to set
-        # both sides of the range to the same thing.
-        point = [err.$.line, err.$.column]
-        violations.push
-          severity: err.$.severity
-          message: err.$.message
-          bufferRange: new Range(point, point)
+    return violations if not jsHintResults.checkstyle.file?
+    for violation in jsHintResults.checkstyle.file[0].error
+      # JSHint only returns one point instead of a range, so we're going to set
+      # both sides of the range to the same thing.
+      point = [violation.$.line, violation.$.column]
+      violations.push
+        severity: violation.$.severity
+        message: violation.$.message
+        bufferRange: new Range(point, point)
     violations
 
   constructCommand: ->
