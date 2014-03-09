@@ -10,6 +10,7 @@
     "atom": ">0.50.0"
   },
   "dependencies": {
-    "season": "^1.0.2"
+    "season": "^1.0.2",
+    "xml2js": "^0.4.1"
   }
 }
