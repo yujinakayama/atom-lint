@@ -1,27 +1,10 @@
-{WorkspaceView} = require 'atom'
-path = require 'path'
-fs = require 'fs'
-temp = require 'temp'
+require './spec-helper'
 
 describe 'atom-lint', ->
   editorView = null
 
-  sampleFilename = 'sample.rb'
-
   beforeEach ->
-    projectPath = temp.mkdirSync('atom-lint-spec-')
-    atom.project.setPath(projectPath)
-
-    sampleFilePath = path.join(projectPath, sampleFilename)
-    fs.writeFileSync(sampleFilePath, 'foo = 1')
-
-    atom.workspaceView = new WorkspaceView
-    atom.workspaceView.attachToDom()
-    atom.workspaceView.openSync(sampleFilename)
-    editorView = atom.workspaceView.getActiveView()
-
-    waitsForPromise ->
-      atom.packages.activatePackage('atom-lint')
+    {editorView} = prepareWorkspace({ activatePackage: true })
 
   describe 'by default', ->
     it 'is enabled', ->

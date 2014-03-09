@@ -4,6 +4,7 @@
 
 * [#10](https://github.com/yujinakayama/atom-lint/pull/10): Add Haskell support via HLint. ([@x0l][])
 * [#11](https://github.com/yujinakayama/atom-lint/pull/11): Add JavaScript support via JSHint. ([@benjohnson][])
+* Fix a bug where linters were possibly run multiple times on a save. ([@yujinakayama][])
 
 ## v0.3.0
 

@@ -1,9 +1,10 @@
 {View} = require 'atom'
-path = require('path');
+path = require 'path'
 CSON = require 'season'
+LintRunner = require './lint-runner'
 ViolationView = require './violation-view'
 
-linterMap = CSON.readFileSync(path.join(__dirname, 'linter-map.cson'));
+SEVERITIES = ['warning', 'error']
 
 module.exports =
 class RubocopView extends View
@@ -14,52 +15,39 @@ class RubocopView extends View
     @editor = @editorView.getEditor()
     @gutterView = @editorView.gutter
 
-    @violations = []
+    @lastViolations = null
     @violationViews = []
 
-    @enableIfSupportedGrammar()
-    @subscribe @editor, 'grammar-changed', =>
-      @enableIfSupportedGrammar()
+    @lintRunner = new LintRunner(@editor)
+    @lintRunner.on 'activate', => @onLinterActivation()
+    @lintRunner.on 'deactivate', => @onLinterDeactivation()
+    @lintRunner.on 'lint', (error, violations) => @onLint(error, violations)
+    @lintRunner.startWatching()
 
-  enableIfSupportedGrammar: ->
-    scopeName = @editor.getGrammar().scopeName
-    linterName = linterMap[scopeName]
-    if linterName
-      @enable(linterName)
-    else
-      @disable()
-
-  enable: (linterName) ->
-    linterPath = "./linter/#{linterName}"
-    @linterConstructor = require linterPath
-
-    @lint()
-    @bufferSubscription = @subscribe @editor.getBuffer(), 'saved', =>
-      @lint()
+  onLinterActivation: ->
     # http://discuss.atom.io/t/decorating-the-left-gutter/1321/4
-    @editorViewSubscription = @subscribe @editorView, 'editor:display-updated', =>
+    @editorDisplayUpdateSubscription = @subscribe @editorView, 'editor:display-updated', =>
       @updateGutterMarkers()
 
-  disable: ->
-    @violations = []
-
-    @editorViewSubscription?.off()
-    @bufferSubscription?.off()
-
+  onLinterDeactivation: ->
+    @lastViolations = null
+    @editorDisplayUpdateSubscription?.off()
     @removeViolationViews()
     @updateGutterMarkers()
 
-  lint: ->
-    filePath = @editor.getBuffer().getUri()
-    linter = new @linterConstructor(filePath)
-    linter.run (error, violations) =>
-      @violations = violations
-      if error?
-        console.log(error)
-      else
-        @removeViolationViews()
-        @addViolationViews(violations)
-        @updateGutterMarkers()
+  onLint: (error, violations) ->
+    @lastViolations = violations
+
+    @updateGutterMarkers()
+    @removeViolationViews()
+
+    if error?
+      console.log(error)
+    else
+      @addViolationViews(violations)
+
+  beforeRemove: ->
+    @lintRunner.stopWatching()
 
   addViolationViews: (violations) ->
     for violation in violations
@@ -74,15 +62,12 @@ class RubocopView extends View
   updateGutterMarkers: ->
     return unless @gutterView.isVisible()
 
-    @gutterView.removeClassFromAllLines('lint-warning')
-    @gutterView.removeClassFromAllLines('lint-error')
+    for severity in SEVERITIES
+      @gutterView.removeClassFromAllLines("lint-#{severity}")
 
-    return unless @violations
+    return unless @lastViolations
 
-    for violation in @violations
+    for violation in @lastViolations
       line = violation.bufferRange.start.row
       klass = "lint-#{violation.severity}"
       @gutterView.addClassToLine(line, klass)
-
-  beforeRemove: ->
-    @disable()
