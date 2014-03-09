@@ -13,6 +13,7 @@ More linters will be supported in the future.
 * [RuboCop](https://github.com/bbatsov/rubocop) for Ruby
 * [flake8](https://flake8.readthedocs.org/) for Python
 * [JSHint](http://www.jshint.com/docs/) for JavaScript
+* [HLint](http://community.haskell.org/~ndm/hlint/) for Haskell
 
 ## Installation
 
@@ -43,6 +44,8 @@ You can configure Atom-Lint by editing `config.cson` file (choose **Open Your Co
     'path': '/path/to/bin/flake8'
   'jshint':
     'path': '/path/to/bin/jshint'
+  'hlint':
+    'path': '/path/to/bin/hlint'
 ```
 
 ### `atom-lint.rubocop.path`
@@ -60,6 +63,10 @@ Specify an executable path for `flake8` command. Similar to the `rubocop` path a
 ### `atom-lint.jshint.path`
 
 Specify an executable path for `jshint` command. Similar to the `rubocop` path argument described above.
+
+### `atom-lint.hlint.path`
+
+Specify an executable path for `hlint` command. Similar to the `rubocop` path argument described above.
 
 ## Contributors
 
