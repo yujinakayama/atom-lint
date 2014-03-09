@@ -5,7 +5,9 @@
     'submenu': [
       'label': 'Lint'
       'submenu': [
-        { 'label': 'Toggle', 'command': 'lint:toggle' },
+        { 'label': 'Toggle', 'command': 'lint:toggle' }
+        { 'label': 'Move to Next Violation', 'command': 'lint:move-to-next-violation' }
+        { 'label': 'Move to Previous Violation', 'command': 'lint:move-to-previous-violation' }
       ]
     ]
   }

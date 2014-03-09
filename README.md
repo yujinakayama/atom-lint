@@ -27,13 +27,27 @@ Your source will be linted on open and on save automatically,
 and the detected violations will be displayed as arrows in the editor.
 You can see the detail of the violation by moving the cursor to it.
 
-### Keymaps
+## Keymaps
 
-* `Ctrl-Alt-L` for global toggle
+* `Ctrl-Alt-L`: Global toggle
+* `Ctrl-Alt-[`: Move to Previous Violation
+* `Ctrl-Alt-]`: Move to Next Violation
+
+Also you can customize keymaps by editing `~/.atom/keymap.cson` (choose **Open Your Keymap** in **Atom** menu):
+
+```cson
+'.workspace':
+  'ctrl-alt-l': 'lint:toggle'
+'.editor':
+  'ctrl-alt-[': 'lint:move-to-previous-violation'
+  'ctrl-alt-]': 'lint:move-to-next-violation'
+```
+
+See [Customizing Atom](https://atom.io/docs/latest/customizing-atom) for more details.
 
 ## Configuration
 
-You can configure Atom-Lint by editing `config.cson` file (choose **Open Your Config** in **Atom** menu):
+You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your Config** in **Atom** menu):
 
 ```cson
 # Some other settings...

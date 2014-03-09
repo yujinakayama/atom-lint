@@ -9,3 +9,6 @@
 # https://atom.io/docs/latest/advanced/keymaps
 '.workspace':
   'ctrl-alt-l': 'lint:toggle'
+'.editor':
+  'ctrl-alt-[': 'lint:move-to-previous-violation'
+  'ctrl-alt-]': 'lint:move-to-next-violation'

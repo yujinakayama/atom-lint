@@ -1,6 +1,7 @@
 {View} = require 'atom'
 path = require 'path'
 CSON = require 'season'
+_ = require 'lodash'
 LintRunner = require './lint-runner'
 ViolationView = require './violation-view'
 
@@ -24,6 +25,9 @@ class RubocopView extends View
     @lintRunner.on 'lint', (error, violations) => @onLint(error, violations)
     @lintRunner.startWatching()
 
+    @editorView.command 'lint:move-to-next-violation', => @moveToNextViolation()
+    @editorView.command 'lint:move-to-previous-violation', => @moveToPreviousViolation()
+
   onLinterActivation: ->
     # http://discuss.atom.io/t/decorating-the-left-gutter/1321/4
     @editorDisplayUpdateSubscription = @subscribe @editorView, 'editor:display-updated', =>
@@ -36,7 +40,8 @@ class RubocopView extends View
     @updateGutterMarkers()
 
   onLint: (error, violations) ->
-    @lastViolations = violations
+    @lastViolations = violations.sort (a, b) ->
+      a.bufferRange.compare(b.bufferRange)
 
     @updateGutterMarkers()
     @removeViolationViews()
@@ -71,3 +76,27 @@ class RubocopView extends View
       line = violation.bufferRange.start.row
       klass = "lint-#{violation.severity}"
       @gutterView.addClassToLine(line, klass)
+
+  moveToNextViolation: ->
+    @moveToNeighborViolation('next')
+
+  moveToPreviousViolation: ->
+    @moveToNeighborViolation('previous')
+
+  moveToNeighborViolation: (direction) ->
+    if direction == 'next'
+      enumerationMethod = 'find'
+      comparingMethod = 'isGreaterThan'
+    else
+      enumerationMethod = 'findLast'
+      comparingMethod = 'isLessThan'
+
+    currentCursorPosition = @editor.getCursor().getBufferPosition()
+
+    neighborViolation = _[enumerationMethod] @lastViolations, (violation) ->
+      violation.bufferRange.start[comparingMethod](currentCursorPosition)
+
+    if neighborViolation?
+      @editor.setCursorBufferPosition(neighborViolation.bufferRange.start)
+    else
+      atom.beep()
