@@ -2,6 +2,8 @@
 
 ## Development
 
+* Minimize additional startup time of Atom caused by atom-lint. ([@yujinakayama][])
+
 ## v0.4.0
 
 * [#10](https://github.com/yujinakayama/atom-lint/pull/10): Add Haskell support via HLint. ([@x0l][])

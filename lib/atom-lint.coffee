@@ -1,4 +1,5 @@
-LintView = require './lint-view'
+# Minimize additional startup time of Atom caused by atom-lint.
+LintView = null
 
 module.exports =
   activate: ->
@@ -36,6 +37,7 @@ module.exports =
   injectLintViewIntoEditorView: (editorView) ->
     return unless editorView.attached
     return if editorView.find('.lint').length > 0
+    LintView ?= require './lint-view'
     lintView = new LintView(editorView)
     @lintViews.push(lintView)
     editorView.overlayer.append(lintView)
