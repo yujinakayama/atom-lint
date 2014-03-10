@@ -43,7 +43,7 @@ Also you can customize keymaps by editing `~/.atom/keymap.cson` (choose **Open Y
   'ctrl-alt-]': 'lint:move-to-next-violation'
 ```
 
-See [Customizing Atom](https://atom.io/docs/latest/customizing-atom) for more details.
+See **Customizing Key Bindings** in [Customizing Atom](https://atom.io/docs/latest/customizing-atom) for more details.
 
 ## Configuration
 
