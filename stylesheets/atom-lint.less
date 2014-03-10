@@ -32,7 +32,7 @@
   }
 
   .tooltip {
-    font-family: @font-family
+    font-family: @font-family;
   }
 
   .tooltip.bottom .tooltip-arrow {
@@ -43,6 +43,11 @@
 
   .tooltip.bottom .tooltip-inner {
     border-top-left-radius: 0 !important;
+  }
+
+  .tooltip .tooltip-inner {
+    white-space: pre-wrap;
+    text-align: left;
   }
 }
 
