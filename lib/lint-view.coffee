@@ -93,6 +93,7 @@ class RubocopView extends View
 
     currentCursorPosition = @editor.getCursor().getBufferPosition()
 
+    # OPTIMIZE: Consider using binary search.
     neighborViolation = _[enumerationMethod] @lastViolations, (violation) ->
       violation.bufferRange.start[comparingMethod](currentCursorPosition)
 
