@@ -14,6 +14,7 @@ More linters will be supported in the future.
 * [flake8](https://flake8.readthedocs.org/) for Python
 * [JSHint](http://www.jshint.com/docs/) for JavaScript
 * [HLint](http://community.haskell.org/~ndm/hlint/) for Haskell
+  (Installation of [language-haskell](https://atom.io/packages/language-haskell) package is required)
 
 ## Installation
 
