@@ -24,7 +24,7 @@ class JsHint
     for violation in jsHintResults.checkstyle.file[0].error
       # JSHint only returns one point instead of a range, so we're going to set
       # both sides of the range to the same thing.
-      point = [violation.$.line, violation.$.column]
+      point = [violation.$.line - 1, violation.$.column - 1]
       violations.push
         severity: violation.$.severity
         message: violation.$.message
