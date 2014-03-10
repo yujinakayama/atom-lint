@@ -1,5 +1,6 @@
 'source.ruby': 'rubocop'
 'source.ruby.rails': 'rubocop'
 'source.python': 'flake8'
+'source.js': 'jshint'
 'source.haskell': 'hlint'
 'text.tex.latex.haskell': 'hlint'
