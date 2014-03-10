@@ -53,7 +53,7 @@ class ViolationView extends View
       'border-left-width': arrowSize
       'top': pixelPosition.top + @editorView.lineHeight - (arrowSize / 2)
       'left': pixelPosition.left
-    @addClass(@violation.severity)
+    @addClass("violation-#{@violation.severity}")
     @show()
 
   hideArrow: ->

@@ -16,15 +16,17 @@
     border-color: transparent;
     border-top-width: 0;
 
-    &.info {
+    &.violation-info {
       border-bottom-color: @text-color-info;
     }
 
-    &.warning {
+    &.violation-warning {
       border-bottom-color: @text-color-warning;
     }
 
-    &.error {
+    // .error is already defined in /Applications/Atom.app/Contents/Resources/app/static/utilities.less
+    // and it adds unexpected CSS animation.
+    &.violation-error {
       border-bottom-color: @text-color-error;
     }
   }
