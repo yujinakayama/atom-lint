@@ -2,6 +2,8 @@
 
 ## Development
 
+## v0.4.1
+
 * Minimize additional startup time of Atom caused by atom-lint. ([@yujinakayama][])
 
 ## v0.4.0
