@@ -2,6 +2,8 @@
 
 ## Development
 
+## v0.4.0
+
 * [#10](https://github.com/yujinakayama/atom-lint/pull/10): Add Haskell support via HLint. ([@x0l][])
 * [#11](https://github.com/yujinakayama/atom-lint/pull/11): Add JavaScript support via JSHint. ([@benjohnson][])
 * Add “Move to Next/Previous Violation”. ([@yujinakayama][])
