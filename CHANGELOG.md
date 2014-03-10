@@ -2,9 +2,12 @@
 
 ## Development
 
+* [#10](https://github.com/yujinakayama/atom-lint/pull/10): Add Haskell support via HLint. ([@x0l][])
+* [#11](https://github.com/yujinakayama/atom-lint/pull/11): Add JavaScript support via JSHint. ([@benjohnson][])
+
 ## v0.3.0
 
-* [#9](https://github.com/yujinakayama/atom-lint/pull/9): Add Python support via `flake8`. ([@danielgtaylor][])
+* [#9](https://github.com/yujinakayama/atom-lint/pull/9): Add Python support via flake8. ([@danielgtaylor][])
 
 ## v0.2.0
 
@@ -26,3 +29,5 @@
 
 [@yujinakayama]: https://github.com/yujinakayama
 [@danielgtaylor]: https://github.com/danielgtaylor
+[@x0l]: https://github.com/x0l
+[@benjohnson]: https://github.com/benjohnson
