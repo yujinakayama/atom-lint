@@ -18,6 +18,7 @@ module.exports =
 
     # Invoked on instantiation of new tab
     @editorViewSubscription = atom.workspaceView.eachEditorView (editorView) =>
+      return unless editorView.getPane()?
       @injectLintViewIntoEditorView(editorView)
 
   disable: ->
