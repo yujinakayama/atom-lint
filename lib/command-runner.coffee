@@ -1,14 +1,14 @@
-{$} = require 'atom'
 child_process = require 'child_process'
 os = require 'os'
 path = require 'path'
 fs = require 'fs'
+{$} = require 'atom'
 
 module.exports =
 class CommandRunner
-  CommandRunner._cachedPathEnvOfLoginShell = undefined
+  @_cachedPathEnvOfLoginShell = undefined
 
-  CommandRunner.fetchPathEnvOfLoginShell = (callback) ->
+  @fetchPathEnvOfLoginShell = (callback) ->
     if !process.env.SHELL
       return callback(new Error("SHELL environment variable is not set."))
 
@@ -25,9 +25,9 @@ class CommandRunner
         return callback(readError) if readError?
         callback(null, data.toString())
 
-  CommandRunner.getPathEnvOfLoginShell = (callback) ->
+  @getPathEnvOfLoginShell = (callback) ->
     if @_cachedPathEnvOfLoginShell == undefined
-      CommandRunner.fetchPathEnvOfLoginShell (error, path) =>
+      @fetchPathEnvOfLoginShell (error, path) =>
         @_cachedPathEnvOfLoginShell = path || null
         callback(path)
     else

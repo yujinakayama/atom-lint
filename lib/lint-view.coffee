@@ -1,5 +1,5 @@
-{View} = require 'atom'
 path = require 'path'
+{View} = require 'atom'
 CSON = require 'season'
 _ = require 'lodash'
 LintRunner = require './lint-runner'

@@ -1,6 +1,6 @@
 {Range} = require 'atom'
+xml2js = require 'xml2js'
 CommandRunner = require '../command-runner'
-parseString = require('xml2js').parseString
 
 module.exports =
 class JsHint
@@ -12,7 +12,7 @@ class JsHint
       return callback(error) if error?
       # JSHint returns an exit code of 2 when everything worked, but the check failed.
       if result.exitCode == 0 || result.exitCode == 2
-        parseString result.stdout, (xmlError, result) =>
+        xml2js.parseString result.stdout, (xmlError, result) =>
           return callback(xmlError) if xmlError?
           callback(null, @parseJsHintResultToViolations(result))
       else

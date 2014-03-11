@@ -1,6 +1,4 @@
 {Range, Point} = require 'atom'
-child_process = require 'child_process'
-fs = require 'fs'
 CommandRunner = require '../command-runner'
 
 module.exports =

@@ -5,7 +5,7 @@ Tooltip = $.fn.tooltip.Constructor
 
 module.exports =
 class ViolationTooltip extends Tooltip
-  ViolationTooltip.DEFAULTS = $.extend({}, Tooltip.DEFAULTS, { placement: 'bottom' })
+  @DEFAULTS = $.extend({}, Tooltip.DEFAULTS, { placement: 'bottom' })
 
   getDefaults: ->
     ViolationTooltip.DEFAULTS
