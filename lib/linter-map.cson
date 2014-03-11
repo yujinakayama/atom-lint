@@ -4,3 +4,4 @@
 'source.js': 'jshint'
 'source.haskell': 'hlint'
 'text.tex.latex.haskell': 'hlint'
+'source.coffee': 'coffeelint'
