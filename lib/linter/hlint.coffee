@@ -6,7 +6,7 @@ class HLint
   constructor: (@filePath) ->
 
   run: (callback) ->
-    @runHLint (error, violations) =>
+    @runHLint (error, violations) ->
       if error?
         callback(error)
       else

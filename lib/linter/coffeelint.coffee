@@ -6,7 +6,7 @@ class CoffeeLint
   constructor: (@filePath) ->
 
   run: (callback) ->
-    @runCoffeeLint (error, violations) =>
+    @runCoffeeLint (error, violations) ->
       if error?
         callback(error)
       else

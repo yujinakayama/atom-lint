@@ -2,7 +2,7 @@ path = require 'path'
 CSON = require 'season'
 {Emitter, Subscriber} = require 'emissary'
 
-LINTER_MAP = CSON.readFileSync(path.join(__dirname, 'linter-map.cson'));
+LINTER_MAP = CSON.readFileSync(path.join(__dirname, 'linter-map.cson'))
 
 module.exports =
 class LintRunner

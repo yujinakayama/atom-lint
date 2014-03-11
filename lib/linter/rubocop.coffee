@@ -19,10 +19,10 @@ class Rubocop
     bufferPoint = new Point(offense.location.line - 1, offense.location.column - 1)
     bufferRange = new Range(bufferPoint, bufferPoint)
     severity = switch offense.severity
-               when 'error', 'fatal'
-                 'error'
-               else
-                 'warning'
+      when 'error', 'fatal'
+        'error'
+      else
+        'warning'
 
     severity: severity
     message: offense.message

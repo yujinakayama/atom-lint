@@ -6,7 +6,7 @@ class Flake8
   constructor: (@filePath) ->
 
   run: (callback) ->
-    @runFlake8 (error, violations) =>
+    @runFlake8 (error, violations) ->
       if error?
         callback(error)
       else

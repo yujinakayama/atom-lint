@@ -40,10 +40,11 @@ class CommandRunner
       @runWithEnv(process.env, callback)
     else
       CommandRunner.getPathEnvOfLoginShell (path) =>
-        env = if path?
-                $.extend({}, process.env, { PATH: path })
-              else
-                process.env
+        env =
+          if path?
+            $.extend({}, process.env, { PATH: path })
+          else
+            process.env
 
         @runWithEnv(env, callback)
 
