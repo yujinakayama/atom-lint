@@ -1,5 +1,6 @@
 {Range, Point} = require 'atom'
 CommandRunner = require '../command-runner'
+Violation = require '../violation'
 
 module.exports =
 class CoffeeLint
@@ -32,12 +33,9 @@ class CoffeeLint
 
           col = '1' if col == ''
           severity = 'warning' if severity == 'warn'
-          bufferPoint = new Point parseInt(line) - 1, parseInt(col) - 1
-
-          violations.push
-            severity: severity
-            message: msg
-            bufferRange: new Range bufferPoint, bufferPoint
+          bufferPoint = new Point(parseInt(line) - 1, parseInt(col) - 1)
+          bufferRange = new Range(bufferPoint, bufferPoint)
+          violations.push(new Violation(severity, bufferRange, msg))
 
         callback(null, violations)
       else

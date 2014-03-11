@@ -1,5 +1,6 @@
 {Range, Point} = require 'atom'
 CommandRunner = require '../command-runner'
+Violation = require '../violation'
 
 module.exports =
 class Rubocop
@@ -23,10 +24,7 @@ class Rubocop
         'error'
       else
         'warning'
-
-    severity: severity
-    message: offense.message
-    bufferRange: bufferRange
+    new Violation(severity, bufferRange, offense.message)
 
   runRubocop: (callback) ->
     runner = new CommandRunner(@constructCommand())

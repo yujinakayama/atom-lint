@@ -1,5 +1,6 @@
 {Range, Point} = require 'atom'
 CommandRunner = require '../command-runner'
+Violation = require '../violation'
 
 module.exports =
 class Flake8
@@ -27,7 +28,8 @@ class Flake8
 
           [file, line, col, msg] = (x.trim() for x in item.split ':')
 
-          bufferPoint = new Point parseInt(line) - 1, parseInt(col) - 1
+          bufferPoint = new Point(parseInt(line) - 1, parseInt(col) - 1)
+          bufferRange = new Range(bufferPoint, bufferPoint)
 
           # Use pep8 E/W codes, mark some PyFlakes F codes as errors
           # and make all C/N codes warnings. See:
@@ -37,10 +39,7 @@ class Flake8
             else
               if msg[0] is 'E' then 'error' else 'warning'
 
-          violations.push
-            severity: severity
-            message: msg
-            bufferRange: new Range bufferPoint, bufferPoint
+          violations.push(new Violation(severity, bufferRange, msg))
 
         callback(null, violations)
       else
