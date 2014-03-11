@@ -12,9 +12,10 @@ More linters will be supported in the future.
 
 * [RuboCop](https://github.com/bbatsov/rubocop) for Ruby
 * [flake8](https://flake8.readthedocs.org/) for Python
-* [JSHint](http://www.jshint.com/docs/) for JavaScript
 * [HLint](http://community.haskell.org/~ndm/hlint/) for Haskell
-  (Installation of [language-haskell](https://atom.io/packages/language-haskell) package is required)
+(Installation of [language-haskell](https://atom.io/packages/language-haskell) package is required)
+* [JSHint](http://www.jshint.com/docs/) for JavaScript
+* [CoffeeLint](http://www.coffeelint.org/) for CoffeeScript
 
 ## Installation
 
@@ -53,35 +54,21 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
 ```cson
 # Some other settings...
 'atom-lint':
-  'rubocop':
-    'path': '/path/to/bin/rubocop'
+  'coffeelint':
+    'path': '/path/to/bin/coffeelint'
   'flake8':
     'path': '/path/to/bin/flake8'
-  'jshint':
-    'path': '/path/to/bin/jshint'
   'hlint':
     'path': '/path/to/bin/hlint'
+  'jshint':
+    'path': '/path/to/bin/jshint'
+  'rubocop':
+    'path': '/path/to/bin/rubocop'
 ```
 
-### `atom-lint.rubocop.path`
-
-Specify an executable path for `rubocop` command.
-
 By default Atom-Lint automatically refers the environement variable `PATH` of your login shell
-if it's `bash` or `zsh`, and invokes `rubocop` command.
+if it's `bash` or `zsh`, and then invokes the command.
 If you got a problem with `PATH`, use this setting.
-
-### `atom-lint.flake8.path`
-
-Specify an executable path for `flake8` command. Similar to the `rubocop` path argument described above.
-
-### `atom-lint.jshint.path`
-
-Specify an executable path for `jshint` command. Similar to the `rubocop` path argument described above.
-
-### `atom-lint.hlint.path`
-
-Specify an executable path for `hlint` command. Similar to the `rubocop` path argument described above.
 
 ## Contributors
 
