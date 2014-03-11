@@ -25,21 +25,20 @@ class HLint
         pattern = ///
           ^(.+):(\d+):(\d+):\s*  # file / line / col
           (Warning|Error):\s*
-          ([^]+)$
+          ([^]+)
         ///
 
         violations = []
-        output = result.stdout.split '\n\n'
-        for item in output
-          try
-            [file, line, col, severity, msg] = item.match(pattern)[1..5]
+        items = result.stdout.split '\n\n'
+        for item in items[...-1]
+          [file, line, col, severity, msg] = item.match(pattern)[1..5]
 
-            bufferPoint = new Point parseInt(line) - 1, parseInt(col) - 1
+          bufferPoint = new Point parseInt(line) - 1, parseInt(col) - 1
 
-            violations.push
-              severity: severity.toLowerCase()
-              message: msg
-              bufferRange: new Range bufferPoint, bufferPoint
+          violations.push
+            severity: severity.toLowerCase()
+            message: msg
+            bufferRange: new Range bufferPoint, bufferPoint
 
         callback(null, violations)
       else
