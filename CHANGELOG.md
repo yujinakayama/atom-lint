@@ -2,6 +2,12 @@
 
 ## Development
 
+## v0.5.0
+
+* [#16](https://github.com/yujinakayama/atom-lint/pull/16) Support multiline in tooltips. ([@x0l][])
+* [#18](https://github.com/yujinakayama/atom-lint/pull/18) Add CoffeeLint support. ([@x0l][])
+* Markup HLint results in tooltip. ([@yujinakayama][])
+
 ## v0.4.1
 
 * Minimize additional startup time of Atom caused by atom-lint. ([@yujinakayama][])
