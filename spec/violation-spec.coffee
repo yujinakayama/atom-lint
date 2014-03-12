@@ -1,7 +1,7 @@
 {Range, Point} = require 'atom'
 Violation = require '../lib/violation'
 
-fdescribe 'Violation', ->
+describe 'Violation', ->
   describe 'constructor', ->
     bufferRange = null
 
