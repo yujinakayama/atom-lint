@@ -72,7 +72,7 @@ class HLintViolation extends Violation
     matches = @message.match(HLintViolation.MESSAGE_PATTTERN)
     return null unless matches?
     [match, message, foundCode, alternativeCode] = matches
-    HTML = _.escape(message)
+    HTML = _.escape(@punctuate(message))
     HTML += '<div class="attachment">'
     HTML += '<p class="code-label">Found:</p>'
     HTML += @formatSnippet(foundCode)
@@ -80,6 +80,12 @@ class HLintViolation extends Violation
     HTML += @formatSnippet(alternativeCode)
     HTML += '</div>'
     HTML
+
+  punctuate: (string) ->
+    if string.match(/[\.,:;]$/)
+      string
+    else
+      string + '.'
 
   formatSnippet: (snippet) ->
     lines = snippet.split('\n')
