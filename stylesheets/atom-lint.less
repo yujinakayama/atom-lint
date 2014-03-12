@@ -41,13 +41,29 @@
     border-left-width: 0 !important;
   }
 
-  .tooltip.bottom .tooltip-inner {
-    border-top-left-radius: 0 !important;
+  .tooltip .tooltip-inner {
+    white-space: normal;
+    text-align: left;
+
+    .attachment {
+      margin-top: 5px;
+    }
+
+    .code-label {
+      margin: 0;
+    }
+
+    pre {
+      margin: 5px 0;
+      padding: 4px 8px;
+      font-size: 10px;
+      background-color: transparent;
+      border: 1px solid transparent;
+    }
   }
 
-  .tooltip .tooltip-inner {
-    white-space: pre-wrap;
-    text-align: left;
+  .tooltip.bottom .tooltip-inner {
+    border-top-left-radius: 0 !important;
   }
 }
 

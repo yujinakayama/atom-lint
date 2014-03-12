@@ -1,4 +1,5 @@
 {Range, Point} = require 'atom'
+_ = require 'lodash'
 CommandRunner = require '../command-runner'
 Violation = require '../violation'
 
@@ -33,7 +34,7 @@ class HLint
           [file, line, col, severity, msg] = item.match(pattern)[1..5]
           bufferPoint = new Point(parseInt(line) - 1, parseInt(col) - 1)
           bufferRange = new Range(bufferPoint, bufferPoint)
-          violation = new Violation(severity.toLowerCase(), bufferRange, msg)
+          violation = new HLintViolation(severity.toLowerCase(), bufferRange, msg)
           violations.push(violation)
 
         callback(null, violations)
@@ -52,3 +53,37 @@ class HLint
 
     command.push(@filePath)
     command
+
+class HLintViolation extends Violation
+  # Error: Use unwords
+  # Found:
+  #   intercalate " "
+  # Why not:
+  #   unwords
+  @MESSAGE_PATTTERN = ///
+    ^(.+)\n
+    Found:\n
+    (\x20{2}[\S\s]+)
+    Why\x20not:\n
+    (\x20{2}[\S\s]+)
+  ///
+
+  getHTML: ->
+    matches = @message.match(HLintViolation.MESSAGE_PATTTERN)
+    return null unless matches?
+    [match, message, foundCode, alternativeCode] = matches
+    HTML = _.escape(message)
+    HTML += '<div class="attachment">'
+    HTML += '<p class="code-label">Found:</p>'
+    HTML += @formatSnippet(foundCode)
+    HTML += '<p class="code-label">Why not:</p>'
+    HTML += @formatSnippet(alternativeCode)
+    HTML += '</div>'
+    HTML
+
+  formatSnippet: (snippet) ->
+    lines = snippet.split('\n')
+    unindentedLines = for line in lines
+      line.slice(2)
+    unindentedSnippet = unindentedLines.join('\n')
+    "<pre>#{_.escape(unindentedSnippet)}</pre>"

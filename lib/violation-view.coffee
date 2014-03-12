@@ -20,8 +20,10 @@ class ViolationView extends View
     @showArrow()
 
   prepareTooltip: ->
+    HTML = @violation.getHTML()
     @violationTooltip
-      title: @violation.message
+      title: HTML || @violation.message
+      html: HTML?
       container: @lintView
       viewport: @lintView
 
