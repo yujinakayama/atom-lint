@@ -2,6 +2,10 @@
 
 ## Development
 
+## v0.5.1
+
+* Fix a bug where sometimes style of HLint results in tooltip were not applied. ([@yujinakayama][])
+
 ## v0.5.0
 
 * [#16](https://github.com/yujinakayama/atom-lint/pull/16) Support multiline in tooltips. ([@x0l][])

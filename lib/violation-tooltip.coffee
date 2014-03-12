@@ -19,9 +19,7 @@ class ViolationTooltip extends Tooltip
   # and 'shown.bs.tooltip' is a bit late.
   show: ->
     super()
-    return if @hasAppliedStyle
     @applyAdditionalStyle()
-    @hasAppliedStyle = true
 
   applyAdditionalStyle: ->
     $tip = @tip()
