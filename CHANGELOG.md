@@ -4,7 +4,7 @@
 
 ## v0.5.2
 
-* [#19](https://github.com/yujinakayama/atom-lint/issues/19): Fix `Uncaught TypeError: Cannot call method 'sort' of undefined` on failure of linting. ([@yujinakayama][])
+* [#19](https://github.com/yujinakayama/atom-lint/issues/19), [#20](https://github.com/yujinakayama/atom-lint/issues/20): Fix `Uncaught TypeError: Cannot call method 'sort' of undefined` on failure of linting. ([@yujinakayama][])
 
 ## v0.5.1
 
