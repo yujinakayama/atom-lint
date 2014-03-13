@@ -2,6 +2,10 @@
 
 ## Development
 
+## v0.5.2
+
+* [#19](https://github.com/yujinakayama/atom-lint/issues/19): Fix `Uncaught TypeError: Cannot call method 'sort' of undefined` on failure of linting. ([@yujinakayama][])
+
 ## v0.5.1
 
 * Fix a bug where sometimes style of HLint results in tooltip were not applied. ([@yujinakayama][])

@@ -40,8 +40,7 @@ class RubocopView extends View
     @updateGutterMarkers()
 
   onLint: (error, violations) ->
-    @lastViolations = violations.sort (a, b) ->
-      a.bufferRange.compare(b.bufferRange)
+    @setLastViolations(violations)
 
     @updateGutterMarkers()
     @removeViolationViews()
@@ -76,6 +75,12 @@ class RubocopView extends View
       line = violation.bufferRange.start.row
       klass = "lint-#{violation.severity}"
       @gutterView.addClassToLine(line, klass)
+
+  setLastViolations: (violations) ->
+    @lastViolations = violations
+    return unless @lastViolations?
+    @lastViolations = @lastViolations.sort (a, b) ->
+      a.bufferRange.compare(b.bufferRange)
 
   moveToNextViolation: ->
     @moveToNeighborViolation('next')
