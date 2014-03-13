@@ -4,8 +4,7 @@ CSON = require 'season'
 _ = require 'lodash'
 LintRunner = require './lint-runner'
 ViolationView = require './violation-view'
-
-SEVERITIES = ['warning', 'error']
+Violation = require './violation'
 
 module.exports =
 class RubocopView extends View
@@ -66,7 +65,7 @@ class RubocopView extends View
   updateGutterMarkers: ->
     return unless @gutterView.isVisible()
 
-    for severity in SEVERITIES
+    for severity in Violation.SEVERITIES
       @gutterView.removeClassFromAllLines("lint-#{severity}")
 
     return unless @lastViolations
