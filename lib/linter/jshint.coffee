@@ -12,7 +12,8 @@ class JsHint
     runner.run (error, result) =>
       return callback(error) if error?
       # JSHint returns an exit code of 2 when everything worked, but the check failed.
-      if result.exitCode == 0 || result.exitCode == 2
+      # coffeelint does the same thing with the value 1 for parse errors
+      if 0 <= result.exitCode <= 2
         xml2js.parseString result.stdout, (xmlError, result) =>
           return callback(xmlError) if xmlError?
           callback(null, @parseJsHintResultToViolations(result))
