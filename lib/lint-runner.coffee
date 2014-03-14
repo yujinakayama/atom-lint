@@ -54,10 +54,18 @@ class LintRunner
       @bufferSaveSubscription = @subscribe @buffer, 'saved', =>
         @lint()
 
+    unless @modificationSubscription?
+      @modificationSubscription = @subscribe @buffer, 'contents-modified', =>
+        @bufferLint()
+
   deactivate: ->
     if @bufferSaveSubscription?
       @bufferSaveSubscription.off()
       @bufferSaveSubscription = null
+
+    if @modificationSubscription?
+      @modificationSubscription.off()
+      @modificationSubscription = null
 
     if @linterConstructor?
       @linterConstructor = null
@@ -65,6 +73,11 @@ class LintRunner
 
   getCurrentLinter: ->
     @linterConstructor
+
+  bufferLint: ->
+      linter = new @linterConstructor(null, @buffer.cachedText)
+      linter.run (error, violations) =>
+          @emit('lint', error, violations)
 
   lint: ->
     filePath = @buffer.getUri()

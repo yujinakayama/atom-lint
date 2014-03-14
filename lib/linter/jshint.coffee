@@ -5,10 +5,14 @@ Violation = require '../violation'
 
 module.exports =
 class JsHint
-  constructor: (@filePath) ->
+  constructor: (@filePath, @textContents=null) ->
+    if @textContents?
+        @filePath = '-'
 
   run: (callback) ->
     runner = new CommandRunner(@constructCommand())
+    if @textContents?
+      runner.stdin = @textContents
     runner.run (error, result) =>
       return callback(error) if error?
       # JSHint returns an exit code of 2 when everything worked, but the check failed.

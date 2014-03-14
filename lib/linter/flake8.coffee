@@ -4,7 +4,9 @@ Violation = require '../violation'
 
 module.exports =
 class Flake8
-  constructor: (@filePath) ->
+  constructor: (@filePath, @textContents=null) ->
+    if @textContents?
+      @filePath = '-'
 
   run: (callback) ->
     @runFlake8 (error, violations) ->
@@ -15,6 +17,8 @@ class Flake8
 
   runFlake8: (callback) ->
     runner = new CommandRunner(@constructCommand())
+    if @textContents?
+        runner.stdin = @textContents
 
     runner.run (error, result) ->
       return callback(error) if error?

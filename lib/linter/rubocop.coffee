@@ -4,9 +4,13 @@ Violation = require '../violation'
 
 module.exports =
 class Rubocop
-  constructor: (@filePath) ->
+  constructor: (@filePath, @textContents=null) ->
 
   run: (callback) ->
+    if @textContents?
+      # No idea how to feed HLint stdin, so we'll just ignore those
+      # requests
+      return
     @runRubocop (error, result) =>
       if error?
         callback(error)
