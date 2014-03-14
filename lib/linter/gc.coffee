@@ -1,28 +1,21 @@
 {Range, Point} = require 'atom'
 CommandRunner = require '../command-runner'
 Violation = require '../violation'
-os = require 'os'
 path = require 'path'
 fs = require 'fs'
+errorPattern = /^\/+([^:]+):(\d+)(:(\d+))?: (.*)$/
 
 module.exports =
-class GoLint
+class Gc
   constructor: (@filePath) ->
-    @pattern = /^\/+([^:]+):(\d+)(:(\d+))?: (.*)$/
-    @gotEnv = false
 
   run: (callback) ->
-    f = () =>
+    @getEnv =>
       @runGoLint (error, violations) ->
         if error?
           callback(error)
         else
           callback(null, violations)
-
-    if @gotEnv
-      f()
-    else
-      @getEnv f
 
   runGoLint: (callback) ->
     runner = new CommandRunner(@buildCommand())
@@ -42,10 +35,10 @@ class GoLint
 
         if item[0] is '\t' and violations.length > 0
           # stuff like interfaces not being satisfied, etc will be indented
-          if not skippingIndented
+          unless skippingIndented
             violations[violations.length-1].message += '\n' + item
         else
-          [_, filePath, line, _, col, msg] = item.match(@pattern)
+          [_, filePath, line, _, col, msg] = item.match(errorPattern)
           filePath = '/' + filePath
           if filePath isnt @filePath
             skippingIndented = true
@@ -78,30 +71,27 @@ class GoLint
       "GOPATH"
       "GOCHAR"
     ])).run (error, result) =>
-      if not error?
+      unless error?
         [@GOARCH, @GOOS, @GOPATH, @GOCHAR] = result.stdout.split('\n')
         @importpath = "#{@GOPATH}/pkg/#{@GOOS}_#{@GOARCH}"
-        @gotEnv = true
         callback()
 
   # Build the compile command to be run, including relevant flags and setting
   # the import path to GOPATH/pkg (the go tool *g needs to be told explicitly,
-  # normally `go build` does this all for us)
+  # normally `go build` does this all for us).
+  # Opting for *g instead of go build because the linking would take up
+  # unnecessary real and cpu time for no gain.
   buildCommand: () ->
     # compile with all the other files in the same directory so it doesn't
     # complain about missing identifiers, etc
     here = path.dirname(@filePath)
     files = fs.readdirSync(here).filter (file) ->
-      path.extname(file) in ['.go', '.c', '.h', '.s', '.cpp', '.cc', '.m']
+      path.extname(file) is '.go'
     .map (file) ->
       path.join(here, file)
 
-    gotool = atom.config.get('atom-lint.gc.path')
-    if not gotool?
-      gotool = "go"
-
     [
-      gotool
+      atom.config.get('atom-lint.gc.path') || 'go'
       "tool"
       @GOCHAR + 'g'
       "-L" # use full file paths
