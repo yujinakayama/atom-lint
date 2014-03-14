@@ -96,8 +96,12 @@ class GoLint
     .map (file) ->
       path.join(here, file)
 
+    gotool = atom.config.get('atom-lint.gc.path')
+    if not gotool?
+      gotool = "go"
+
     [
-      "go"
+      gotool
       "tool"
       @GOCHAR + 'g'
       "-L" # use full file paths
