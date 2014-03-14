@@ -4,7 +4,9 @@ Violation = require '../violation'
 
 module.exports =
 class CoffeeLint
-  constructor: (@filePath) ->
+  constructor: (@filePath, @textContents=null) ->
+    if @textContents?
+      @filePath = '-s'
 
   run: (callback) ->
     @runCoffeeLint (error, violations) ->
@@ -15,6 +17,8 @@ class CoffeeLint
 
   runCoffeeLint: (callback) ->
     runner = new CommandRunner(@constructCommand())
+    if @textContents?
+      runner.stdin = @textContents
 
     runner.run (error, result) ->
       return callback(error) if error?

@@ -5,9 +5,13 @@ Violation = require '../violation'
 
 module.exports =
 class HLint
-  constructor: (@filePath) ->
+  constructor: (@filePath, @textContents=null) ->
 
   run: (callback) ->
+    if @textContents?
+      # No idea how to feed HLint stdin, so we'll just ignore those
+      # requests
+      return
     @runHLint (error, violations) ->
       if error?
         callback(error)
