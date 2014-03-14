@@ -63,7 +63,7 @@ class LintRunner
       @linterConstructor = null
       @emit('deactivate')
 
-  getCurrentLinter: ->
+  getActiveLinter: ->
     @linterConstructor
 
   lint: ->
