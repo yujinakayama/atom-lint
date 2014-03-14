@@ -39,7 +39,7 @@ class CoffeeLint
 
         callback(null, violations)
       else
-        callback(new Error "Process exited with code #{result.exitCode}")
+        callback(new Error("Process exited with code #{result.exitCode}"))
 
   constructCommand: ->
     command = []
