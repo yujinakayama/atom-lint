@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/yujinakayama/transpec.png?branch=master)](https://travis-ci.org/yujinakayama/transpec)
+
 # Atom-Lint
 
 Generic code linting support for [Atom](https://atom.io).
