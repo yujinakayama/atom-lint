@@ -17,6 +17,8 @@
     "xml2js": "^0.4.1"
   },
   "devDependencies": {
+    "coffee-script": "latest",
+    "coffeelint": "latest",
     "temp": "^0.7.0"
   }
 }
