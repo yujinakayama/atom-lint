@@ -28,4 +28,8 @@ class CoffeeLint extends CheckstyleBase
     column ?= 1
     bufferPoint = new Point(element.$.line - 1, column - 1)
     bufferRange = new Range(bufferPoint, bufferPoint)
-    new Violation(element.$.severity, bufferRange, element.$.message)
+
+    # https://github.com/clutchski/coffeelint/blob/v1.1.0/src/commandline.coffee#L236
+    message = element.$.message.replace(/; context: .*?$/, '')
+
+    new Violation(element.$.severity, bufferRange, message)
