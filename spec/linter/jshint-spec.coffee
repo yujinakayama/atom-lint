@@ -6,7 +6,7 @@ describe 'JsHint', ->
   beforeEach ->
     jsHint = new JsHint('/path/to/target.js')
 
-  describe 'constructCommand', ->
+  describe 'buildCommand', ->
     originalJSHintPath = atom.config.get('atom-lint.jshint.path')
 
     afterEach ->
@@ -14,13 +14,13 @@ describe 'JsHint', ->
 
     describe 'when the target file path is "/path/to/target.js"', ->
       describe 'and config "atom-lint.jshint.path" is "/path/to/jshint"', ->
-        it 'returns ["/path/to/jshint", "/path/to/target.js"]', ->
+        it 'returns ["/path/to/jshint", "--reporter", "checkstyle", "/path/to/target.js"]', ->
           atom.config.set('atom-lint.jshint.path', '/path/to/jshint')
-          expect(jsHint.constructCommand())
-            .toEqual(['/path/to/jshint', '--reporter=checkstyle', '/path/to/target.js'])
+          expect(jsHint.buildCommand())
+            .toEqual(['/path/to/jshint', '--reporter', 'checkstyle', '/path/to/target.js'])
 
-      describe 'and config "atom-lint.flake8.path" is not set', ->
-        it 'returns ["jshint", "/path/to/target.js"]', ->
+      describe 'and config "atom-lint.jshint.path" is not set', ->
+        it 'returns ["jshint", "--reporter", "checkstyle", "/path/to/target.js"]', ->
           atom.config.set('atom-lint.jshint.path', null)
-          expect(jsHint.constructCommand())
-            .toEqual(['jshint', '--reporter=checkstyle', '/path/to/target.js'])
+          expect(jsHint.buildCommand())
+            .toEqual(['jshint', '--reporter', 'checkstyle', '/path/to/target.js'])
