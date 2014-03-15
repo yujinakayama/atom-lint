@@ -36,7 +36,7 @@ class Gc
         if item[0] is '\t' and violations.length > 0
           # stuff like interfaces not being satisfied, etc will be indented
           unless skippingIndented
-            violations[violations.length-1].message += '\n' + item
+            violations[violations.length - 1].message += '\n' + item
         else
           [_, filePath, line, _, col, msg] = item.match(errorPattern)
           filePath = '/' + filePath
@@ -49,7 +49,7 @@ class Gc
           line ||= '1'
           col ||= '1'
 
-          bufferPoint = new Point(parseInt(line)-1, parseInt(col)-1)
+          bufferPoint = new Point(parseInt(line) - 1, parseInt(col) - 1)
           bufferRange = new Range(bufferPoint, bufferPoint)
           violations.push(new Violation('error', bufferRange, msg))
 
@@ -81,7 +81,7 @@ class Gc
   # normally `go build` does this all for us).
   # Opting for *g instead of go build because the linking would take up
   # unnecessary real and cpu time for no gain.
-  buildCommand: () ->
+  buildCommand: ->
     # compile with all the other files in the same directory so it doesn't
     # complain about missing identifiers, etc
     here = path.dirname(@filePath)
