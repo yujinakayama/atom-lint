@@ -7,7 +7,7 @@ ViolationView = require './violation-view'
 Violation = require './violation'
 
 module.exports =
-class RubocopView extends View
+class LintView extends View
   @content: ->
     @div class: 'lint'
 
