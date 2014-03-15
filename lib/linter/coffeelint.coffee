@@ -1,4 +1,6 @@
+{Range, Point} = require 'atom'
 CheckstyleBase = require './checkstyle-base'
+Violation = require '../violation'
 
 module.exports =
 class CoffeeLint extends CheckstyleBase
@@ -20,3 +22,10 @@ class CoffeeLint extends CheckstyleBase
     # CoffeeLint returns an exit code of 2 when everything worked, but the check failed.
     # And code 1 for parse errors.
     0 <= exitCode <= 2
+
+  createViolationFromErrorElement: (element) ->
+    column = element.$.column
+    column ?= 1
+    bufferPoint = new Point(element.$.line - 1, column - 1)
+    bufferRange = new Range(bufferPoint, bufferPoint)
+    new Violation(element.$.severity, bufferRange, element.$.message)

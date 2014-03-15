@@ -1,7 +1,5 @@
-{Range, Point} = require 'atom'
 xml2js = require 'xml2js'
 CommandRunner = require '../command-runner'
-Violation = require '../violation'
 
 module.exports =
 class CheckstyleBase
@@ -28,8 +26,7 @@ class CheckstyleBase
   createViolationsFromCheckstyleXml: (xml) ->
     return [] unless xml.checkstyle.file?
     for element in xml.checkstyle.file[0].error
-      # JSHint only returns one point instead of a range, so we're going to set
-      # both sides of the range to the same thing.
-      bufferPoint = new Point(element.$.line - 1, element.$.column - 1)
-      bufferRange = new Range(bufferPoint, bufferPoint)
-      new Violation(element.$.severity, bufferRange, element.$.message)
+      @createViolationFromErrorElement(element)
+
+  createViolationFromErrorElement: (element) ->
+    throw new Error('::createViolationFromErrorElement must be overridden')
