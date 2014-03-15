@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/yujinakayama/transpec.png?branch=master)](https://travis-ci.org/yujinakayama/transpec)
+[![Build Status](https://travis-ci.org/yujinakayama/atom-lint.png?branch=master)](https://travis-ci.org/yujinakayama/atom-lint)
 
 # Atom-Lint
 
