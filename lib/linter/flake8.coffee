@@ -14,7 +14,7 @@ class Flake8
         callback(null, violations)
 
   runFlake8: (callback) ->
-    runner = new CommandRunner(@constructCommand())
+    runner = new CommandRunner(@buildCommand())
 
     runner.run (error, result) ->
       return callback(error) if error?
@@ -45,7 +45,7 @@ class Flake8
       else
         callback(new Error("Process exited with code #{result.exitCode}"))
 
-  constructCommand: ->
+  buildCommand: ->
     command = []
 
     userFlake8Path = atom.config.get('atom-lint.flake8.path')

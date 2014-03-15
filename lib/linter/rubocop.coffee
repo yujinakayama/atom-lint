@@ -27,7 +27,7 @@ class Rubocop
     new Violation(severity, bufferRange, offense.message)
 
   runRubocop: (callback) ->
-    runner = new CommandRunner(@constructCommand())
+    runner = new CommandRunner(@buildCommand())
 
     runner.run (error, result) ->
       return callback(error) if error?
@@ -40,7 +40,7 @@ class Rubocop
       else
         callback(new Error("Process exited with code #{result.exitCode}"))
 
-  constructCommand: ->
+  buildCommand: ->
     command = []
 
     userRubocopPath = atom.config.get('atom-lint.rubocop.path')

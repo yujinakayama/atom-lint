@@ -15,7 +15,7 @@ class HLint
         callback(null, violations)
 
   runHLint: (callback) ->
-    runner = new CommandRunner(@constructCommand())
+    runner = new CommandRunner(@buildCommand())
 
     runner.run (error, result) ->
       return callback(error) if error?
@@ -41,7 +41,7 @@ class HLint
       else
         callback(new Error("Process exited with code #{result.exitCode}"))
 
-  constructCommand: ->
+  buildCommand: ->
     command = []
 
     userHLintPath = atom.config.get('atom-lint.hlint.path')
