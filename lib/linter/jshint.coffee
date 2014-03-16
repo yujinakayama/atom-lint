@@ -7,7 +7,7 @@ module.exports =
 class JsHint
   constructor: (@filePath, @textContents=null) ->
     if @textContents?
-        @filePath = '-'
+      @filePath = '-'
 
   run: (callback) ->
     runner = new CommandRunner(@constructCommand())
