@@ -72,7 +72,8 @@ describe 'LintRunner', ->
     describe "when already watching and a linter is activated", ->
       beforeEach ->
         editor.setGrammar(loadGrammar('ruby'))
-        lintRunner.startWatching()
+        waitsForEventToBeEmitted lintRunner, 'lint', ->
+          lintRunner.startWatching()
 
       it 'does not change linter', ->
         lintRunner.startWatching()

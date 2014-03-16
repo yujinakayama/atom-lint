@@ -4,11 +4,16 @@ path = require 'path'
 fs = require 'fs'
 {$} = require 'atom'
 
+each_slice = (array, size, callback) ->
+  for i in [0..array.length] by size
+    slice = array.slice(i, i + size)
+    callback(slice)
+
 module.exports =
 class CommandRunner
-  @_cachedPathEnvOfLoginShell = undefined
+  @_cachedEnvOfLoginShell = undefined
 
-  @fetchPathEnvOfLoginShell = (callback) ->
+  @fetchEnvOfLoginShell = (callback) ->
     if !process.env.SHELL
       return callback(new Error("SHELL environment variable is not set."))
 
@@ -16,22 +21,42 @@ class CommandRunner
       # csh/tcsh does not allow to execute a command (-c) in a login shell (-l).
       return callback(new Error("#{process.env.SHELL} is not supported."))
 
-    outputPath = path.join(os.tmpdir(), 'CommandRunner_fetchPathEnvOfLoginShell.txt')
-    command = "#{process.env.SHELL} -l -i -c 'echo -n \"$PATH\" > #{outputPath}'"
+    outputPath = path.join(os.tmpdir(), 'CommandRunner_fetchEnvOfLoginShell.txt')
+    # Running non-shell-builtin command with -i (interactive) option causes shell to freeze with
+    # CPU 100%. So we run it in subshell to make it non-interactive.
+    command = "#{process.env.SHELL} -l -i -c '$(printenv > #{outputPath})'"
 
-    child_process.exec command, (execError, stdout, stderr) ->
+    child_process.exec command, (execError, stdout, stderr) =>
       return callback(execError) if execError?
-      fs.readFile outputPath, (readError, data) ->
+      fs.readFile outputPath, (readError, data) =>
         return callback(readError) if readError?
-        callback(null, data.toString())
+        env = @parseResultOfPrintEnv(data.toString())
+        callback(null, env)
 
-  @getPathEnvOfLoginShell = (callback) ->
-    if @_cachedPathEnvOfLoginShell == undefined
-      @fetchPathEnvOfLoginShell (error, path) =>
-        @_cachedPathEnvOfLoginShell = path || null
-        callback(path)
+  @parseResultOfPrintEnv: (string) ->
+    env = {}
+
+    # JS does not support lookbehind assertion.
+    lines_and_last_chars = string.split(/([^\\])\n/)
+    lines = each_slice lines_and_last_chars, 2, (slice) ->
+      slice.join('')
+
+    for line in lines
+      matches = line.match(/^(.+?)=([\S\s]*)$/)
+      continue unless matches?
+      [_match, key, value] = matches
+      continue if !(key?) || key.length == 0
+      env[key] = value
+
+    env
+
+  @getEnvOfLoginShell = (callback) ->
+    if @_cachedEnvOfLoginShell == undefined
+      @fetchEnvOfLoginShell (error, env) =>
+        @_cachedEnvOfLoginShell = env || {}
+        callback(env)
     else
-      callback(@_cachedPathEnvOfLoginShell)
+      callback(@_cachedEnvOfLoginShell)
 
   constructor: (@command) ->
 
@@ -39,13 +64,8 @@ class CommandRunner
     if @command[0].indexOf('/') == 0
       @runWithEnv(process.env, callback)
     else
-      CommandRunner.getPathEnvOfLoginShell (path) =>
-        env =
-          if path?
-            $.extend({}, process.env, { PATH: path })
-          else
-            process.env
-
+      CommandRunner.getEnvOfLoginShell (env) =>
+        env ?= process.env
         @runWithEnv(env, callback)
 
   runWithEnv: (env, callback) ->

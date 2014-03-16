@@ -8,15 +8,16 @@ describe 'CommandRunner', ->
     process.env.PATH = originalPath
     process.env.SHELL = originalShell
 
-  describe 'fetchPathEnvOfLoginShell', ->
-    itPassesValidPath = ->
-      it 'passes valid PATH', ->
+  describe '.fetchEnvOfLoginShell', ->
+    itPassesAnObjectContainingAllEnvironementVariables = ->
+      it 'passes an object containing all environement variables', ->
         hasFetched = false
 
-        CommandRunner.fetchPathEnvOfLoginShell (error, path) ->
+        CommandRunner.fetchEnvOfLoginShell (error, env) ->
           expect(error).toBeFalsy()
-          expect(path.constructor).toBe(String)
-          expect(path).toMatch(/\/[^:]+(?::\/[^:]+)/)
+          expect(env.PATH.constructor).toBe(String)
+          expect(env.PATH).toMatch(/\/[^:]+(?::\/[^:]+)/)
+          expect(env.HOME).toBe(process.env.HOME)
           hasFetched = true
 
         waitsFor ->
@@ -26,13 +27,13 @@ describe 'CommandRunner', ->
       beforeEach ->
         process.env.SHELL = '/bin/bash'
 
-      itPassesValidPath()
+      itPassesAnObjectContainingAllEnvironementVariables()
 
     describe 'when the login shell is zsh', ->
       beforeEach ->
         process.env.SHELL = '/bin/zsh'
 
-      itPassesValidPath()
+      itPassesAnObjectContainingAllEnvironementVariables()
 
     describe 'when the login shell is tcsh', ->
       beforeEach ->
@@ -41,9 +42,9 @@ describe 'CommandRunner', ->
       it 'passes error', ->
         hasFetched = false
 
-        CommandRunner.fetchPathEnvOfLoginShell (error, path) ->
+        CommandRunner.fetchEnvOfLoginShell (error, env) ->
           expect(error.message).toMatch(/tcsh.+not.+supported/)
-          expect(path).toBeFalsy()
+          expect(env).toBeFalsy()
           hasFetched = true
 
         waitsFor ->
@@ -56,38 +57,38 @@ describe 'CommandRunner', ->
       it 'passes error', ->
         hasFetched = false
 
-        CommandRunner.fetchPathEnvOfLoginShell (error, path) ->
+        CommandRunner.fetchEnvOfLoginShell (error, env) ->
           expect(error.message).toMatch(/SHELL.+not.+set/)
-          expect(path).toBeFalsy()
+          expect(env).toBeFalsy()
           hasFetched = true
 
         waitsFor ->
           hasFetched
 
-  describe 'getPathEnvOfLoginShell', ->
+  describe 'getEnvOfLoginShell', ->
     beforeEach ->
-      CommandRunner._cachedPathEnvOfLoginShell = undefined
+      CommandRunner._cachedEnvOfLoginShell = undefined
 
     describe 'on first invocation', ->
-      it 'invokes fetchPathEnvOfLoginShell and passes the result', ->
-        spyOn(CommandRunner, 'fetchPathEnvOfLoginShell').andCallThrough()
+      it 'invokes .fetchEnvOfLoginShell and passes the result', ->
+        spyOn(CommandRunner, 'fetchEnvOfLoginShell').andCallThrough()
 
         hasGotten = false
 
-        CommandRunner.getPathEnvOfLoginShell (path) ->
-          expect(path).toMatch(/\/[^:]+(?::\/[^:]+)/)
-          expect(CommandRunner.fetchPathEnvOfLoginShell).toHaveBeenCalled()
+        CommandRunner.getEnvOfLoginShell (env) ->
+          expect(env.PATH).toMatch(/\/[^:]+(?::\/[^:]+)/)
+          expect(CommandRunner.fetchEnvOfLoginShell).toHaveBeenCalled()
           hasGotten = true
 
         waitsFor ->
           hasGotten
 
     describe 'on second invocation', ->
-      itReturnsCachedResultOfFetchPathEnvOfLoginShell = ->
-        it 'returns cached result of fetchPathEnvOfLoginShell', ->
+      itReturnsCachedResultOfFetchEnvOfLoginShell = ->
+        it 'returns cached result of .fetchEnvOfLoginShell', ->
           hasGotten = false
 
-          CommandRunner.getPathEnvOfLoginShell (path) ->
+          CommandRunner.getEnvOfLoginShell (env) ->
             hasGotten = true
 
           waitsFor ->
@@ -95,27 +96,27 @@ describe 'CommandRunner', ->
 
           runs ->
             hasGotten = false
-            spyOn(CommandRunner, 'fetchPathEnvOfLoginShell').andCallThrough()
+            spyOn(CommandRunner, 'fetchEnvOfLoginShell').andCallThrough()
 
-            CommandRunner.getPathEnvOfLoginShell (path) ->
-              expect(CommandRunner.fetchPathEnvOfLoginShell).not.toHaveBeenCalled()
+            CommandRunner.getEnvOfLoginShell (env) ->
+              expect(CommandRunner.fetchEnvOfLoginShell).not.toHaveBeenCalled()
               hasGotten = true
 
           waitsFor ->
             hasGotten
 
-      describe 'and the result of fetchPathEnvOfLoginShell is valid PATH', ->
-        itReturnsCachedResultOfFetchPathEnvOfLoginShell()
+      describe 'and the result of .fetchEnvOfLoginShell is valid', ->
+        itReturnsCachedResultOfFetchEnvOfLoginShell()
 
-      describe 'and the result of fetchPathEnvOfLoginShell is null', ->
+      describe 'and the result of fetchEnvOfLoginShell is null', ->
         beforeEach ->
           process.env.SHELL = ''
 
-        itReturnsCachedResultOfFetchPathEnvOfLoginShell()
+        itReturnsCachedResultOfFetchEnvOfLoginShell()
 
   describe 'run', ->
     beforeEach ->
-      CommandRunner._cachedPathEnvOfLoginShell = undefined
+      CommandRunner._cachedEnvOfLoginShell = undefined
 
     run = (command, callback) ->
       hasRun = false
