@@ -12,8 +12,8 @@
 
 ## v0.5.0
 
-* [#16](https://github.com/yujinakayama/atom-lint/pull/16) Support multiline in tooltips. ([@x0l][])
-* [#18](https://github.com/yujinakayama/atom-lint/pull/18) Add CoffeeLint support. ([@x0l][])
+* [#16](https://github.com/yujinakayama/atom-lint/pull/16): Support multiline in tooltips. ([@x0l][])
+* [#18](https://github.com/yujinakayama/atom-lint/pull/18): Add CoffeeLint support. ([@x0l][])
 * Markup HLint results in tooltip. ([@yujinakayama][])
 
 ## v0.4.1
@@ -39,8 +39,8 @@
 
 ## v0.1.2
 
-* ([#1](https://github.com/yujinakayama/atom-lint/issues/1)): Use `PATH` of the login shell even if Atom is launched from Finder or Dock so that executable `rubocop` can be found properly. ([@yujinakayama])
-* ([#1](https://github.com/yujinakayama/atom-lint/issues/1)): Use config `atom-lint.rubocop.path` as an executable path for `rubocop` if it's set. ([@yujinakayama])
+* [#1](https://github.com/yujinakayama/atom-lint/issues/1): Use `PATH` of the login shell even if Atom is launched from Finder or Dock so that executable `rubocop` can be found properly. ([@yujinakayama])
+* [#1](https://github.com/yujinakayama/atom-lint/issues/1): Use config `atom-lint.rubocop.path` as an executable path for `rubocop` if it's set. ([@yujinakayama])
 
 ## v0.1.1
 
