@@ -75,9 +75,9 @@ class LintRunner
     @linterConstructor
 
   bufferLint: ->
-      linter = new @linterConstructor(null, @buffer.cachedText)
-      linter.run (error, violations) =>
-          @emit('lint', error, violations)
+    linter = new @linterConstructor(null, @buffer.cachedText)
+    linter.run (error, violations) =>
+      @emit('lint', error, violations)
 
   lint: ->
     filePath = @buffer.getUri()
