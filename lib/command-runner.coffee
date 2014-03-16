@@ -52,7 +52,7 @@ class CommandRunner
     proc = child_process.spawn(@command[0], @command.splice(1), { env: env })
 
     if @stdin?
-        proc.stdin.end @stdin, "utf-8"
+      proc.stdin.end @stdin, "utf-8"
 
     result =
       stdout: ''
