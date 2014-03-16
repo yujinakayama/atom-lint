@@ -7,21 +7,42 @@ errorPattern = /^\/+([^:]+):(\d+)(:(\d+))?: (.*)$/
 
 module.exports =
 class Gc
+  @_cachedEnv = undefined
+
+  # Grab the Go environment variables from the go tool. These variables won't
+  # be in the system-wide env.
+  @getEnv: (callback) ->
+    callback(null, @_cachedEnv) unless @_cachedEnv == undefined
+
+    runner = new CommandRunner(['go', 'env', 'GOARCH', 'GOOS', 'GOPATH', 'GOCHAR'])
+    runner.run (error, result) =>
+      return callback(error) if error?
+
+      [GOARCH, GOOS, GOPATH, GOCHAR] = result.stdout.split('\n')
+      @_cachedEnv =
+        'GOARCH': GOARCH
+        'GOOS': GOOS
+        'GOPATH': GOPATH
+        'GOCHAR': GOCHAR
+
+      callback(null, @_cachedEnv)
+
   constructor: (@filePath) ->
 
   run: (callback) ->
-    @getEnv =>
-      @runGoLint (error, violations) ->
+    Gc.getEnv (error, env) =>
+      return callback(error) if error?
+
+      @runGoLint env, (error, violations) ->
         if error?
           callback(error)
         else
           callback(null, violations)
 
-  runGoLint: (callback) ->
-    runner = new CommandRunner(@buildCommand())
+  runGoLint: (env, callback) ->
+    runner = new CommandRunner(@buildCommand(env))
     runner.run (error, result) =>
-      if error?
-        return callback(error)
+      return callback(error) if error?
 
       violations = []
       items = result.stdout.split '\n'
@@ -55,49 +76,31 @@ class Gc
 
       callback(null, violations)
 
-  # Grab the Go environment variables from the go tool. These variables won't
-  # be in the system-wide env (hence not accessible from process.env) unless
-  # they're in launchd.
-  #
-  # Speaking of launchd, GOPATH *still* won't be visible until it's in launchd.
-  # So users of this must put 'launchctl setenv GOPATH $GOPATH' wherever they
-  # set GOPATH, like in a .bash_profile or whatever.
-  getEnv: (callback) ->
-    (new CommandRunner([
-      "go"
-      "env"
-      "GOARCH"
-      "GOOS"
-      "GOPATH"
-      "GOCHAR"
-    ])).run (error, result) =>
-      unless error?
-        [@GOARCH, @GOOS, @GOPATH, @GOCHAR] = result.stdout.split('\n')
-        @importpath = "#{@GOPATH}/pkg/#{@GOOS}_#{@GOARCH}"
-        callback()
-
   # Build the compile command to be run, including relevant flags and setting
   # the import path to GOPATH/pkg (the go tool *g needs to be told explicitly,
   # normally `go build` does this all for us).
   # Opting for *g instead of go build because the linking would take up
   # unnecessary real and cpu time for no gain.
-  buildCommand: ->
+  buildCommand: (env) ->
     # compile with all the other files in the same directory so it doesn't
     # complain about missing identifiers, etc
     here = path.dirname(@filePath)
+
     files = fs.readdirSync(here).filter (file) ->
       path.extname(file) is '.go'
     .map (file) ->
       path.join(here, file)
 
+    importSearchPath = "#{env.GOPATH}/pkg/#{env.GOOS}_#{env.GOARCH}"
+
     [
       atom.config.get('atom-lint.gc.path') || 'go'
       "tool"
-      @GOCHAR + 'g'
+      env.GOCHAR + 'g'
       "-L" # use full file paths
       "-e" # don't limit # of errors
       "-s" # warn about simplifiable composite literals
       "-o", "/dev/null"
-      "-I", @importpath
+      "-I", importSearchPath
       files...
     ]
