@@ -18,6 +18,7 @@ More linters will be supported in the future.
 (Installation of [language-haskell](https://atom.io/packages/language-haskell) package is required)
 * [JSHint](http://www.jshint.com/docs/) for JavaScript
 * [CoffeeLint](http://www.coffeelint.org/) for CoffeeScript
+* [gc](http://golang.org/cmd/gc/) for Go
 
 ## Installation
 
@@ -60,6 +61,8 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
     'path': '/path/to/bin/coffeelint'
   'flake8':
     'path': '/path/to/bin/flake8'
+  'gc':
+    'path': '/path/to/bin/go'
   'hlint':
     'path': '/path/to/bin/hlint'
   'jshint':

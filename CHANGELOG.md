@@ -2,6 +2,10 @@
 
 ## Development
 
+## v0.6.0
+
+* [#23](https://github.com/yujinakayama/atom-lint/pull/23): Add Go support via gc. ([@moshee][])
+
 ## v0.5.2
 
 * [#19](https://github.com/yujinakayama/atom-lint/issues/19), [#20](https://github.com/yujinakayama/atom-lint/issues/20): Fix `Uncaught TypeError: Cannot call method 'sort' of undefined` on failure of linting. ([@yujinakayama][])
@@ -54,3 +58,4 @@
 [@danielgtaylor]: https://github.com/danielgtaylor
 [@x0l]: https://github.com/x0l
 [@benjohnson]: https://github.com/benjohnson
+[@moshee]: https://github.com/moshee
