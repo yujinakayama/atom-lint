@@ -3,7 +3,8 @@ CommandRunner = require '../command-runner'
 Violation = require '../violation'
 path = require 'path'
 fs = require 'fs'
-errorPattern = /^\/+([^:]+):(\d+)(:(\d+))?: (.*)$/
+
+ERROR_PATTERN = /^\/+([^:]+):(\d+)(:(\d+))?: (.*)$/
 
 module.exports =
 class Gc
@@ -61,7 +62,7 @@ class Gc
           unless skippingIndented
             violations[violations.length - 1].message += '\n' + item
         else
-          [_, filePath, line, _, col, msg] = item.match(errorPattern)
+          [_, filePath, line, _, col, msg] = item.match(ERROR_PATTERN)
           filePath = '/' + filePath
           if filePath isnt @filePath
             skippingIndented = true
