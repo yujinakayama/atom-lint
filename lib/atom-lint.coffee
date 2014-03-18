@@ -14,13 +14,8 @@ module.exports =
   enable: ->
     @enabled = true
 
-    # Already instantiated tabs
-    for editorView in atom.workspaceView.getEditorViews()
-      @injectLintViewIntoEditorView(editorView)
-
-    # Invoked on instantiation of new tab
+    # Subscribing to every current and future editor
     @editorViewSubscription = atom.workspaceView.eachEditorView (editorView) =>
-      return unless editorView.getPane()?
       @injectLintViewIntoEditorView(editorView)
 
     @injectLintStatusViewIntoStatusBar()
@@ -45,6 +40,7 @@ module.exports =
       @enable()
 
   injectLintViewIntoEditorView: (editorView) ->
+    return unless editorView.getPane()?
     return unless editorView.attached
     return if editorView.lintView?
     LintView ?= require './lint-view'
