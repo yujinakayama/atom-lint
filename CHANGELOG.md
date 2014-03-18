@@ -2,6 +2,10 @@
 
 ## Development
 
+## v0.7.0
+
+* [#8](https://github.com/yujinakayama/atom-lint/issues/8): Display current active linter name and violation summary in the status bar. ([@yujinakayama])
+
 ## v0.6.0
 
 * [#23](https://github.com/yujinakayama/atom-lint/pull/23): Add Go support via gc. ([@moshee][])
