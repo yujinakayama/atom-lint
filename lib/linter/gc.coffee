@@ -7,6 +7,8 @@ errorPattern = /^\/+([^:]+):(\d+)(:(\d+))?: (.*)$/
 
 module.exports =
 class Gc
+  @canonicalName = 'gc'
+
   @_cachedEnv = undefined
 
   # Grab the Go environment variables from the go tool. These variables won't

@@ -18,7 +18,7 @@ describe 'LintRunner', ->
 
   describe 'initially', ->
     it 'has no active linter', ->
-      expect(lintRunner.getCurrentLinter()).toBeFalsy()
+      expect(lintRunner.getActiveLinter()).toBeFalsy()
 
   describe '::startWatching', ->
     describe "when the editor's grammar is Ruby", ->
@@ -27,7 +27,7 @@ describe 'LintRunner', ->
 
       it 'activates RuboCop', ->
         lintRunner.startWatching()
-        expect(lintRunner.getCurrentLinter()).toBe(Rubocop)
+        expect(lintRunner.getActiveLinter()).toBe(Rubocop)
 
       it 'emits "activate" event', ->
         waitsForEventToBeEmitted lintRunner, 'activate', ->
@@ -43,7 +43,7 @@ describe 'LintRunner', ->
 
       it 'activates flake8', ->
         lintRunner.startWatching()
-        expect(lintRunner.getCurrentLinter()).toBe(Flake8)
+        expect(lintRunner.getActiveLinter()).toBe(Flake8)
 
       it 'emits "activate" event', ->
         waitsForEventToBeEmitted lintRunner, 'activate', ->
@@ -59,7 +59,7 @@ describe 'LintRunner', ->
 
       it 'does not activate any linter', ->
         lintRunner.startWatching()
-        expect(lintRunner.getCurrentLinter()).toBeFalsy()
+        expect(lintRunner.getActiveLinter()).toBeFalsy()
 
       it 'does not emit "activate" event', ->
         expectEventNotToBeEmitted lintRunner, 'activate', ->
@@ -77,7 +77,7 @@ describe 'LintRunner', ->
 
       it 'does not change linter', ->
         lintRunner.startWatching()
-        expect(lintRunner.getCurrentLinter()).toBe(Rubocop)
+        expect(lintRunner.getActiveLinter()).toBe(Rubocop)
 
       it 'does not emit "activate" event', ->
         expectEventNotToBeEmitted lintRunner, 'activate', ->
@@ -95,7 +95,7 @@ describe 'LintRunner', ->
 
       it 'deactivates the linter', ->
         lintRunner.stopWatching()
-        expect(lintRunner.getCurrentLinter()).toBeFalsy()
+        expect(lintRunner.getActiveLinter()).toBeFalsy()
 
       it 'emits "deactivate" event', ->
         waitsForEventToBeEmitted lintRunner, 'deactivate', ->
@@ -107,7 +107,7 @@ describe 'LintRunner', ->
 
       it 'does nothing with linter', ->
         lintRunner.stopWatching()
-        expect(lintRunner.getCurrentLinter()).toBeFalsy()
+        expect(lintRunner.getActiveLinter()).toBeFalsy()
 
       it 'does not emit "deactivate" event', ->
         expectEventNotToBeEmitted lintRunner, 'deactivate', ->
@@ -127,7 +127,7 @@ describe 'LintRunner', ->
     describe "and the editor's grammar is changed to Python", ->
       it 'activates flake8', ->
         editor.setGrammar(loadGrammar('python'))
-        expect(lintRunner.getCurrentLinter()).toBe(Flake8)
+        expect(lintRunner.getActiveLinter()).toBe(Flake8)
 
       it 'does not emit "activate" event', ->
         expectEventNotToBeEmitted lintRunner, 'activate', ->
@@ -171,7 +171,7 @@ describe 'LintRunner', ->
     describe "and the editor's grammar is changed to Python", ->
       it 'activates flake8', ->
         editor.setGrammar(loadGrammar('python'))
-        expect(lintRunner.getCurrentLinter()).toBe(Flake8)
+        expect(lintRunner.getActiveLinter()).toBe(Flake8)
 
       it 'emits "activate" event', ->
         waitsForEventToBeEmitted lintRunner, 'activate', ->

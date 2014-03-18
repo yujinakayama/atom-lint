@@ -4,6 +4,8 @@ Violation = require '../violation'
 
 module.exports =
 class Rubocop
+  @canonicalName = 'RuboCop'
+
   constructor: (@filePath) ->
 
   run: (callback) ->

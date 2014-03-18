@@ -11,6 +11,7 @@ class LintRunner
 
   constructor: (@editor) ->
     @buffer = @editor.getBuffer()
+    @lastViolations = null
 
   startWatching: ->
     return if @isWatching()
@@ -55,6 +56,8 @@ class LintRunner
         @lint()
 
   deactivate: ->
+    @lastViolations = null
+
     if @bufferSaveSubscription?
       @bufferSaveSubscription.off()
       @bufferSaveSubscription = null
@@ -63,11 +66,21 @@ class LintRunner
       @linterConstructor = null
       @emit('deactivate')
 
-  getCurrentLinter: ->
-    @linterConstructor
-
   lint: ->
     filePath = @buffer.getUri()
     linter = new @linterConstructor(filePath)
     linter.run (error, violations) =>
-      @emit('lint', error, violations)
+      @setLastViolations(violations)
+      @emit('lint', error, @lastViolations)
+
+  getActiveLinter: ->
+    @linterConstructor
+
+  getLastViolations: ->
+    @lastViolations
+
+  setLastViolations: (violations) ->
+    @lastViolations = violations
+    return unless @lastViolations?
+    @lastViolations = @lastViolations.sort (a, b) ->
+      a.bufferRange.compare(b.bufferRange)

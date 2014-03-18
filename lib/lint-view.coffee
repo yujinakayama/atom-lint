@@ -12,10 +12,11 @@ class LintView extends View
     @div class: 'lint'
 
   initialize: (@editorView) ->
+    @editorView.lintView = this
+
     @editor = @editorView.getEditor()
     @gutterView = @editorView.gutter
 
-    @lastViolations = null
     @violationViews = []
 
     @lintRunner = new LintRunner(@editor)
@@ -33,14 +34,11 @@ class LintView extends View
       @updateGutterMarkers()
 
   onLinterDeactivation: ->
-    @lastViolations = null
     @editorDisplayUpdateSubscription?.off()
     @removeViolationViews()
     @updateGutterMarkers()
 
   onLint: (error, violations) ->
-    @setLastViolations(violations)
-
     @updateGutterMarkers()
     @removeViolationViews()
 
@@ -51,6 +49,7 @@ class LintView extends View
 
   beforeRemove: ->
     @lintRunner.stopWatching()
+    @editorView.lintView = undefined
 
   addViolationViews: (violations) ->
     for violation in violations
@@ -68,18 +67,12 @@ class LintView extends View
     for severity in Violation.SEVERITIES
       @gutterView.removeClassFromAllLines("lint-#{severity}")
 
-    return unless @lastViolations
+    return unless @getLastViolations()
 
-    for violation in @lastViolations
+    for violation in @getLastViolations()
       line = violation.bufferRange.start.row
       klass = "lint-#{violation.severity}"
       @gutterView.addClassToLine(line, klass)
-
-  setLastViolations: (violations) ->
-    @lastViolations = violations
-    return unless @lastViolations?
-    @lastViolations = @lastViolations.sort (a, b) ->
-      a.bufferRange.compare(b.bufferRange)
 
   moveToNextViolation: ->
     @moveToNeighborViolation('next')
@@ -88,6 +81,10 @@ class LintView extends View
     @moveToNeighborViolation('previous')
 
   moveToNeighborViolation: (direction) ->
+    unless @getLastViolations()?
+      atom.beep()
+      return
+
     if direction == 'next'
       enumerationMethod = 'find'
       comparingMethod = 'isGreaterThan'
@@ -98,10 +95,13 @@ class LintView extends View
     currentCursorPosition = @editor.getCursor().getBufferPosition()
 
     # OPTIMIZE: Consider using binary search.
-    neighborViolation = _[enumerationMethod] @lastViolations, (violation) ->
+    neighborViolation = _[enumerationMethod] @getLastViolations(), (violation) ->
       violation.bufferRange.start[comparingMethod](currentCursorPosition)
 
     if neighborViolation?
       @editor.setCursorBufferPosition(neighborViolation.bufferRange.start)
     else
       atom.beep()
+
+  getLastViolations: ->
+    @lintRunner.getLastViolations()

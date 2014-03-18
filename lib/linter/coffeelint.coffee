@@ -4,6 +4,8 @@ Violation = require '../violation'
 
 module.exports =
 class CoffeeLint extends CheckstyleBase
+  @canonicalName = 'CoffeeLint'
+
   buildCommand: ->
     command = []
 

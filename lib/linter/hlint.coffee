@@ -5,6 +5,8 @@ Violation = require '../violation'
 
 module.exports =
 class HLint
+  @canonicalName = 'HLint'
+
   constructor: (@filePath) ->
 
   run: (callback) ->

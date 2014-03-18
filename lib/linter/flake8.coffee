@@ -4,6 +4,8 @@ Violation = require '../violation'
 
 module.exports =
 class Flake8
+  @canonicalName = 'flake8'
+
   constructor: (@filePath) ->
 
   run: (callback) ->
