@@ -86,3 +86,29 @@
     }
   }
 }
+
+.status-bar .lint-status {
+  .icon {
+    margin-left: 4px;
+  }
+
+  .icon:before {
+    @font-size: 12px;
+    width: @font-size;
+    height: @font-size;
+    font-size: @font-size;
+    top: 0;
+  }
+
+  .lint-clean:before {
+    color: @text-color-success;
+  }
+
+  .lint-warning:before {
+    color: @text-color-warning;
+  }
+
+  .lint-error:before {
+    color: @text-color-error;
+  }
+}

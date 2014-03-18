@@ -12,6 +12,8 @@ class LintView extends View
     @div class: 'lint'
 
   initialize: (@editorView) ->
+    @editorView.lintView = this
+
     @editor = @editorView.getEditor()
     @gutterView = @editorView.gutter
 
@@ -47,6 +49,7 @@ class LintView extends View
 
   beforeRemove: ->
     @lintRunner.stopWatching()
+    @editorView.lintView = undefined
 
   addViolationViews: (violations) ->
     for violation in violations

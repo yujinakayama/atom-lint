@@ -1,5 +1,6 @@
 # Minimize additional startup time of Atom caused by atom-lint.
 LintView = null
+LintStatusView = null
 
 module.exports =
   activate: ->
@@ -22,10 +23,19 @@ module.exports =
       return unless editorView.getPane()?
       @injectLintViewIntoEditorView(editorView)
 
+    @injectLintStatusViewIntoStatusBar()
+    atom.packages.once 'activated', =>
+      @injectLintStatusViewIntoStatusBar()
+
   disable: ->
+    @lintStatusView?.remove()
+    @lintStatusView = null
+
     @editorViewSubscription?.off()
+
     while view = @lintViews.shift()
       view.remove()
+
     @enabled = false
 
   toggle: ->
@@ -36,8 +46,16 @@ module.exports =
 
   injectLintViewIntoEditorView: (editorView) ->
     return unless editorView.attached
-    return if editorView.find('.lint').length > 0
+    return if editorView.lintView?
     LintView ?= require './lint-view'
     lintView = new LintView(editorView)
     @lintViews.push(lintView)
     editorView.overlayer.append(lintView)
+
+  injectLintStatusViewIntoStatusBar: ->
+    return if @lintStatusView?
+    statusBar = atom.workspaceView.statusBar
+    return unless statusBar?
+    LintStatusView ?= require './lint-status-view'
+    @lintStatusView = new LintStatusView(statusBar)
+    statusBar.prependRight(@lintStatusView)

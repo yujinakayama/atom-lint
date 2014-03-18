@@ -4,6 +4,8 @@ Violation = require '../violation'
 
 module.exports =
 class JsHint extends CheckstyleBase
+  @canonicalName = 'JSHint'
+
   buildCommand: ->
     command = []
 
