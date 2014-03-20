@@ -61,12 +61,9 @@ class CommandRunner
   constructor: (@command) ->
 
   run: (callback) ->
-    if @command[0].indexOf('/') == 0
-      @runWithEnv(process.env, callback)
-    else
-      CommandRunner.getEnvOfLoginShell (env) =>
-        env ?= process.env
-        @runWithEnv(env, callback)
+    CommandRunner.getEnvOfLoginShell (env) =>
+      env ?= process.env
+      @runWithEnv(env, callback)
 
   runWithEnv: (env, callback) ->
     proc = child_process.spawn(@command[0], @command.splice(1), { env: env })

@@ -181,25 +181,19 @@ describe 'CommandRunner', ->
         run ['non-existent-command'], (error, result) ->
           expect(error.code).toBe('ENOENT')
 
-    describe 'when the command is specified as an absolute path', ->
-      it 'runs the command with the current PATH', ->
-        run ['/usr/bin/perl', '-e', 'print $ENV{PATH}'], (error, result) ->
+    describe 'when environment variables of the login shell can be fetched', ->
+      it 'runs the command with the env', ->
+        process.env.PATH = '/usr/bin'
+        run ['perl', '-e', 'print $ENV{PATH}'], (error, result) ->
+          expect(result.stdout).not.toBe('/usr/bin')
+
+      it 'does not modify the env of the current process', ->
+        process.env.PATH = '/usr/bin'
+        run ['perl', '-e', 'print $ENV{PATH}'], (error, result) ->
+          expect(process.env.PATH).toBe('/usr/bin')
+
+    describe 'when environment variables of the login shell cannot be fetched', ->
+      it 'runs the command with the current env', ->
+        process.env.SHELL = ''
+        run ['perl', '-e', 'print $ENV{PATH}'], (error, result) ->
           expect(result.stdout).toBe(process.env.PATH)
-
-    describe 'when the command is specified as a basename', ->
-      describe 'and PATH of the login shell can be fetched', ->
-        it 'runs the command with PATH of the login shell', ->
-          process.env.PATH = '/usr/bin'
-          run ['perl', '-e', 'print $ENV{PATH}'], (error, result) ->
-            expect(result.stdout).not.toBe('/usr/bin')
-
-        it 'does not modify PATH of the current process', ->
-          process.env.PATH = '/usr/bin'
-          run ['perl', '-e', 'print $ENV{PATH}'], (error, result) ->
-            expect(process.env.PATH).toBe('/usr/bin')
-
-      describe 'and PATH of the login shell cannot be fetched', ->
-        it 'runs the command with the current PATH', ->
-          process.env.SHELL = ''
-          run ['perl', '-e', 'print $ENV{PATH}'], (error, result) ->
-            expect(result.stdout).toBe(process.env.PATH)
