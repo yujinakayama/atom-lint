@@ -36,6 +36,7 @@
 
   .tooltip {
     font-family: @font-family;
+    max-width: 430px;
   }
 
   .tooltip.bottom {
@@ -49,7 +50,7 @@
   }
 
   .tooltip .tooltip-inner {
-    white-space: pre;
+    white-space: pre-wrap;
     text-align: left;
     box-shadow: 0 0 3px 1px fadeout(@syntax-background-color, 10%);
 
@@ -64,6 +65,9 @@
     pre {
       margin: 5px 0;
       padding: 4px 8px;
+      white-space: pre;
+      word-wrap: normal;
+      overflow: scroll;
       font-size: 10px;
       background-color: transparent;
       border: 1px solid transparent;
