@@ -4,6 +4,9 @@
 // for a full listing of what's available.
 @import 'ui-variables';
 
+// https://github.com/atom/atom-dark-syntax/blob/master/stylesheets/syntax-variables.less
+@import 'syntax-variables';
+
 // https://github.com/styleguide/css/7.0
 @import 'octicon-utf-codes';
 
@@ -48,6 +51,7 @@
   .tooltip .tooltip-inner {
     white-space: pre;
     text-align: left;
+    box-shadow: 0 0 3px 1px fadeout(@syntax-background-color, 10%);
 
     .attachment {
       margin-top: 5px;
