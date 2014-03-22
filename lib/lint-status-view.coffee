@@ -53,10 +53,10 @@ class LintStatusView extends View
       else
         errorCount = @countViolationsOfSeverity(violations, 'error')
         if errorCount > 0
-          html += "<span class=\"icon icon-alert lint-error\">#{errorCount}</span>"
+          html += "<span class=\"icon icon-alert lint-error\"></span> #{errorCount}"
         warningCount = @countViolationsOfSeverity(violations, 'warning')
         if warningCount > 0
-          html += "<span class=\"icon icon-alert lint-warning\">#{warningCount}</span>"
+          html += "<span class=\"icon icon-alert lint-warning\"></span> #{warningCount}"
 
     @find('.lint-summary').html(html)
 
