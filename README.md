@@ -20,6 +20,7 @@ More linters will be supported in the future.
 * [CoffeeLint](http://www.coffeelint.org/) for CoffeeScript
 * [gc](http://golang.org/cmd/gc/) for Go
 * [CSSLint](https://github.com/stubbornella/csslint) for CSS
+* [SCSS-Lint](https://github.com/causes/scss-lint) for SCSS
 
 ## Installation
 

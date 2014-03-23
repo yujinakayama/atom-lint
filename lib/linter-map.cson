@@ -7,3 +7,4 @@
 'source.coffee': 'coffeelint'
 'source.go': 'gc'
 'source.css': 'csslint'
+'source.css.scss': 'scss-lint'
