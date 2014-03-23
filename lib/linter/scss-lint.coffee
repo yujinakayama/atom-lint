@@ -5,7 +5,7 @@ Violation = require '../violation'
 
 module.exports =
 class SCSSLint
-  @canonicalName = 'SCSSLint'
+  @canonicalName = 'SCSS-Lint'
 
   constructor: (@filePath) ->
 
@@ -27,12 +27,12 @@ class SCSSLint
   buildCommand: ->
     command = []
 
-    userSCSSLintPath = atom.config.get('atom-lint.scsslint.path')
+    userSCSSLintPath = atom.config.get('atom-lint.scss-lint.path')
 
     if userSCSSLintPath?
       command.push(userSCSSLintPath)
     else
-      command.push('scsslint')
+      command.push('scss-lint')
 
     command.push('--format', 'XML')
     command.push(@filePath)
