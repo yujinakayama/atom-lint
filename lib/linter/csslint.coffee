@@ -21,7 +21,7 @@ class CSSLint extends CheckstyleBase
     command
 
   isValidExitCode: (exitCode) ->
-    exitCode == 0
+    exitCode == 0 || exitCode == 1
 
   createViolationFromErrorElement: (element) ->
     bufferPoint = new Point(element.$.line - 1, element.$.column - 1)
