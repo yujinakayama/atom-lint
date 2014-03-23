@@ -51,16 +51,16 @@ class LintRunner
 
     @lint()
 
-    unless @bufferSaveSubscription?
-      @bufferSaveSubscription = @subscribe @buffer, 'saved', =>
+    unless @bufferSubscription?
+      @bufferSubscription = @subscribe @buffer, 'saved reloaded', =>
         @lint()
 
   deactivate: ->
     @lastViolations = null
 
-    if @bufferSaveSubscription?
-      @bufferSaveSubscription.off()
-      @bufferSaveSubscription = null
+    if @bufferSubscription?
+      @bufferSubscription.off()
+      @bufferSubscription = null
 
     if @linterConstructor?
       @linterConstructor = null

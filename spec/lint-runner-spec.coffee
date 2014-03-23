@@ -124,6 +124,11 @@ describe 'LintRunner', ->
         waitsForEventToBeEmitted lintRunner, 'lint', ->
           buffer.emit('saved')
 
+    describe 'and a file is reloaded', ->
+      it 'emits "lint" event', ->
+        waitsForEventToBeEmitted lintRunner, 'lint', ->
+          buffer.emit('reloaded')
+
     describe "and the editor's grammar is changed to Python", ->
       it 'activates flake8', ->
         editor.setGrammar(loadGrammar('python'))

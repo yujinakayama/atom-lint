@@ -2,6 +2,8 @@
 
 ## Development
 
+* Rerun lint when the file was reloaded with modification by another process. ([@yujinakayama])
+
 ## v0.7.0
 
 * [#8](https://github.com/yujinakayama/atom-lint/issues/8): Display current active linter name and violation summary in the status bar. ([@yujinakayama])
