@@ -61,6 +61,8 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
 'atom-lint':
   'coffeelint':
     'path': '/path/to/bin/coffeelint'
+  'csslint':
+    'path': '/path/to/bin/csslint'
   'flake8':
     'path': '/path/to/bin/flake8'
   'gc':
@@ -71,6 +73,8 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
     'path': '/path/to/bin/jshint'
   'rubocop':
     'path': '/path/to/bin/rubocop'
+  'scss-lint':
+    'path': '/path/to/bin/scss-lint'
 ```
 
 By default Atom-Lint automatically refers the environement variable `PATH` of your login shell
