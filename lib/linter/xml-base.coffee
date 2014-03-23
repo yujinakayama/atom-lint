@@ -2,7 +2,7 @@ xml2js = require 'xml2js'
 CommandRunner = require '../command-runner'
 
 module.exports =
-class CheckstyleBase
+class XmlBase
   constructor: (@filePath) ->
 
   run: (callback) ->
@@ -15,7 +15,7 @@ class CheckstyleBase
 
       xml2js.parseString result.stdout, (xmlError, xml) =>
         return callback(xmlError) if xmlError?
-        callback(null, @createViolationsFromCheckstyleXml(xml))
+        callback(null, @createViolationsFromXml(xml))
 
   buildCommand: ->
     throw new Error('::buildCommand must be overridden')
@@ -23,10 +23,10 @@ class CheckstyleBase
   isValidExitCode: (exitCode) ->
     throw new Error('::isValidExitCode must be overridden')
 
-  createViolationsFromCheckstyleXml: (xml) ->
+  createViolationsFromXml: (xml) ->
     return [] unless xml.checkstyle.file?
     for element in xml.checkstyle.file[0].error
-      @createViolationFromErrorElement(element)
+      @createViolationFromElement(element)
 
-  createViolationFromErrorElement: (element) ->
-    throw new Error('::createViolationFromErrorElement must be overridden')
+  createViolationFromElement: (element) ->
+    throw new Error('::createViolationFromElement must be overridden')

@@ -1,9 +1,9 @@
 {Range, Point} = require 'atom'
-CheckstyleBase = require './checkstyle-base'
+XmlBase = require './xml-base'
 Violation = require '../violation'
 
 module.exports =
-class CSSLint extends CheckstyleBase
+class CSSLint extends XmlBase
   @canonicalName = 'CSSLint'
 
   buildCommand: ->
@@ -23,7 +23,7 @@ class CSSLint extends CheckstyleBase
   isValidExitCode: (exitCode) ->
     exitCode == 0 || exitCode == 1
 
-  createViolationFromErrorElement: (element) ->
+  createViolationFromElement: (element) ->
     bufferPoint = new Point(element.$.line - 1, element.$.column - 1)
     bufferRange = new Range(bufferPoint, bufferPoint)
     new Violation(element.$.severity, bufferRange, element.$.message)

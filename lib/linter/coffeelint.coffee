@@ -1,9 +1,9 @@
 {Range, Point} = require 'atom'
-CheckstyleBase = require './checkstyle-base'
+XmlBase = require './xml-base'
 Violation = require '../violation'
 
 module.exports =
-class CoffeeLint extends CheckstyleBase
+class CoffeeLint extends XmlBase
   @canonicalName = 'CoffeeLint'
 
   buildCommand: ->
@@ -25,7 +25,7 @@ class CoffeeLint extends CheckstyleBase
     # And code 1 for parse errors.
     0 <= exitCode <= 2
 
-  createViolationFromErrorElement: (element) ->
+  createViolationFromElement: (element) ->
     column = element.$.column
     column ?= 1
     bufferPoint = new Point(element.$.line - 1, column - 1)

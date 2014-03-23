@@ -1,9 +1,9 @@
 {Range, Point} = require 'atom'
-CheckstyleBase = require './checkstyle-base'
+XmlBase = require './xml-base'
 Violation = require '../violation'
 
 module.exports =
-class JsHint extends CheckstyleBase
+class JsHint extends XmlBase
   @canonicalName = 'JSHint'
 
   buildCommand: ->
@@ -25,7 +25,7 @@ class JsHint extends CheckstyleBase
     # https://github.com/jshint/jshint/issues/916
     exitCode == 0 || exitCode == 2
 
-  createViolationFromErrorElement: (element) ->
+  createViolationFromElement: (element) ->
     # JSHint only returns one point instead of a range, so we're going to set
     # both sides of the range to the same thing.
     bufferPoint = new Point(element.$.line - 1, element.$.column - 1)
