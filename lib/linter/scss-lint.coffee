@@ -14,7 +14,7 @@ class SCSSLint
     runner.run (commandError, result) =>
       return callback(commandError) if commandError?
 
-      unless result.exitCode == 0
+      if result.exitCode == 65
         xml2js.parseString result.stdout, (xmlError, xml) =>
           return callback(xmlError) if xmlError?
           callback(null, @createViolationsFromXml(xml))
