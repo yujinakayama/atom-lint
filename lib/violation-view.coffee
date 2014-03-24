@@ -25,7 +25,6 @@ class ViolationView extends View
       title: HTML || @violation.message
       html: HTML?
       container: @lintView
-      viewport: @lintView
 
   trackEdit: ->
     @marker = @editor.markScreenRange(@getCurrentScreenRange(), invalidation: 'inside')
