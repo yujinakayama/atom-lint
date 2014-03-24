@@ -1,6 +1,7 @@
 {Range, Point} = require 'atom'
 CommandRunner = require '../command-runner'
 Violation = require '../violation'
+util = require '../util'
 
 module.exports =
 class PuppetLint
@@ -30,6 +31,8 @@ class PuppetLint
       [line, column, severity, message] = line.split(':')
       bufferPoint = new Point(parseInt(line) - 1, parseInt(column) - 1)
       bufferRange = new Range(bufferPoint, bufferPoint)
+
+      message = util.punctuate(util.capitalize(message))
 
       new Violation(severity, bufferRange, message)
 
