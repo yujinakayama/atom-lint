@@ -27,8 +27,8 @@ class PuppetLint
     for line in lines
       continue unless line
 
-      [line, severity, message] = line.split(':')
-      bufferPoint = new Point(parseInt(line) - 1, 0)
+      [line, column, severity, message] = line.split(':')
+      bufferPoint = new Point(parseInt(line) - 1, parseInt(column) - 1)
       bufferRange = new Range(bufferPoint, bufferPoint)
 
       new Violation(severity, bufferRange, message)
@@ -43,7 +43,7 @@ class PuppetLint
     else
       command.push('puppet-lint')
 
-    command.push('--log-format', '%{linenumber}:%{kind}:%{message}')
+    command.push('--log-format', '%{linenumber}:%{column}:%{kind}:%{message}')
 
     command.push(@filePath)
     command
