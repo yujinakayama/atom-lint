@@ -21,6 +21,7 @@ More linters will be supported in the future.
 * [gc](http://golang.org/cmd/gc/) for Go
 * [CSSLint](https://github.com/stubbornella/csslint) for CSS
 * [SCSS-Lint](https://github.com/causes/scss-lint) for SCSS
+* [puppet-lint](http://puppet-lint.com) for Puppet
 
 ## Installation
 
@@ -74,6 +75,8 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
     'path': '/path/to/bin/hlint'
   'jshint':
     'path': '/path/to/bin/jshint'
+  'puppet-lint':
+    'path': '/path/to/bin/puppet-lint'
   'rubocop':
     'path': '/path/to/bin/rubocop'
     'ignoredNames': [
