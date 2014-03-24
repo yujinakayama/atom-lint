@@ -6,21 +6,22 @@ class LinterConfig
 
   constructor: (@linterKey) ->
 
-  getBaseKeyPath: ->
-    @getKeyPathForSubKey()
-
-  getKeyPathForSubKey: (subKey) ->
-    keys = [LinterConfig.ROOT_KEY, @linterKey]
-    keys.push(subKey) if subKey?
+  getKeyPathForSubKeys: (keys...) ->
+    keys.unshift(LinterConfig.ROOT_KEY)
     keys.join('.')
 
-  get: (subKey) ->
-    keyPath = @getKeyPathForSubKey(subKey)
+  getLinterSetting: (key) ->
+    keyPath = @getKeyPathForSubKeys(@linterKey, key)
+    atom.config.get(keyPath)
+
+  getGlobalSetting: (key) ->
+    keyPath = @getKeyPathForSubKeys(key)
     atom.config.get(keyPath)
 
   isFileToLint: (absolutePath) ->
-    ignoredNames = @get('ignoredNames')
-    return true unless ignoredNames?
+    linterIgnoredNames = @getLinterSetting('ignoredNames') || []
+    globalIgnoredNames = @getGlobalSetting('ignoredNames') || []
+    ignoredNames = linterIgnoredNames.concat(globalIgnoredNames)
 
     relativePath = atom.project.relativize(absolutePath)
 
