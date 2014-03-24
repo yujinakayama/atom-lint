@@ -117,7 +117,7 @@ so that you can make these lists DRY.
 
 With the above example, both `tmp/**` and `db/schema.db` are ignored when RuboCop is active.
 
-The pattern must be a relative to the project root directory.
+The pattern must be relative to the project root directory.
 The pattern format is basically the same as the shell expansion and `.gitignore`.
 See [`minimatch`](https://github.com/isaacs/minimatch) for more details.
 
