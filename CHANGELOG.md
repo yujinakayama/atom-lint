@@ -2,7 +2,16 @@
 
 ## Development
 
+## v0.8.0
+
+* [#21](https://github.com/yujinakayama/atom-lint/issues/21): Add Puppet support via puppet-lint. ([@yujinakayama])
+* [#27](https://github.com/yujinakayama/atom-lint/pull/27): Add CSS support via CSSLint. ([@jonrohan][])
+* [#28](https://github.com/yujinakayama/atom-lint/pull/28): Add SCSS support via SCSS-Lint. ([@jonrohan][])
+* [#25](https://github.com/yujinakayama/atom-lint/issues/25): Allow to disable linting on specific files with configuration. ([@yujinakayama])
 * Rerun lint when the file was reloaded with modification by another process. ([@yujinakayama])
+* Improve tooltip style. ([@yujinakayama])
+* Tweak position of the icons in the status bar. ([@yujinakayama])
+* Display a message in the status bar when the current active linter is not installed. ([@yujinakayama])
 
 ## v0.7.0
 
@@ -65,3 +74,4 @@
 [@x0l]: https://github.com/x0l
 [@benjohnson]: https://github.com/benjohnson
 [@moshee]: https://github.com/moshee
+[@jonrohan]: https://github.com/jonrohan
