@@ -4,7 +4,8 @@ ViolationTooltip = require './violation-tooltip'
 module.exports =
 class ViolationView extends View
   @content: ->
-    @div class: 'violation'
+    @div class: 'violation', =>
+      @div class: 'violation-arrow'
 
   initialize: (@violation, @lintView) ->
     @editorView = @lintView.editorView
@@ -48,13 +49,20 @@ class ViolationView extends View
   showArrow: ->
     pixelPosition = @editorView.pixelPositionForScreenPosition(@getCurrentScreenRange().start)
     arrowSize = @editorView.charWidth / 2
+
     @css
+      'top': pixelPosition.top
+      'left': pixelPosition.left
+      'width': @editorView.charWidth
+      'height': @editorView.lineHeight + (arrowSize / 2)
+
+    $arrow = @find('.violation-arrow')
+    $arrow.css
       'border-right-width': arrowSize
       'border-bottom-width': arrowSize
       'border-left-width': arrowSize
-      'top': pixelPosition.top + @editorView.lineHeight - (arrowSize / 2)
-      'left': pixelPosition.left
-    @addClass("violation-#{@violation.severity}")
+    $arrow.addClass("violation-#{@violation.severity}")
+
     @show()
 
   hideArrow: ->
