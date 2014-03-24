@@ -10,11 +10,19 @@ describe 'LintRunner', ->
   editor = null
   buffer = null
 
+  filename = 'sample.txt'
+  originalAtomLintConfig = atom.config.get('atom-lint')
+
   beforeEach ->
-    {editorView} = prepareWorkspace()
+    atom.config.set('atom-lint', null)
+
+    {editorView} = prepareWorkspace('filename': filename)
     editor = editorView.getEditor()
     buffer = editor.getBuffer()
     lintRunner = new LintRunner(editor)
+
+  afterEach ->
+    atom.config.set('atom-lint', originalAtomLintConfig)
 
   describe 'initially', ->
     it 'has no active linter', ->
@@ -25,17 +33,34 @@ describe 'LintRunner', ->
       beforeEach ->
         editor.setGrammar(loadGrammar('ruby'))
 
-      it 'activates RuboCop', ->
-        lintRunner.startWatching()
-        expect(lintRunner.getActiveLinter()).toBe(Rubocop)
-
-      it 'emits "activate" event', ->
-        waitsForEventToBeEmitted lintRunner, 'activate', ->
+      describe 'and the filename is not specified in config "atom-lint.rubocop.ignoredNames"', ->
+        it 'activates RuboCop', ->
           lintRunner.startWatching()
+          expect(lintRunner.getActiveLinter()).toBe(Rubocop)
 
-      it 'emits "lint" event', ->
-        waitsForEventToBeEmitted lintRunner, 'lint', ->
+        it 'emits "activate" event', ->
+          waitsForEventToBeEmitted lintRunner, 'activate', ->
+            lintRunner.startWatching()
+
+        it 'emits "lint" event', ->
+          waitsForEventToBeEmitted lintRunner, 'lint', ->
+            lintRunner.startWatching()
+
+      describe 'and the filename is specified in config "atom-lint.rubocop.ignoredNames"', ->
+        beforeEach ->
+          atom.config.pushAtKeyPath('atom-lint.rubocop.ignoredNames', filename)
+
+        it 'does not activate any linter', ->
           lintRunner.startWatching()
+          expect(lintRunner.getActiveLinter()).toBeFalsy()
+
+        it 'does not emit "activate" event', ->
+          expectEventNotToBeEmitted lintRunner, 'activate', ->
+            lintRunner.startWatching()
+
+        it 'does not emit "lint" event', ->
+          expectEventNotToBeEmitted lintRunner, 'lint', ->
+            lintRunner.startWatching()
 
     describe "when the editor's grammar is Python", ->
       beforeEach ->

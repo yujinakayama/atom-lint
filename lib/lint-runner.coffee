@@ -1,6 +1,7 @@
 path = require 'path'
 CSON = require 'season'
 {Emitter, Subscriber} = require 'emissary'
+LinterConfig = require './linter-config'
 
 LINTER_MAP = CSON.readFileSync(path.join(__dirname, 'linter-map.cson'))
 
@@ -35,10 +36,12 @@ class LintRunner
     scopeName = @editor.getGrammar().scopeName
     linterName = LINTER_MAP[scopeName]
 
-    if linterName
-      @activate(linterName)
-    else
-      @deactivate()
+    return @deactivate() unless linterName
+
+    linterConfig = new LinterConfig(linterName)
+    return @deactivate() unless linterConfig.isFileToLint(@getFilePath())
+
+    @activate(linterName)
 
   activate: (linterName) ->
     wasAlreadyActivated = @linterConstructor?
@@ -67,11 +70,13 @@ class LintRunner
       @emit('deactivate')
 
   lint: ->
-    filePath = @buffer.getUri()
-    linter = new @linterConstructor(filePath)
+    linter = new @linterConstructor(@getFilePath())
     linter.run (error, violations) =>
       @setLastViolations(violations)
       @emit('lint', error, @lastViolations)
+
+  getFilePath: ->
+    @buffer.getUri()
 
   getActiveLinter: ->
     @linterConstructor
