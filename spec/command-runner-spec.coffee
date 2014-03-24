@@ -65,18 +65,47 @@ describe 'CommandRunner', ->
         waitsFor ->
           hasFetched
 
-  describe 'getEnvOfLoginShell', ->
+  describe '.mergePaths', ->
+    describe 'with "/foo:/bar" and "/baz:/qux"', ->
+      it 'returns "/foo:/bar:/baz:/qux"', ->
+        path = CommandRunner.mergePaths('/foo:/bar', '/baz:/qux')
+        expect(path).toBe('/foo:/bar:/baz:/qux')
+
+    describe 'with "/foo:/bar" and "/foo:/baz"', ->
+      it 'returns "/foo:/bar:/baz"', ->
+        path = CommandRunner.mergePaths('/foo:/bar', '/foo:/baz')
+        expect(path).toBe('/foo:/bar:/baz')
+
+    describe 'with "/foo:/bar" and "/bar:/baz"', ->
+      it 'returns "/foo:/bar:/baz"', ->
+        path = CommandRunner.mergePaths('/foo:/bar', '/bar:/baz')
+        expect(path).toBe('/foo:/bar:/baz')
+
+    describe 'with "/foo:/bar" and ""', ->
+      it 'returns "/foo:/bar"', ->
+        path = CommandRunner.mergePaths('/foo:/bar', '')
+        expect(path).toBe('/foo:/bar')
+
+    describe 'with "" and "/foo:/bar"', ->
+      it 'returns "/foo:/bar"', ->
+        path = CommandRunner.mergePaths('', '/foo:/bar')
+        expect(path).toBe('/foo:/bar')
+
+  describe 'getEnv', ->
     beforeEach ->
-      CommandRunner._cachedEnvOfLoginShell = undefined
+      CommandRunner._cachedEnv = undefined
 
     describe 'on first invocation', ->
-      it 'invokes .fetchEnvOfLoginShell and passes the result', ->
+      it 'invokes .fetchEnvOfLoginShell, merges PATHs of login shell and Atom,
+          then passes the env', ->
         spyOn(CommandRunner, 'fetchEnvOfLoginShell').andCallThrough()
 
         hasGotten = false
 
-        CommandRunner.getEnvOfLoginShell (env) ->
-          expect(env.PATH).toMatch(/\/[^:]+(?::\/[^:]+)/)
+        process.env.PATH = '/some/unique/path'
+
+        CommandRunner.getEnv (env) ->
+          expect(env.PATH).toMatch(/\/[^:]+(?::\/[^:]+):\/some\/unique\/path/)
           expect(CommandRunner.fetchEnvOfLoginShell).toHaveBeenCalled()
           hasGotten = true
 
@@ -85,10 +114,10 @@ describe 'CommandRunner', ->
 
     describe 'on second invocation', ->
       itReturnsCachedResultOfFetchEnvOfLoginShell = ->
-        it 'returns cached result of .fetchEnvOfLoginShell', ->
+        it 'returns cached env', ->
           hasGotten = false
 
-          CommandRunner.getEnvOfLoginShell (env) ->
+          CommandRunner.getEnv (env) ->
             hasGotten = true
 
           waitsFor ->
@@ -98,7 +127,7 @@ describe 'CommandRunner', ->
             hasGotten = false
             spyOn(CommandRunner, 'fetchEnvOfLoginShell').andCallThrough()
 
-            CommandRunner.getEnvOfLoginShell (env) ->
+            CommandRunner.getEnv (env) ->
               expect(CommandRunner.fetchEnvOfLoginShell).not.toHaveBeenCalled()
               hasGotten = true
 
@@ -116,7 +145,7 @@ describe 'CommandRunner', ->
 
   describe 'run', ->
     beforeEach ->
-      CommandRunner._cachedEnvOfLoginShell = undefined
+      CommandRunner._cachedEnv = undefined
 
     run = (command, callback) ->
       hasRun = false

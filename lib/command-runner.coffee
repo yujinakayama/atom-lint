@@ -2,6 +2,7 @@ child_process = require 'child_process'
 os = require 'os'
 path = require 'path'
 fs = require 'fs'
+_ = require 'lodash'
 {$} = require 'atom'
 
 each_slice = (array, size, callback) ->
@@ -11,7 +12,7 @@ each_slice = (array, size, callback) ->
 
 module.exports =
 class CommandRunner
-  @_cachedEnvOfLoginShell = undefined
+  @_cachedEnv = undefined
 
   @fetchEnvOfLoginShell = (callback) ->
     if !process.env.SHELL
@@ -50,18 +51,30 @@ class CommandRunner
 
     env
 
-  @getEnvOfLoginShell = (callback) ->
-    if @_cachedEnvOfLoginShell == undefined
+  @mergePathEnvs: (baseEnv, subsequentEnv) ->
+    for key in ['PATH', 'GEM_PATH']
+      baseEnv[key] = @mergePaths(baseEnv[key], subsequentEnv[key])
+    baseEnv
+
+  @mergePaths: (baseString, subsequentString) ->
+    basePaths = if baseString then baseString.split(':') else []
+    subsequentPaths = if subsequentString then subsequentString.split(':') else []
+    paths = basePaths.concat(subsequentPaths)
+    _.uniq(paths).join(':')
+
+  @getEnv: (callback) ->
+    if @_cachedEnv == undefined
       @fetchEnvOfLoginShell (error, env) =>
-        @_cachedEnvOfLoginShell = env || {}
-        callback(env)
+        env ?= {}
+        @_cachedEnv = @mergePathEnvs(env, process.env)
+        callback(@_cachedEnv)
     else
-      callback(@_cachedEnvOfLoginShell)
+      callback(@_cachedEnv)
 
   constructor: (@command) ->
 
   run: (callback) ->
-    CommandRunner.getEnvOfLoginShell (env) =>
+    CommandRunner.getEnv (env) =>
       env ?= process.env
       @runWithEnv(env, callback)
 

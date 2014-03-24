@@ -2,6 +2,10 @@
 
 ## Development
 
+## v0.8.1
+
+* [#30](https://github.com/yujinakayama/atom-lint/issues/30): Merge `PATH` and `GEM_PATH` of the login shell and the shell where Atom was launched when running command so that shell-instance-specific `PATH` (e.g. RVM's gemset) can be used. ([@yujinakayama])
+
 ## v0.8.0
 
 * [#21](https://github.com/yujinakayama/atom-lint/issues/21): Add Puppet support via puppet-lint. ([@yujinakayama])
