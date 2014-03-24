@@ -23,20 +23,24 @@ class LintStatusView extends View
   subscribeToLintRunner: ->
     activeLintRunner = @getActiveLintRunner()
     return unless activeLintRunner?
-    @subscription = activeLintRunner.on 'activate deactivate lint', =>
-      @update()
+    @subscription = activeLintRunner.on 'activate deactivate lint', (error) =>
+      @update(error)
 
   unsubscribeFromLintRunner: ->
     @subscription?.off()
     @subscription = null
 
-  update: ->
+  update: (error) ->
     activeLinter = @getActiveLintRunner()?.getActiveLinter()
 
     if activeLinter?
-      @displayLinterName(activeLinter.canonicalName)
-      violations = @getActiveLintRunner().getLastViolations()
-      @displaySummary(violations)
+      if error? && error.code == 'ENOENT'
+        @displayLinterName("#{activeLinter.canonicalName} is not installed")
+        @displaySummary(violations)
+      else
+        @displayLinterName(activeLinter.canonicalName)
+        violations = @getActiveLintRunner().getLastViolations()
+        @displaySummary(violations)
     else
       @displayLinterName()
       @displaySummary()
