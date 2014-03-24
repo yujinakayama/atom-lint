@@ -6,7 +6,9 @@ class Violation
 
   constructor: (@severity, @bufferRange, @message) ->
     unless _.contains(Violation.SEVERITIES, @severity)
-      throw new Error("Severity must be any of #{Violation.SEVERITIES}.")
+      message  = "Severity must be any of #{Violation.SEVERITIES.join(',')}. "
+      message += "#{@severity} is passed."
+      throw new Error(message)
 
   getHTML: ->
     null
