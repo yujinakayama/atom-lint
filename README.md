@@ -59,6 +59,9 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
 ```cson
 # Some other settings...
 'atom-lint':
+  'ignoredNames': [
+    'tmp/**'
+  ]
   'coffeelint':
     'path': '/path/to/bin/coffeelint'
   'csslint':
@@ -73,13 +76,46 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
     'path': '/path/to/bin/jshint'
   'rubocop':
     'path': '/path/to/bin/rubocop'
+    'ignoredNames': [
+      'db/schema.rb'
+    ]
   'scss-lint':
     'path': '/path/to/bin/scss-lint'
 ```
 
+### Linter Executable Paths
+
+* `atom-lint.LINTER.path`
+
 By default Atom-Lint automatically refers the environement variable `PATH` of your login shell
 if it's `bash` or `zsh`, and then invokes the command.
 If you got a problem with `PATH`, use this setting.
+
+### File Patterns to Ignore
+
+* `atom-lint.ignoredNames` (Global)
+* `atom-lint.LINTER.ignoredNames` (Per Linter)
+
+You can specify lists of file patterns to disable linting.
+The global patterns and the per linter patterns will be merged on evaluation
+so that you can make these lists DRY.
+
+```cson
+'atom-lint':
+  'ignoredNames': [
+    'tmp/**'
+  ]
+  'rubocop':
+    'ignoredNames': [
+      'db/schema.rb'
+    ]
+```
+
+With the above example, both `tmp/**` and `db/schema.db` are ignored when RuboCop is active.
+
+The pattern must be a relative to the project root directory.
+The pattern format is basically the same as the shell expansion and `.gitignore`.
+See [`minimatch`](https://github.com/isaacs/minimatch) for more details.
 
 ## Contributors
 
