@@ -15,13 +15,14 @@ More linters will be supported in the future.
 * [RuboCop](https://github.com/bbatsov/rubocop) for Ruby
 * [flake8](https://flake8.readthedocs.org/) for Python
 * [HLint](http://community.haskell.org/~ndm/hlint/) for Haskell
-(Installation of [language-haskell](https://atom.io/packages/language-haskell) package is required)
+  (Installation of [language-haskell](https://atom.io/packages/language-haskell) package is required)
 * [JSHint](http://www.jshint.com/docs/) for JavaScript
 * [CoffeeLint](http://www.coffeelint.org/) for CoffeeScript
 * [gc](http://golang.org/cmd/gc/) for Go
 * [CSSLint](https://github.com/stubbornella/csslint) for CSS
 * [SCSS-Lint](https://github.com/causes/scss-lint) for SCSS
 * [puppet-lint](http://puppet-lint.com) for Puppet
+  (Installation of [language-puppet](https://atom.io/packages/language-puppet) package is required)
 
 ## Installation
 
