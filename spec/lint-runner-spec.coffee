@@ -138,6 +138,34 @@ describe 'LintRunner', ->
         expectEventNotToBeEmitted lintRunner, 'deactivate', ->
           lintRunner.stopWatching()
 
+  describe '::refresh', ->
+    describe 'when RuboCop is already activated', ->
+      beforeEach ->
+        editor.setGrammar(loadGrammar('ruby'))
+        waitsForEventToBeEmitted lintRunner, 'lint', ->
+          lintRunner.startWatching()
+
+      describe 'then the filename is added to config "atom-lint.rubocop.ignoredNames"', ->
+        beforeEach ->
+          atom.config.pushAtKeyPath('atom-lint.rubocop.ignoredNames', filename)
+
+        it 'deactivates RuboCop', ->
+          lintRunner.refresh()
+          expect(lintRunner.getActiveLinter()).toBeFalsy()
+
+      describe 'and config is not changed', ->
+        it 'does nothing with linter', ->
+          lintRunner.refresh()
+          expect(lintRunner.getActiveLinter()).toBe(Rubocop)
+
+    describe 'when not watching', ->
+      beforeEach ->
+        editor.setGrammar(loadGrammar('ruby'))
+
+      it 'does nothing with linter', ->
+        lintRunner.refresh()
+        expect(lintRunner.getActiveLinter()).toBeFalsy()
+
   describe 'when watching and RuboCop is already activated', ->
     beforeEach ->
       editor.setGrammar(loadGrammar('ruby'))

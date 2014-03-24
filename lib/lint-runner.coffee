@@ -29,6 +29,10 @@ class LintRunner
 
     @deactivate()
 
+  refresh: ->
+    return unless @isWatching()
+    @switchLinter()
+
   isWatching: ->
     @grammerChangeSubscription?
 

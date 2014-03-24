@@ -28,6 +28,9 @@ class LintView extends View
     @editorView.command 'lint:move-to-next-violation', => @moveToNextViolation()
     @editorView.command 'lint:move-to-previous-violation', => @moveToPreviousViolation()
 
+  refresh: ->
+    @lintRunner.refresh()
+
   onLinterActivation: ->
     # http://discuss.atom.io/t/decorating-the-left-gutter/1321/4
     @editorDisplayUpdateSubscription = @subscribe @editorView, 'editor:display-updated', =>
