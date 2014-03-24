@@ -7,13 +7,13 @@ window.prepareWorkspace = (options = {}) ->
   projectPath = temp.mkdirSync('lint-runner-spec-')
   atom.project.setPath(projectPath)
 
-  sampleFilename = 'sample.txt'
-  sampleFilePath = path.join(projectPath, sampleFilename)
-  fs.writeFileSync(sampleFilePath, 'foo = 1')
+  filename = options.filename || 'sample.txt'
+  filePath = path.join(projectPath, filename)
+  fs.writeFileSync(filePath, 'This is a sample file.')
 
   atom.workspaceView = new WorkspaceView
   atom.workspaceView.attachToDom()
-  atom.workspaceView.openSync(sampleFilename)
+  atom.workspaceView.openSync(filename)
 
   if options.activatePackage
     waitsForPromise ->
