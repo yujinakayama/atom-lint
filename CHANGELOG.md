@@ -2,6 +2,8 @@
 
 ## Development
 
+* Allow to show tooltips with mouseover on a violation character. ([@yujinakayama])
+
 ## v0.8.1
 
 * [#30](https://github.com/yujinakayama/atom-lint/issues/30): Merge `PATH` and `GEM_PATH` of the login shell and the shell where Atom was launched when running command so that shell-instance-specific `PATH` (e.g. RVM's gemset) can be used. ([@yujinakayama])
