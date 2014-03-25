@@ -27,8 +27,8 @@ More linters will be supported in the future.
 ## Features
 
 * Seamless integration with Atom as if it's a built-in package.
-* Code highlighting – you don't need to move your eyes from the problematic code.
-* Clean UI – it honors your favorite Atom theme.
+* Code highlighting – you don't need to move your eyes from the code to see the violations.
+* Clean UI – it honors the colors of your favorite Atom theme.
 
 ## Installation
 
