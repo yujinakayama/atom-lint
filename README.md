@@ -72,6 +72,9 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
   ]
   'coffeelint':
     'path': '/path/to/bin/coffeelint'
+    'ignoredNames': [
+      'coffeelint/specific/file/exclusion.coffeee'
+    ]
   'csslint':
     'path': '/path/to/bin/csslint'
   'flake8':
@@ -86,9 +89,6 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
     'path': '/path/to/bin/puppet-lint'
   'rubocop':
     'path': '/path/to/bin/rubocop'
-    'ignoredNames': [
-      'db/schema.rb'
-    ]
   'scss-lint':
     'path': '/path/to/bin/scss-lint'
 ```
@@ -117,11 +117,12 @@ so that you can make these lists DRY.
   ]
   'rubocop':
     'ignoredNames': [
+      'vendor/**'
       'db/schema.rb'
     ]
 ```
 
-With the above example, both `tmp/**` and `db/schema.db` are ignored when RuboCop is active.
+With the above example, all of `tmp/**`, `vendor/**` and `db/schema.db` are ignored when RuboCop is active.
 
 The pattern must be relative to the project root directory.
 The pattern format is basically the same as the shell expansion and `.gitignore`.
