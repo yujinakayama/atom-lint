@@ -4,6 +4,7 @@
 
 * Allow to show tooltips with mouseover on a violation character. ([@yujinakayama])
 * Place tooltip smartly according to the violation position in the editor. ([@yujinakayama])
+* Fix a bug causing useless beep on **Move to Previous/Next Violation** after once atom-lint enabled again by toggling. ([@yujinakayama])
 
 ## v0.8.1
 

@@ -28,6 +28,11 @@ class LintView extends View
     @editorView.command 'lint:move-to-next-violation', => @moveToNextViolation()
     @editorView.command 'lint:move-to-previous-violation', => @moveToPreviousViolation()
 
+  beforeRemove: ->
+    @editorView.off('lint:move-to-next-violation lint:move-to-previous-violation')
+    @lintRunner.stopWatching()
+    @editorView.lintView = undefined
+
   refresh: ->
     @lintRunner.refresh()
 
@@ -49,10 +54,6 @@ class LintView extends View
       console.log(error)
     else
       @addViolationViews(violations)
-
-  beforeRemove: ->
-    @lintRunner.stopWatching()
-    @editorView.lintView = undefined
 
   addViolationViews: (violations) ->
     for violation in violations
