@@ -6,14 +6,10 @@ Tooltip = $.fn.tooltip.Constructor
 
 module.exports =
 class ViolationTooltip extends Tooltip
-  @DEFAULTS = $.extend({}, Tooltip.DEFAULTS, { placement: 'bottom' })
+  @DEFAULTS = $.extend({}, Tooltip.DEFAULTS, { placement: 'bottom auto' })
 
   getDefaults: ->
     ViolationTooltip.DEFAULTS
-
-  getCalculatedOffset: (placement, pos, actualWidth, actualHeight) ->
-    top: pos.top + pos.height
-    left: pos.left + pos.width / 2
 
   show: ->
     `
@@ -44,7 +40,11 @@ class ViolationTooltip extends Tooltip
         .css({ top: 0, left: 0, display: 'block' })
         .addClass(placement)
 
-      this.options.container ? $tip.appendTo(this.options.container) : $tip.insertAfter(this.$element)
+      if (this.options.container) {
+        $tip.appendTo(this.options.container)
+      } else {
+        $tip.insertAfter(this.$element)
+      }
 
       var pos          = this.getPosition()
       var actualWidth  = $tip[0].offsetWidth
@@ -54,16 +54,20 @@ class ViolationTooltip extends Tooltip
         var $parent = this.$element.parent()
 
         var orgPlacement = placement
-        var docScroll    = document.documentElement.scrollTop || document.body.scrollTop
-        var parentWidth  = this.options.container == 'body' ? window.innerWidth  : $parent.outerWidth()
-        var parentHeight = this.options.container == 'body' ? window.innerHeight : $parent.outerHeight()
+        var parentWidth  =
+          this.options.container == 'body' ? window.innerWidth  : $parent.outerWidth()
+        var parentHeight =
+          this.options.container == 'body' ? window.innerHeight : $parent.outerHeight()
         var parentLeft   = this.options.container == 'body' ? 0 : $parent.offset().left
+        var logicalPos   = this.getLogicalPosition()
 
-        placement = placement == 'bottom' && pos.top   + pos.height  + actualHeight - docScroll > parentHeight  ? 'top'    :
-                    placement == 'top'    && pos.top   - docScroll   - actualHeight < 0                         ? 'bottom' :
-                    placement == 'right'  && pos.right + actualWidth > parentWidth                              ? 'left'   :
-                    placement == 'left'   && pos.left  - actualWidth < parentLeft                               ? 'right'  :
-                    placement
+        placement =
+          placement == 'bottom' &&
+               logicalPos.top + logicalPos.height + actualHeight > parentHeight ? 'top'    :
+          placement == 'top'    && logicalPos.top   - actualHeight < 0          ? 'bottom' :
+          placement == 'right'  && logicalPos.right + actualWidth > parentWidth ? 'left'   :
+          placement == 'left'   && logicalPos.left  - actualWidth < parentLeft  ? 'right'  :
+          placement
 
         $tip
           .removeClass(orgPlacement)
@@ -90,6 +94,26 @@ class ViolationTooltip extends Tooltip
     # The event 'show.bs.tooltip' is too early,
     # and 'shown.bs.tooltip' is a bit late.
     @applyAdditionalStyle()
+
+  # Alternative ::getPosition implementation that returns logical position in the parent view.
+  # The scroll position of the editor doesn't affect to this value while ::getPosition is affected.
+  getLogicalPosition: ->
+    el = @$element[0]
+    position = @$element.position()
+    position.width = el.offsetWidth
+    position.height = el.offsetHeight
+    position.right = position.left + position.width
+    position.bottom = position.top + position.height
+    position
+
+  getCalculatedOffset: (placement, pos, actualWidth, actualHeight) ->
+    switch placement
+      when 'bottom'
+        top: pos.top + pos.height
+        left: pos.left + pos.width / 2
+      when 'top'
+        top: pos.top - actualHeight
+        left: pos.left + pos.width / 2
 
   applyAdditionalStyle: ->
     $tip = @tip()

@@ -11,6 +11,10 @@
 @import 'octicon-utf-codes';
 
 .lint {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
   .violation {
     position: absolute;
   }
@@ -43,45 +47,53 @@
   .tooltip {
     font-family: @font-family;
     max-width: 430px;
-  }
 
-  .tooltip.bottom {
-    margin-top: 1px;
-
-    .tooltip-arrow {
-      left: 0 !important;
-      margin-left: 0 !important;
-      border-left-width: 0 !important;
-    }
-  }
-
-  .tooltip .tooltip-inner {
-    white-space: pre-wrap;
-    text-align: left;
-    box-shadow: 0 0 3px fadeout(@syntax-background-color, 10%);
-
-    .attachment {
-      margin-top: 5px;
+    &.top, &.bottom {
+      .tooltip-arrow {
+        left: 0 !important;
+        margin-left: 0 !important;
+        border-left-width: 0 !important;
+      }
     }
 
-    .code-label {
-      margin: 0;
+    &.top {
+      .tooltip-inner {
+        border-bottom-left-radius: 0 !important;
+      }
     }
 
-    pre {
-      margin: 5px 0;
-      padding: 4px 8px;
-      white-space: pre;
-      word-wrap: normal;
-      overflow: scroll;
-      font-size: 10px;
-      background-color: transparent;
-      border: 1px solid transparent;
-    }
-  }
+    &.bottom {
+      margin-top: 1px;
 
-  .tooltip.bottom .tooltip-inner {
-    border-top-left-radius: 0 !important;
+      .tooltip-inner {
+        border-top-left-radius: 0 !important;
+      }
+    }
+
+    .tooltip-inner {
+      white-space: pre-wrap;
+      text-align: left;
+      box-shadow: 0 0 3px fadeout(@syntax-background-color, 10%);
+
+      .attachment {
+        margin-top: 5px;
+      }
+
+      .code-label {
+        margin: 0;
+      }
+
+      pre {
+        margin: 5px 0;
+        padding: 4px 8px;
+        white-space: pre;
+        word-wrap: normal;
+        overflow: scroll;
+        font-size: 10px;
+        background-color: transparent;
+        border: 1px solid transparent;
+      }
+    }
   }
 }
 
