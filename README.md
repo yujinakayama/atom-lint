@@ -97,7 +97,7 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
 
 * `atom-lint.LINTER.path`
 
-By default Atom-Lint automatically refers the environement variable `PATH` of your login shell
+By default Atom-Lint automatically refers the environment variable `PATH` of your login shell
 if it's `bash` or `zsh`, and then invokes the command.
 If you got a problem with `PATH`, use this setting.
 
