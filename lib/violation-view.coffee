@@ -53,8 +53,8 @@ class ViolationView extends View
     @css
       'top': pixelPosition.top
       'left': pixelPosition.left
-      'width': @editorView.charWidth
-      'height': @editorView.lineHeight + (arrowSize / 2)
+      'width': @editorView.charWidth - (@editorView.charWidth % 2) # Adjust toolbar tip center
+      'height': @editorView.lineHeight + (arrowSize / 4)
 
     $arrow = @find('.violation-arrow')
     $arrow.css
