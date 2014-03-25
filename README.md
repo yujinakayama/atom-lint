@@ -99,7 +99,10 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
 
 By default Atom-Lint automatically refers the environment variable `PATH` of your login shell
 if it's `bash` or `zsh`, and then invokes the command.
-If you got a problem with `PATH`, use this setting.
+Thus, if you're using a language version manager such as [rbenv](https://github.com/sstephenson/rbenv),
+linters need be installed in the default/global environment of the version manager
+(i.e. the environment where you opened a new terminal).
+If you need to use a non-default executable, use this setting.
 
 ### File Patterns to Ignore
 
