@@ -24,6 +24,12 @@ More linters will be supported in the future.
 * [puppet-lint](http://puppet-lint.com) for Puppet
   (Installation of [language-puppet](https://atom.io/packages/language-puppet) package is required)
 
+## Features
+
+* Seamless integration with Atom as if it's a built-in package.
+* Code highlighting – you don't need to move your eyes from the problematic code.
+* Clean UI – it honors your favorite Atom theme.
+
 ## Installation
 
 ```bash
