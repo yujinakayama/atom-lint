@@ -3,6 +3,7 @@
 ## Development
 
 * Allow to show tooltips with mouseover on a violation character. ([@yujinakayama])
+* Place tooltip smartly according to the violation position in the editor. ([@yujinakayama])
 
 ## v0.8.1
 
