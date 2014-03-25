@@ -6,7 +6,7 @@ Tooltip = $.fn.tooltip.Constructor
 
 module.exports =
 class ViolationTooltip extends Tooltip
-  @DEFAULTS = $.extend({}, Tooltip.DEFAULTS, { placement: 'bottom auto' })
+  @DEFAULTS = $.extend({}, Tooltip.DEFAULTS, { placement: 'bottom-right auto' })
 
   getDefaults: ->
     ViolationTooltip.DEFAULTS
@@ -33,7 +33,7 @@ class ViolationTooltip extends Tooltip
 
       var autoToken = /\s?auto?\s?/i
       var autoPlace = autoToken.test(placement)
-      if (autoPlace) placement = placement.replace(autoToken, '') || 'top'
+      if (autoPlace) placement = placement.replace(autoToken, '') || 'bottom-right'
 
       $tip
         .detach()
@@ -51,24 +51,8 @@ class ViolationTooltip extends Tooltip
       var actualHeight = $tip[0].offsetHeight
 
       if (autoPlace) {
-        var $parent = this.$element.parent()
-
         var orgPlacement = placement
-        var parentWidth  =
-          this.options.container == 'body' ? window.innerWidth  : $parent.outerWidth()
-        var parentHeight =
-          this.options.container == 'body' ? window.innerHeight : $parent.outerHeight()
-        var parentLeft   = this.options.container == 'body' ? 0 : $parent.offset().left
-        var logicalPos   = this.getLogicalPosition()
-
-        placement =
-          placement == 'bottom' &&
-               logicalPos.top + logicalPos.height + actualHeight > parentHeight ? 'top'    :
-          placement == 'top'    && logicalPos.top   - actualHeight < 0          ? 'bottom' :
-          placement == 'right'  && logicalPos.right + actualWidth > parentWidth ? 'left'   :
-          placement == 'left'   && logicalPos.left  - actualWidth < parentLeft  ? 'right'  :
-          placement
-
+        placement = this.autoPlace(orgPlacement, actualWidth, actualHeight)
         $tip
           .removeClass(orgPlacement)
           .addClass(placement)
@@ -94,6 +78,31 @@ class ViolationTooltip extends Tooltip
     # The event 'show.bs.tooltip' is too early,
     # and 'shown.bs.tooltip' is a bit late.
     @applyAdditionalStyle()
+
+  autoPlace: (orgPlacement, actualWidth, actualHeight) ->
+    $parent = @$element.parent()
+
+    parentWidth =
+      if @options.container == 'body' then window.innerWidth  else $parent.outerWidth()
+    parentHeight =
+      if @options.container == 'body' then window.innerHeight else $parent.outerHeight()
+    parentLeft =
+      if @options.container == 'body' then 0                  else $parent.offset().left
+    pos = @getLogicalPosition()
+
+    placement = orgPlacement.split('-')
+
+    if      placement[0] == 'bottom' && (pos.top + pos.height + actualHeight > parentHeight)
+      placement[0] = 'top'
+    else if placement[0] == 'top'    && (pos.top - actualHeight < 0)
+      placement[0] = 'bottom'
+
+    if      placement[1] == 'right'  && (pos.right + actualWidth > parentWidth)
+      placement[1] = 'left'
+    else if placement[1] == 'left'   && (pos.left - actualWidth < parentLeft)
+      placement[1] = 'right'
+
+    placement.join('-')
 
   applyPlacement: (offset, placement) ->
     `
@@ -163,7 +172,7 @@ class ViolationTooltip extends Tooltip
     title = @getTitle()
 
     $tip.find('.tooltip-inner')[if @options.html then 'html' else 'text'](title)
-    $tip.removeClass('fade in top bottom left right')
+    $tip.removeClass('fade in top-left top-right bottom-left bottom-right')
 
   # Alternative ::getPosition implementation that returns logical position in the parent view.
   # The scroll position of the editor doesn't affect to this value while ::getPosition is affected.
@@ -178,12 +187,18 @@ class ViolationTooltip extends Tooltip
 
   getCalculatedOffset: (placement, pos, actualWidth, actualHeight) ->
     switch placement
-      when 'bottom'
+      when 'bottom-right'
         top: pos.top + pos.height
         left: pos.left + pos.width / 2
-      when 'top'
+      when 'top-right'
         top: pos.top - actualHeight
         left: pos.left + pos.width / 2
+      when 'bottom-left'
+        top: pos.top + pos.height
+        left: pos.left + pos.width / 2 - actualWidth
+      when 'top-left'
+        top: pos.top - actualHeight
+        left: pos.left + pos.width / 2 - actualWidth
 
   applyAdditionalStyle: ->
     $tip = @tip()
