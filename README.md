@@ -1,4 +1,4 @@
-[![Build Status](http://img.shields.io/travis/yujinakayama/atom-lint/master.svg)](https://travis-ci.org/yujinakayama/atom-lint)
+[![Build Status](https://travis-ci.org/yujinakayama/atom-lint.svg?branch=master)](https://travis-ci.org/yujinakayama/atom-lint)
 
 # Atom-Lint
 
