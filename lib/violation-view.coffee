@@ -21,6 +21,7 @@ class ViolationView extends View
     @trackEdit()
     @trackCursor()
     @showArrow()
+    @toggleTooltipWithCursorPosition()
 
   prepareTooltip: ->
     HTML = @violation.getHTML()
@@ -40,13 +41,17 @@ class ViolationView extends View
         @violationTooltip('hide')
 
   trackCursor: ->
-    @subscribe @editor.getCursor(), 'moved', (event) =>
-      {newScreenPosition} = event
-      if newScreenPosition.row is @headScreenPosition.row &&
-         newScreenPosition.column is @tailScreenPosition.column
-        @violationTooltip('show')
-      else
-        @violationTooltip('hide')
+    @subscribe @editor.getCursor(), 'moved', =>
+      @toggleTooltipWithCursorPosition()
+
+  toggleTooltipWithCursorPosition: ->
+    cursorPosition = @editor.getCursor().getScreenPosition()
+
+    if cursorPosition.row is @headScreenPosition.row &&
+       cursorPosition.column is @headScreenPosition.column
+      @violationTooltip('show')
+    else
+      @violationTooltip('hide')
 
   showArrow: ->
     pixelPosition = @editorView.pixelPositionForScreenPosition(@getCurrentScreenRange().start)
