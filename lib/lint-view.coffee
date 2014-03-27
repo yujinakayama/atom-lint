@@ -13,6 +13,7 @@ class LintView extends View
 
   initialize: (@editorView) ->
     @editorView.lintView = this
+    @editorView.overlayer.append(this)
 
     @editor = @editorView.getEditor()
     @gutterView = @editorView.gutter
@@ -59,7 +60,6 @@ class LintView extends View
     for violation in violations
       violationView = new ViolationView(violation, this)
       @violationViews.push(violationView)
-      @append(violationView)
 
   removeViolationViews: ->
     while view = @violationViews.shift()

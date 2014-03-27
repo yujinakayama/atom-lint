@@ -53,7 +53,6 @@ module.exports =
     LintView ?= require './lint-view'
     lintView = new LintView(editorView)
     @lintViews.push(lintView)
-    editorView.overlayer.append(lintView)
 
   injectLintStatusViewIntoStatusBar: ->
     return if @lintStatusView?

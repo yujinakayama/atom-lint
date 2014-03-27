@@ -8,6 +8,8 @@ class ViolationView extends View
       @div class: 'violation-arrow'
 
   initialize: (@violation, @lintView) ->
+    @lintView.append(this)
+
     @editorView = @lintView.editorView
     @editor = @editorView.getEditor()
 
