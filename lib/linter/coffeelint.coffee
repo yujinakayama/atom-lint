@@ -1,6 +1,7 @@
 {Range, Point} = require 'atom'
 XmlBase = require './xml-base'
 Violation = require '../violation'
+fs = require 'fs-plus'
 
 module.exports =
 class CoffeeLint extends XmlBase
@@ -10,11 +11,19 @@ class CoffeeLint extends XmlBase
     command = []
 
     userCoffeeLintPath = atom.config.get('atom-lint.coffeelint.path')
+    userCoffeeRulesPath = atom.config.get('atom-lint.coffeelint.rules-path')
 
     if userCoffeeLintPath?
       command.push(userCoffeeLintPath)
     else
       command.push('coffeelint')
+
+    if userCoffeeRulesPath?
+      userCoffeeRulesPath = fs.absolute(userCoffeeRulesPath)
+      unless fs.existsSync(userCoffeeRulesPath)
+        throw new Error("Path '#{userCoffeeRulesPath}' does not exist.")
+      command.push('-f')
+      command.push(userCoffeeRulesPath)
 
     command.push('--checkstyle')
     command.push(@filePath)
