@@ -79,10 +79,12 @@ class ViolationView extends View
     new Range(@headScreenPosition, @tailScreenPosition)
 
   violationTooltip: (option) ->
+    violationView = this
     @each ->
       $this = $(this)
       data = $this.data('bs.tooltip')
       options = typeof option == 'object' && option
+      options.violationView = violationView
 
       if !data
         $this.data('bs.tooltip', (data = new ViolationTooltip(this, options)))
