@@ -138,6 +138,10 @@ See [`minimatch`](https://github.com/isaacs/minimatch) for more details.
 
 Here's a [list](https://github.com/yujinakayama/atom-lint/graphs/contributors) of all contributors to Atom-Lint.
 
+## Changelog
+
+Atom-Lint's changelog is available [here](https://github.com/yujinakayama/atom-lint/blob/master/CHANGELOG.md).
+
 ## License
 
 Copyright (c) 2014 Yuji Nakayama
