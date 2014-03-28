@@ -2,11 +2,14 @@
 
 ## Development
 
+## v0.9.0
+
 * Add shell script support via ShellCheck. ([@yujinakayama])
 * Allow to show tooltips with mouseover on a violation character. ([@yujinakayama])
 * Place tooltip smartly according to the violation position in the editor. ([@yujinakayama])
 * Show tooltip if the cursor is at a violation on open and on modification by another process. ([@yujinakayama])
 * Fix a bug causing useless beep on **Move to Previous/Next Violation** after once atom-lint enabled again by toggling. ([@yujinakayama])
+* [#33](https://github.com/yujinakayama/atom-lint/issues/33): Fix strange shadow of tooltip with Atom themes that don't have the Less variable `@syntax-background-color`. ([@yujinakayama])
 
 ## v0.8.1
 
