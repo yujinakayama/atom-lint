@@ -51,7 +51,7 @@ You can see the detail of the violation by moving the cursor to it.
 
 Also you can customize keymaps by editing `~/.atom/keymap.cson` (choose **Open Your Keymap** in **Atom** menu):
 
-```cson
+```coffeescript
 '.workspace':
   'ctrl-alt-l': 'lint:toggle'
 '.editor':
@@ -65,7 +65,7 @@ See **Customizing Key Bindings** in [Customizing Atom](https://atom.io/docs/late
 
 You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your Config** in **Atom** menu):
 
-```cson
+```coffeescript
 # Some other settings...
 'atom-lint':
   'ignoredNames': [
