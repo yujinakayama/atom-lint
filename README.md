@@ -23,6 +23,7 @@ More linters will be supported in the future.
 * [SCSS-Lint](https://github.com/causes/scss-lint) for SCSS
 * [puppet-lint](http://puppet-lint.com) for Puppet
   (Installation of [language-puppet](https://atom.io/packages/language-puppet) package is required)
+* [ShellCheck](https://github.com/koalaman/shellcheck) for shell script
 
 ## Features
 
@@ -91,6 +92,8 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
     'path': '/path/to/bin/rubocop'
   'scss-lint':
     'path': '/path/to/bin/scss-lint'
+  'shellcheck':
+    'path': '/path/to/bin/shellcheck'
 ```
 
 ### Linter Executable Paths

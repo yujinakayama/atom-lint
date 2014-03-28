@@ -9,3 +9,4 @@
 'source.css': 'csslint'
 'source.css.scss': 'scss-lint'
 'source.puppet': 'puppet-lint'
+'source.shell': 'shellcheck'
