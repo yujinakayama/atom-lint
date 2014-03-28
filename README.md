@@ -116,7 +116,7 @@ You can specify lists of file patterns to disable linting.
 The global patterns and the per linter patterns will be merged on evaluation
 so that you can make these lists DRY.
 
-```cson
+```coffeescript
 'atom-lint':
   'ignoredNames': [
     'tmp/**'
