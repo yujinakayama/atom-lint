@@ -207,11 +207,12 @@ class ViolationTooltip extends Tooltip
     shadow = "0 0 3px #{editorBackgroundColor.clearer(0.1).rgbaString()}"
     $tip.find('.tooltip-inner').css('box-shadow', shadow)
 
-    frontColor = Color($tip.find('.tooltip-inner').css('color'))
     $pre = $tip.find('.tooltip-inner pre')
-    $pre.css('color', frontColor.clone().rgbaString())
-    $pre.css('background-color', frontColor.clone().clearer(0.96).rgbaString())
-    $pre.css('border-color', frontColor.clone().clearer(0.86).rgbaString())
+    if $pre.length > 0
+      frontColor = Color($tip.find('.tooltip-inner').css('color'))
+      $pre.css('color', frontColor.clone().rgbaString())
+      $pre.css('background-color', frontColor.clone().clearer(0.96).rgbaString())
+      $pre.css('border-color', frontColor.clone().clearer(0.86).rgbaString())
 
   getEditorView: ->
     @getViolationView().lintView.editorView
