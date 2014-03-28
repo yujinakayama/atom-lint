@@ -74,7 +74,7 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
   'coffeelint':
     'path': '/path/to/bin/coffeelint'
     'ignoredNames': [
-      'coffeelint/specific/file/exclusion.coffeee'
+      'coffeelint/specific/excluded/file.coffee'
     ]
   'csslint':
     'path': '/path/to/bin/csslint'
