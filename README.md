@@ -142,4 +142,4 @@ Here's a [list](https://github.com/yujinakayama/atom-lint/graphs/contributors) o
 
 Copyright (c) 2014 Yuji Nakayama
 
-See the [LICENSE.txt](LICENSE.txt) for details.
+See the [LICENSE.txt](https://github.com/yujinakayama/atom-lint/blob/master/LICENSE.txt) for details.
