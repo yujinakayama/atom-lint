@@ -19,13 +19,20 @@ class Rubocop
         callback(null, violations)
 
   createViolationFromOffense: (offense) ->
-    bufferPoint = new Point(offense.location.line - 1, offense.location.column - 1)
-    bufferRange = new Range(bufferPoint, bufferPoint)
+    location = offense.location
+    startPoint = new Point(location.line - 1, location.column - 1)
+    bufferRange =
+      if location.length?
+        Range.fromPointWithDelta(startPoint, 0, location.length)
+      else
+        new Range(startPoint, startPoint)
+
     severity = switch offense.severity
       when 'error', 'fatal'
         'error'
       else
         'warning'
+
     new Violation(severity, bufferRange, offense.message)
 
   runRubocop: (callback) ->
