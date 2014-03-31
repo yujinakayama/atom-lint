@@ -62,7 +62,9 @@ class Gc
           unless skippingIndented
             violations[violations.length - 1].message += '\n' + item
         else
-          [_, filePath, line, _, col, msg] = item.match(ERROR_PATTERN)
+          matches = item.match(ERROR_PATTERN)
+          continue unless matches
+          [_, filePath, line, _, col, msg] = matches
           filePath = '/' + filePath
           if filePath isnt @filePath
             skippingIndented = true
