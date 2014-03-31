@@ -6,6 +6,7 @@ class ViolationView extends View
   @content: ->
     @div class: 'violation', =>
       @div class: 'violation-arrow'
+      @div class: 'violation-border'
 
   initialize: (@violation, @lintView) ->
     @lintView.append(this)
@@ -29,6 +30,7 @@ class ViolationView extends View
       title: HTML || @violation.message
       html: HTML?
       container: @lintView
+      selector: @find('.violation-border')
 
   trackEdit: ->
     @marker = @editor.markScreenRange(@getCurrentScreenRange(), invalidation: 'inside')
@@ -60,14 +62,16 @@ class ViolationView extends View
       @violationTooltip('hide')
 
   showArrow: ->
-    pixelPosition = @editorView.pixelPositionForScreenPosition(@getCurrentScreenRange().start)
+    startPixelPosition = @editorView.pixelPositionForScreenPosition(@startScreenPosition)
+    endPixelPosition = @editorView.pixelPositionForScreenPosition(@endScreenPosition)
     arrowSize = @editorView.charWidth / 2
+    verticalOffset = @editorView.lineHeight + Math.floor(arrowSize / 4)
 
     @css
-      'top': pixelPosition.top
-      'left': pixelPosition.left
+      'top': startPixelPosition.top
+      'left': startPixelPosition.left
       'width': @editorView.charWidth - (@editorView.charWidth % 2) # Adjust toolbar tip center
-      'height': @editorView.lineHeight + (arrowSize / 4)
+      'height': verticalOffset
 
     $arrow = @find('.violation-arrow')
     $arrow.css
@@ -75,6 +79,16 @@ class ViolationView extends View
       'border-bottom-width': arrowSize
       'border-left-width': arrowSize
     $arrow.addClass("violation-#{@violation.severity}")
+
+    if @endScreenPosition.column - @startScreenPosition.column > 1
+      borderThickness = 1
+      borderOffset = arrowSize / 2
+      $border = @find('.violation-border')
+      $border.css
+        'left': borderOffset # Avoid protruding left edge of the border from the arrow
+        'width': endPixelPosition.left - startPixelPosition.left - borderOffset
+        'height': verticalOffset
+      $border.addClass("violation-#{@violation.severity}")
 
     @show()
 
