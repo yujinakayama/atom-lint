@@ -6,7 +6,7 @@ class ViolationView extends View
   @content: ->
     @div class: 'violation', =>
       @div class: 'violation-arrow'
-      @div class: 'violation-border'
+      @div class: 'violation-area'
 
   initialize: (@violation, @lintView) ->
     @lintView.append(this)
@@ -14,15 +14,28 @@ class ViolationView extends View
     @editorView = @lintView.editorView
     @editor = @editorView.getEditor()
 
-    screenRange = @editor.screenRangeForBufferRange(@violation.bufferRange)
-    @startScreenPosition = screenRange.start
-    @endScreenPosition = screenRange.end
+    @initializeSubviews()
+    @initializeStates()
 
     @prepareTooltip()
     @trackEdit()
     @trackCursor()
-    @showArrow()
+    @showHighlight()
     @toggleTooltipWithCursorPosition()
+
+  initializeSubviews: ->
+    @arrow = @find('.violation-arrow')
+    @arrow.addClass("violation-#{@violation.severity}")
+
+    @area = @find('.violation-area')
+    @area.addClass("violation-#{@violation.severity}")
+
+  initializeStates: ->
+    screenRange = @editor.screenRangeForBufferRange(@violation.bufferRange)
+    @startScreenPosition = screenRange.start
+    @endScreenPosition = screenRange.end
+
+    @isValid = true
 
   prepareTooltip: ->
     HTML = @violation.getHTML()
@@ -30,7 +43,7 @@ class ViolationView extends View
       title: HTML || @violation.message
       html: HTML?
       container: @lintView
-      selector: @find('.violation-border')
+      selector: @find('.violation-area')
 
   trackEdit: ->
     # :persistent -
@@ -61,22 +74,30 @@ class ViolationView extends View
       # If the head precedes the tail the marker is in a "reversed" orientation.
       @startScreenPosition = newTailScreenPosition
       @endScreenPosition = newHeadScreenPosition
-      @toggleTooltipWithCursorPosition()
+      @isValid = isValid
+
+      if @isValid
+        @showHighlight()
+        @toggleTooltipWithCursorPosition()
+      else
+        @hideHighlight()
+        @violationTooltip('hide')
 
   trackCursor: ->
     @subscribe @editor.getCursor(), 'moved', =>
-      @toggleTooltipWithCursorPosition()
+      if @isValid
+        @toggleTooltipWithCursorPosition()
+      else
+        @violationTooltip('hide')
 
-  toggleTooltipWithCursorPosition: ->
-    cursorPosition = @editor.getCursor().getScreenPosition()
+  showHighlight: ->
+    @updateHighlight()
+    @show()
 
-    if cursorPosition.row is @startScreenPosition.row &&
-       cursorPosition.column is @startScreenPosition.column
-      @violationTooltip('show')
-    else
-      @violationTooltip('hide')
+  hideHighlight: ->
+    @hide()
 
-  showArrow: ->
+  updateHighlight: ->
     startPixelPosition = @editorView.pixelPositionForScreenPosition(@startScreenPosition)
     endPixelPosition = @editorView.pixelPositionForScreenPosition(@endScreenPosition)
     arrowSize = @editorView.charWidth / 2
@@ -88,27 +109,30 @@ class ViolationView extends View
       'width': @editorView.charWidth - (@editorView.charWidth % 2) # Adjust toolbar tip center
       'height': verticalOffset
 
-    $arrow = @find('.violation-arrow')
-    $arrow.css
+    @arrow.css
       'border-right-width': arrowSize
       'border-bottom-width': arrowSize
       'border-left-width': arrowSize
-    $arrow.addClass("violation-#{@violation.severity}")
 
+    borderThickness = 1
+    borderOffset = arrowSize / 2
+    @area.css
+      'left': borderOffset # Avoid protruding left edge of the border from the arrow
+      'width': endPixelPosition.left - startPixelPosition.left - borderOffset
+      'height': verticalOffset
     if @endScreenPosition.column - @startScreenPosition.column > 1
-      borderThickness = 1
-      borderOffset = arrowSize / 2
-      $border = @find('.violation-border')
-      $border.css
-        'left': borderOffset # Avoid protruding left edge of the border from the arrow
-        'width': endPixelPosition.left - startPixelPosition.left - borderOffset
-        'height': verticalOffset
-      $border.addClass("violation-#{@violation.severity}")
+      @area.addClass("violation-border")
+    else
+      @area.removeClass("violation-border")
 
-    @show()
+  toggleTooltipWithCursorPosition: ->
+    cursorPosition = @editor.getCursor().getScreenPosition()
 
-  hideArrow: ->
-    @hide()
+    if cursorPosition.row is @startScreenPosition.row &&
+       cursorPosition.column is @startScreenPosition.column
+      @violationTooltip('show')
+    else
+      @violationTooltip('hide')
 
   getCurrentScreenRange: ->
     new Range(@startScreenPosition, @endScreenPosition)
