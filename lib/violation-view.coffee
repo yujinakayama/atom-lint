@@ -33,7 +33,25 @@ class ViolationView extends View
       selector: @find('.violation-border')
 
   trackEdit: ->
-    @marker = @editor.markScreenRange(@getCurrentScreenRange(), invalidation: 'inside')
+    # :persistent -
+    # Whether to include this marker when serializing the buffer. Defaults to true.
+    #
+    # :invalidate -
+    # Determines the rules by which changes to the buffer *invalidate* the
+    # marker. Defaults to 'overlap', but can be any of the following:
+    # * 'never':
+    #     The marker is never marked as invalid. This is a good choice for
+    #     markers representing selections in an editor.
+    # * 'surround':
+    #     The marker is invalidated by changes that completely surround it.
+    # * 'overlap':
+    #     The marker is invalidated by changes that surround the start or
+    #     end of the marker. This is the default.
+    # * 'inside':
+    #     The marker is invalidated by a change that touches the marked
+    #     region in any way. This is the most fragile strategy.
+    options = { invalidation: 'inside', persistent: false }
+    @marker = @editor.markScreenRange(@getCurrentScreenRange(), options)
     @marker.on 'changed', ({newHeadScreenPosition, newTailScreenPosition, isValid}) =>
       # Head and Tail: Markers always have a head and sometimes have a tail.
       # If you think of a marker as an editor selection, the tail is the part that's stationary
