@@ -61,10 +61,7 @@ class ViolationView extends View
       # If the head precedes the tail the marker is in a "reversed" orientation.
       @startScreenPosition = newTailScreenPosition
       @endScreenPosition = newHeadScreenPosition
-      if isValid
-        @violationTooltip('show')
-      else
-        @violationTooltip('hide')
+      @toggleTooltipWithCursorPosition()
 
   trackCursor: ->
     @subscribe @editor.getCursor(), 'moved', =>
