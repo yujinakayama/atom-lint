@@ -14,8 +14,8 @@ class ViolationView extends View
     @editor = @editorView.getEditor()
 
     screenRange = @editor.screenRangeForBufferRange(@violation.bufferRange)
-    @headScreenPosition = screenRange.start
-    @tailScreenPosition = screenRange.end
+    @startScreenPosition = screenRange.start
+    @endScreenPosition = screenRange.end
 
     @prepareTooltip()
     @trackEdit()
@@ -33,8 +33,14 @@ class ViolationView extends View
   trackEdit: ->
     @marker = @editor.markScreenRange(@getCurrentScreenRange(), invalidation: 'inside')
     @marker.on 'changed', ({newHeadScreenPosition, newTailScreenPosition, isValid}) =>
-      @headScreenPosition = newHeadScreenPosition
-      @tailScreenPosition = newTailScreenPosition
+      # Head and Tail: Markers always have a head and sometimes have a tail.
+      # If you think of a marker as an editor selection, the tail is the part that's stationary
+      # and the head is the part that moves when the mouse is moved.
+      # A marker without a tail always reports an empty range at the head position.
+      # A marker with a head position greater than the tail is in a "normal" orientation.
+      # If the head precedes the tail the marker is in a "reversed" orientation.
+      @startScreenPosition = newTailScreenPosition
+      @endScreenPosition = newHeadScreenPosition
       if isValid
         @violationTooltip('show')
       else
@@ -47,8 +53,8 @@ class ViolationView extends View
   toggleTooltipWithCursorPosition: ->
     cursorPosition = @editor.getCursor().getScreenPosition()
 
-    if cursorPosition.row is @headScreenPosition.row &&
-       cursorPosition.column is @headScreenPosition.column
+    if cursorPosition.row is @startScreenPosition.row &&
+       cursorPosition.column is @startScreenPosition.column
       @violationTooltip('show')
     else
       @violationTooltip('hide')
@@ -76,7 +82,7 @@ class ViolationView extends View
     @hide()
 
   getCurrentScreenRange: ->
-    new Range(@headScreenPosition, @tailScreenPosition)
+    new Range(@startScreenPosition, @endScreenPosition)
 
   violationTooltip: (option) ->
     violationView = this
