@@ -2,6 +2,8 @@
 
 ## Development
 
+## v0.10.0
+
 * [#34](https://github.com/yujinakayama/atom-lint/issues/34): Support column range highlight for RuboCop offenses. ([@yujinakayama])
 * [#40](https://github.com/yujinakayama/atom-lint/pull/40): Add C/C++/Objective-C support via Clang. ([@wesbland])
 * Violation highlight now follows source modification. ([@yujinakayama])
