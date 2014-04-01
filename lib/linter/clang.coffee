@@ -18,53 +18,52 @@ class Clang
   runClang: (callback) ->
     runner = new CommandRunner(@buildCommand())
 
-    runner.run (error, result) ->
+    runner.run (error, result) =>
       return callback(error) if error?
 
       if result.exitCode == 0 || result.exitCode == 1
-
-        violations = []
-        items = result.stderr.split '\n'
-        for item in items[...-1]
-
-          pattern = ///
-          ^(.+):(\d+):(\d+):\s*  # file / line / col
-          (.*):\s* # severity
-          ([^]+) # message
-          ///
-
-          matches = item.match(pattern)
-          if !matches?
-            pattern = ///^[In\ file\ included\ from\ ](.+):(\d+):/// # prefix / file / line
-            matches = item.match(pattern)
-            continue unless matches?
-            [_, file, line] = matches
-            if !prevLine? # It's possible that there will be a bunch of nested
-                          # includes that should be ignored. We only want the
-                          # line number from the first one
-              prevLine = line
-            continue
-          [_, file, line, col, severity, msg] = matches
-          severity = severity.trim()
-          if severity == "note"
-            # It might be nice to handle "notes" natively, but for now, they are ignored
-            continue
-          if severity == "fatal error"
-            # These tend to be errors about missing headers
-            severity = "error"
-          if prevLine?
-            line = prevLine # They don't point to the correct location themselves
-                            # We parsed the correct location previously
-            col = 1         # We don't know the correct column (thought it's probably 9)
-            prevLine = null
-          bufferPoint = new Point(parseInt(line) - 1, parseInt(col) - 1)
-          bufferRange = new Range(bufferPoint, bufferPoint)
-          violation = new Violation(severity, bufferRange, msg)
-          violations.push(violation)
-
+        violations = @parseDiagnostics(result.stderr)
         callback(null, violations)
       else
         callback(new Error("Process exited with code #{result.exitCode}"))
+
+  parseDiagnostics: (log) ->
+    items = log.split('\n')
+
+    for item in items[...-1]
+      pattern = ///
+      ^(.+):(\d+):(\d+):\s*  # file / line / col
+      (.*):\s* # severity
+      ([^]+) # message
+      ///
+
+      matches = item.match(pattern)
+      if !matches?
+        pattern = ///^[In\ file\ included\ from\ ](.+):(\d+):/// # prefix / file / line
+        matches = item.match(pattern)
+        continue unless matches?
+        [_, file, line] = matches
+        if !prevLine? # It's possible that there will be a bunch of nested
+                      # includes that should be ignored. We only want the
+                      # line number from the first one
+          prevLine = line
+        continue
+      [_, file, line, col, severity, msg] = matches
+      severity = severity.trim()
+      if severity == "note"
+        # It might be nice to handle "notes" natively, but for now, they are ignored
+        continue
+      if severity == "fatal error"
+        # These tend to be errors about missing headers
+        severity = "error"
+      if prevLine?
+        line = prevLine # They don't point to the correct location themselves
+                        # We parsed the correct location previously
+        col = 1         # We don't know the correct column (thought it's probably 9)
+        prevLine = null
+      bufferPoint = new Point(parseInt(line) - 1, parseInt(col) - 1)
+      bufferRange = new Range(bufferPoint, bufferPoint)
+      new Violation(severity, bufferRange, msg)
 
   buildCommand: ->
     command = []
