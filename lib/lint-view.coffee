@@ -86,7 +86,7 @@ class LintView extends View
     @moveToNeighborViolation('previous')
 
   moveToNeighborViolation: (direction) ->
-    unless @getLastViolations()?
+    if @violationViews.length == 0
       atom.beep()
       return
 
@@ -97,16 +97,14 @@ class LintView extends View
       enumerationMethod = 'findLast'
       comparingMethod = 'isLessThan'
 
-    currentCursorPosition = @editor.getCursor().getBufferPosition()
+    currentCursorPosition = @editor.getCursor().getScreenPosition()
 
     # OPTIMIZE: Consider using binary search.
-    neighborViolation = _[enumerationMethod] @getLastViolations(), (violation) ->
-      violation.bufferRange.start[comparingMethod](currentCursorPosition)
+    neighborViolationView = _[enumerationMethod] @violationViews, (violationView) ->
+      violationPosition = violationView.screenStartPosition
+      violationPosition[comparingMethod](currentCursorPosition)
 
-    if neighborViolation?
-      @editor.setCursorBufferPosition(neighborViolation.bufferRange.start)
+    if neighborViolationView?
+      @editor.setCursorScreenPosition(neighborViolationView.screenStartPosition)
     else
       atom.beep()
-
-  getLastViolations: ->
-    @lintRunner.getLastViolations()
