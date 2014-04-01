@@ -52,10 +52,11 @@ class Clang
           if severity == "fatal error"
             # These tend to be errors about missing headers
             severity = "error"
+          if prevLine?
             line = prevLine # They don't point to the correct location themselves
                             # We parsed the correct location previously
-            prevLine =
             col = 1         # We don't know the correct column (thought it's probably 9)
+            prevLine = null
           bufferPoint = new Point(parseInt(line) - 1, parseInt(col) - 1)
           bufferRange = new Range(bufferPoint, bufferPoint)
           violation = new Violation(severity, bufferRange, msg)
