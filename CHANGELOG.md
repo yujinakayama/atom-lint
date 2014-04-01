@@ -2,6 +2,8 @@
 
 ## Development
 
+* [#34](https://github.com/yujinakayama/atom-lint/issues/34): Support column range highlight for RuboCop offenses. ([@yujinakayama])
+
 ## v0.9.0
 
 * Add shell script support via ShellCheck. ([@yujinakayama])
