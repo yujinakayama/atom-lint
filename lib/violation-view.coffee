@@ -32,8 +32,8 @@ class ViolationView extends View
 
   initializeStates: ->
     screenRange = @editor.screenRangeForBufferRange(@violation.bufferRange)
-    @startScreenPosition = screenRange.start
-    @endScreenPosition = screenRange.end
+    @screenStartPosition = screenRange.start
+    @screenEndPosition = screenRange.end
 
     @isValid = true
 
@@ -72,8 +72,8 @@ class ViolationView extends View
       # A marker without a tail always reports an empty range at the head position.
       # A marker with a head position greater than the tail is in a "normal" orientation.
       # If the head precedes the tail the marker is in a "reversed" orientation.
-      @startScreenPosition = event.newTailScreenPosition
-      @endScreenPosition = event.newHeadScreenPosition
+      @screenStartPosition = event.newTailScreenPosition
+      @screenEndPosition = event.newHeadScreenPosition
       @isValid = event.isValid
 
       if @isValid
@@ -121,8 +121,8 @@ class ViolationView extends View
     @hide()
 
   updateHighlight: ->
-    startPixelPosition = @editorView.pixelPositionForScreenPosition(@startScreenPosition)
-    endPixelPosition = @editorView.pixelPositionForScreenPosition(@endScreenPosition)
+    startPixelPosition = @editorView.pixelPositionForScreenPosition(@screenStartPosition)
+    endPixelPosition = @editorView.pixelPositionForScreenPosition(@screenEndPosition)
     arrowSize = @editorView.charWidth / 2
     verticalOffset = @editorView.lineHeight + Math.floor(arrowSize / 4)
 
@@ -143,7 +143,7 @@ class ViolationView extends View
       'left': borderOffset # Avoid protruding left edge of the border from the arrow
       'width': endPixelPosition.left - startPixelPosition.left - borderOffset
       'height': verticalOffset
-    if @endScreenPosition.column - @startScreenPosition.column > 1
+    if @screenEndPosition.column - @screenStartPosition.column > 1
       @area.addClass("violation-border")
     else
       @area.removeClass("violation-border")
@@ -151,14 +151,14 @@ class ViolationView extends View
   toggleTooltipWithCursorPosition: ->
     cursorPosition = @editor.getCursor().getScreenPosition()
 
-    if cursorPosition.row is @startScreenPosition.row &&
-       cursorPosition.column is @startScreenPosition.column
+    if cursorPosition.row is @screenStartPosition.row &&
+       cursorPosition.column is @screenStartPosition.column
       @violationTooltip('show')
     else
       @violationTooltip('hide')
 
   getCurrentScreenRange: ->
-    new Range(@startScreenPosition, @endScreenPosition)
+    new Range(@screenStartPosition, @screenEndPosition)
 
   violationTooltip: (option) ->
     violationView = this
