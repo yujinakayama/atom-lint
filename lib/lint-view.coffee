@@ -48,13 +48,14 @@ class LintView extends View
     @updateGutterMarkers()
 
   onLint: (error, violations) ->
-    @updateGutterMarkers()
     @removeViolationViews()
 
     if error?
       console.log(error)
     else
       @addViolationViews(violations)
+
+    @updateGutterMarkers()
 
   addViolationViews: (violations) ->
     for violation in violations
@@ -71,11 +72,11 @@ class LintView extends View
     for severity in Violation.SEVERITIES
       @gutterView.removeClassFromAllLines("lint-#{severity}")
 
-    return unless @getLastViolations()
+    return if @violationViews.length == 0
 
-    for violation in @getLastViolations()
-      line = violation.bufferRange.start.row
-      klass = "lint-#{violation.severity}"
+    for violationView in @violationViews
+      line = violationView.getCurrentBufferStartPosition().row
+      klass = "lint-#{violationView.violation.severity}"
       @gutterView.addClassToLine(line, klass)
 
   moveToNextViolation: ->

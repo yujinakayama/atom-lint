@@ -157,6 +157,9 @@ class ViolationView extends View
     else
       @violationTooltip('hide')
 
+  getCurrentBufferStartPosition: ->
+    @editor.bufferPositionForScreenPosition(@screenStartPosition)
+
   getCurrentScreenRange: ->
     new Range(@screenStartPosition, @screenEndPosition)
 
