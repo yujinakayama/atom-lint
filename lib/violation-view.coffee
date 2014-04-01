@@ -65,26 +65,46 @@ class ViolationView extends View
     #     region in any way. This is the most fragile strategy.
     options = { invalidation: 'inside', persistent: false }
     @marker = @editor.markScreenRange(@getCurrentScreenRange(), options)
-    @marker.on 'changed', ({newHeadScreenPosition, newTailScreenPosition, isValid}) =>
+    @marker.on 'changed', (event) =>
       # Head and Tail: Markers always have a head and sometimes have a tail.
       # If you think of a marker as an editor selection, the tail is the part that's stationary
       # and the head is the part that moves when the mouse is moved.
       # A marker without a tail always reports an empty range at the head position.
       # A marker with a head position greater than the tail is in a "normal" orientation.
       # If the head precedes the tail the marker is in a "reversed" orientation.
-      @startScreenPosition = newTailScreenPosition
-      @endScreenPosition = newHeadScreenPosition
-      @isValid = isValid
+      @startScreenPosition = event.newTailScreenPosition
+      @endScreenPosition = event.newHeadScreenPosition
+      @isValid = event.isValid
 
       if @isValid
-        # TODO: EditorView::pixelPositionForScreenPosition lies when a line above the marker was
-        #   removed and it was invoked from this marker's "changed" event.
-        setImmediate =>
-          @showHighlight()
-          @toggleTooltipWithCursorPosition()
+        if @isVisibleMarkerChange(event)
+          # TODO: EditorView::pixelPositionForScreenPosition lies when a line above the marker was
+          #   removed and it was invoked from this marker's "changed" event.
+          setImmediate =>
+            @showHighlight()
+            @toggleTooltipWithCursorPosition()
+        else
+          # Defer repositioning views that are currently outside of visibile area of scroll view.
+          # This is important to avoid UI freeze when so many markers are changed by a single
+          # modification (e.g. inserting/deleting the first line in the file).
+
+          # Hide the views for now, so that the repositioning-pending views won't be shown in the
+          # visible area of the scroll view.
+          @hide()
+
+          # This should be held by each ViolationView instance. Otherwise it will be called only
+          # once for all instance events.
+          @scheduleDeferredShowHighlight ?= _.debounce(@showHighlight, 500)
+          @scheduleDeferredShowHighlight()
       else
         @hideHighlight()
         @violationTooltip('hide')
+
+  isVisibleMarkerChange: (event) ->
+    editorFirstVisibleRow = @editorView.getFirstVisibleScreenRow()
+    editorLastVisibleRow = @editorView.getLastVisibleScreenRow()
+    [event.oldTailScreenPosition, event.newTailScreenPosition].some (position) ->
+      editorFirstVisibleRow <= position.row <= editorLastVisibleRow
 
   trackCursor: ->
     @subscribe @editor.getCursor(), 'moved', =>
