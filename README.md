@@ -24,6 +24,7 @@ More linters will be supported in the future.
 * [puppet-lint](http://puppet-lint.com) for Puppet
   (Installation of [language-puppet](https://atom.io/packages/language-puppet) package is required)
 * [ShellCheck](https://github.com/koalaman/shellcheck) for shell script
+* [Clang](http://clang.llvm.org) for C/C++/Objective-C
 
 ## Features
 
@@ -71,6 +72,9 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
   'ignoredNames': [
     'tmp/**'
   ]
+  'clang':
+    'path': '/path/to/bin/clang'
+    'headerSearchPaths': ['/path/to/include','/path2/to/include']
   'coffeelint':
     'path': '/path/to/bin/coffeelint'
     'ignoredNames': [
