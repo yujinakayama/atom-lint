@@ -77,8 +77,11 @@ class ViolationView extends View
       @isValid = isValid
 
       if @isValid
-        @showHighlight()
-        @toggleTooltipWithCursorPosition()
+        # TODO: EditorView::pixelPositionForScreenPosition lies when a line above the marker was
+        #   removed and it was invoked from this marker's "changed" event.
+        setImmediate =>
+          @showHighlight()
+          @toggleTooltipWithCursorPosition()
       else
         @hideHighlight()
         @violationTooltip('hide')
