@@ -48,13 +48,14 @@ class LintView extends View
     @updateGutterMarkers()
 
   onLint: (error, violations) ->
-    @updateGutterMarkers()
     @removeViolationViews()
 
     if error?
       console.log(error)
     else
       @addViolationViews(violations)
+
+    @updateGutterMarkers()
 
   addViolationViews: (violations) ->
     for violation in violations
@@ -65,17 +66,21 @@ class LintView extends View
     while view = @violationViews.shift()
       view.remove()
 
+  getValidViolationViews: ->
+    @violationViews.filter (violationView) ->
+      violationView.isValid
+
   updateGutterMarkers: ->
     return unless @gutterView.isVisible()
 
     for severity in Violation.SEVERITIES
       @gutterView.removeClassFromAllLines("lint-#{severity}")
 
-    return unless @getLastViolations()
+    return if @violationViews.length == 0
 
-    for violation in @getLastViolations()
-      line = violation.bufferRange.start.row
-      klass = "lint-#{violation.severity}"
+    for violationView in @getValidViolationViews()
+      line = violationView.getCurrentBufferStartPosition().row
+      klass = "lint-#{violationView.violation.severity}"
       @gutterView.addClassToLine(line, klass)
 
   moveToNextViolation: ->
@@ -85,7 +90,7 @@ class LintView extends View
     @moveToNeighborViolation('previous')
 
   moveToNeighborViolation: (direction) ->
-    unless @getLastViolations()?
+    if @violationViews.length == 0
       atom.beep()
       return
 
@@ -96,16 +101,14 @@ class LintView extends View
       enumerationMethod = 'findLast'
       comparingMethod = 'isLessThan'
 
-    currentCursorPosition = @editor.getCursor().getBufferPosition()
+    currentCursorPosition = @editor.getCursor().getScreenPosition()
 
     # OPTIMIZE: Consider using binary search.
-    neighborViolation = _[enumerationMethod] @getLastViolations(), (violation) ->
-      violation.bufferRange.start[comparingMethod](currentCursorPosition)
+    neighborViolationView = _[enumerationMethod] @getValidViolationViews(), (violationView) ->
+      violationPosition = violationView.screenStartPosition
+      violationPosition[comparingMethod](currentCursorPosition)
 
-    if neighborViolation?
-      @editor.setCursorBufferPosition(neighborViolation.bufferRange.start)
+    if neighborViolationView?
+      @editor.setCursorScreenPosition(neighborViolationView.screenStartPosition)
     else
       atom.beep()
-
-  getLastViolations: ->
-    @lintRunner.getLastViolations()

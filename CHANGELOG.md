@@ -3,6 +3,8 @@
 ## Development
 
 * [#34](https://github.com/yujinakayama/atom-lint/issues/34): Support column range highlight for RuboCop offenses. ([@yujinakayama])
+* Violation highlight now follows source modification. ([@yujinakayama])
+* Fix strange appearance of non-related tooltips on modification. ([@yujinakayama])
 
 ## v0.9.0
 
