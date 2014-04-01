@@ -2,6 +2,16 @@
 CommandRunner = require '../command-runner'
 Violation = require '../violation'
 
+# /Users/me/NAKPlaybackIndicatorContentView.h:19:9: fatal error: 'UIKit/UIKit.h' file not found
+DIAGNOSTIC_PATTERN = ///
+^(.+):(\d+):(\d+):  # file / line / column
+\s*([^:]+)\s*: # severity
+\s*([^]+) # message
+///
+
+# In file included from /Users/me/NAKPlaybackIndicatorContentView.m:9:
+PRELIMINARY_PATTERN = /^In file included from (.+):(\d+):/ # file / line
+
 module.exports =
 class Clang
   @canonicalName = 'Clang'
@@ -18,58 +28,53 @@ class Clang
   runClang: (callback) ->
     runner = new CommandRunner(@buildCommand())
 
-    runner.run (error, result) ->
+    runner.run (error, result) =>
       return callback(error) if error?
 
       if result.exitCode == 0 || result.exitCode == 1
-
-        violations = []
-        items = result.stderr.split '\n'
-        for item in items[...-1]
-
-          pattern = ///
-          ^(.+):(\d+):(\d+):\s*  # file / line / col
-          (.*):\s* # severity
-          ([^]+) # message
-          ///
-
-          matches = item.match(pattern)
-          if !matches?
-            pattern = ///^[In\ file\ included\ from\ ](.+):(\d+):/// # prefix / file / line
-            matches = item.match(pattern)
-            continue unless matches?
-            [_, file, line] = matches
-            if !prevLine? # It's possible that there will be a bunch of nested
-                          # includes that should be ignored. We only want the
-                          # line number from the first one
-              prevLine = line
-            continue
-          [_, file, line, col, severity, msg] = matches
-          severity = severity.trim()
-          if severity == "note"
-            # It might be nice to handle "notes" natively, but for now, they are ignored
-            continue
-          if severity == "fatal error"
-            # These tend to be errors about missing headers
-            severity = "error"
-            line = prevLine # They don't point to the correct location themselves
-                            # We parsed the correct location previously
-            prevLine =
-            col = 1         # We don't know the correct column (thought it's probably 9)
-          bufferPoint = new Point(parseInt(line) - 1, parseInt(col) - 1)
-          bufferRange = new Range(bufferPoint, bufferPoint)
-          violation = new Violation(severity, bufferRange, msg)
-          violations.push(violation)
-
+        violations = @parseDiagnostics(result.stderr)
         callback(null, violations)
       else
         callback(new Error("Process exited with code #{result.exitCode}"))
+
+  parseDiagnostics: (log) ->
+    lines = log.split('\n')
+
+    for line in lines
+      matches = line.match(DIAGNOSTIC_PATTERN)
+
+      unless matches
+        matches = line.match(PRELIMINARY_PATTERN)
+        continue unless matches
+        [_, filePath, lineNumber] = matches
+        if filePath == @filePath
+          actualLineNumberInTargetFile = lineNumber
+        continue
+
+      [_, _, lineNumber, columnNumber, severity, message] = matches
+
+      # It might be nice to handle "notes" natively, but for now, they are ignored
+      continue if severity == 'note'
+
+      # These tend to be errors about missing headers
+      severity = 'error' if severity == 'fatal error'
+
+      if actualLineNumberInTargetFile?
+        # They don't point to the correct location themselves
+        # We parsed the correct location previously
+        lineNumber = actualLineNumberInTargetFile
+        columnNumber = 1 # We don't know the correct column (thought it's probably 9)
+        actualLineNumberInTargetFile = null
+
+      bufferPoint = new Point(parseInt(lineNumber) - 1, parseInt(columnNumber) - 1)
+      bufferRange = new Range(bufferPoint, bufferPoint)
+      new Violation(severity, bufferRange, message)
 
   buildCommand: ->
     command = []
 
     userClangPath = atom.config.get('atom-lint.clang.path')
-    userClangIncludes = atom.config.get('atom-lint.clang.headerSearchPaths')
+    userHeaderSearchPaths = atom.config.get('atom-lint.clang.headerSearchPaths')
 
     if userClangPath?
       command.push(userClangPath)
@@ -80,8 +85,10 @@ class Clang
     command.push('-fsyntax-only')
     command.push('-fno-caret-diagnostics')
     command.push('-Wall')
-    if userClangIncludes?
-      for item in userClangIncludes
-        command.push("-I#{item}")
+
+    if userHeaderSearchPaths?
+      for path in userHeaderSearchPaths
+        command.push("-I#{path}")
+
     command.push(@filePath)
     command
