@@ -66,6 +66,10 @@ class LintView extends View
     while view = @violationViews.shift()
       view.remove()
 
+  getValidViolationViews: ->
+    @violationViews.filter (violationView) ->
+      violationView.isValid
+
   updateGutterMarkers: ->
     return unless @gutterView.isVisible()
 
@@ -74,7 +78,7 @@ class LintView extends View
 
     return if @violationViews.length == 0
 
-    for violationView in @violationViews
+    for violationView in @getValidViolationViews()
       line = violationView.getCurrentBufferStartPosition().row
       klass = "lint-#{violationView.violation.severity}"
       @gutterView.addClassToLine(line, klass)
@@ -100,7 +104,7 @@ class LintView extends View
     currentCursorPosition = @editor.getCursor().getScreenPosition()
 
     # OPTIMIZE: Consider using binary search.
-    neighborViolationView = _[enumerationMethod] @violationViews, (violationView) ->
+    neighborViolationView = _[enumerationMethod] @getValidViolationViews(), (violationView) ->
       violationPosition = violationView.screenStartPosition
       violationPosition[comparingMethod](currentCursorPosition)
 
