@@ -10,6 +10,7 @@
     "atom": ">0.50.0"
   },
   "dependencies": {
+    "fs-plus": "1.0.0",
     "season": "^1.0.2",
     "emissary": "^1.0.0",
     "lodash": "^2.4.1",
