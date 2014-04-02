@@ -19,11 +19,8 @@ class CoffeeLint extends XmlBase
       command.push('coffeelint')
 
     if userCoffeeRulesPath?
-      userCoffeeRulesPath = fs.absolute(userCoffeeRulesPath)
-      unless fs.existsSync(userCoffeeRulesPath)
-        throw new Error("CoffeeLint rule path '#{userCoffeeRulesPath}' does not exist.")
       command.push('-f')
-      command.push(userCoffeeRulesPath)
+      command.push(fs.absolute(userCoffeeRulesPath))
 
     command.push('--checkstyle')
     command.push(@filePath)
