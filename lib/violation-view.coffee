@@ -1,3 +1,4 @@
+_ = require 'lodash'
 {$, View, Range, Point} = require 'atom'
 ViolationTooltip = require './violation-tooltip'
 

@@ -2,6 +2,10 @@
 
 ## Development
 
+## v0.10.1
+
+* [#42](https://github.com/yujinakayama/atom-lint/issues/42): Fix error `Uncaught ReferenceError: _ is not defined` when some violations that are currently out of sight in the editor scroll view are moved by a modification (e.g. insertion of a line at beginning of the file). ([@yujinakayama])
+
 ## v0.10.0
 
 * [#34](https://github.com/yujinakayama/atom-lint/issues/34): Support column range highlight for RuboCop offenses. ([@yujinakayama])
