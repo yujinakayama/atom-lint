@@ -46,8 +46,6 @@ class Rustc
       endPoint = new Point(parseInt(lineNumber2 - 1), parseInt(columnNumber2 - 1))
       bufferRange = new Range(startPoint, endPoint)
 
-      message = util.punctuate(util.capitalize(message))
-
       new Violation(severity, bufferRange, message)
 
   buildCommand: ->

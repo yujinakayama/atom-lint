@@ -31,3 +31,11 @@ describe 'Violation', ->
       violation = new Violation('warning', bufferRange, message)
       expect(violation.getHTML())
         .toBe('Favor <code>unless</code> over <code>if</code> for negative conditions.')
+
+    it 'marks up singlequotes with <code> tag', ->
+      message = "Background image 'bg_fallback.png' was used multiple times, " +
+                'first declared at line 42, col 2.'
+      violation = new Violation('warning', bufferRange, message)
+      expect(violation.getHTML())
+        .toBe("Background image <code>bg_fallback.png</code> was used multiple times, " +
+              'first declared at line 42, col 2.')

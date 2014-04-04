@@ -32,8 +32,6 @@ class PuppetLint
       bufferPoint = new Point(parseInt(line) - 1, parseInt(column) - 1)
       bufferRange = new Range(bufferPoint, bufferPoint)
 
-      message = util.punctuate(util.capitalize(message))
-
       new Violation(severity, bufferRange, message)
 
   buildCommand: ->
