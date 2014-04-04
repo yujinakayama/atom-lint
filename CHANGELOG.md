@@ -2,6 +2,11 @@
 
 ## Development
 
+## v0.11.0
+
+* [#44](https://github.com/yujinakayama/atom-lint/pull/44): Add Rust support via rustc. ([@shtirlic])
+* Beautify and mark up violation messages. ([@yujinakayama])
+
 ## v0.10.1
 
 * [#42](https://github.com/yujinakayama/atom-lint/issues/42): Fix error `Uncaught ReferenceError: _ is not defined` when some violations that are currently out of sight in the editor scroll view are moved by a modification (e.g. insertion of a line at beginning of the file). ([@yujinakayama])
@@ -100,3 +105,4 @@
 [@moshee]: https://github.com/moshee
 [@jonrohan]: https://github.com/jonrohan
 [@wesbland]: https://github.com/wesbland
+[@shtirlic]: https://github.com/shtirlic
