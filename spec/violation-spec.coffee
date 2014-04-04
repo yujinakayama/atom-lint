@@ -2,13 +2,13 @@
 Violation = require '../lib/violation'
 
 describe 'Violation', ->
+  bufferRange = null
+
+  beforeEach ->
+    bufferPoint = new Point(1, 2)
+    bufferRange = new Range(bufferPoint, bufferPoint)
+
   describe 'constructor', ->
-    bufferRange = null
-
-    beforeEach ->
-      bufferPoint = new Point(1, 2)
-      bufferRange = new Range(bufferPoint, bufferPoint)
-
     it 'sets properties', ->
       violation = new Violation('warning', bufferRange, 'This is a message')
       expect(violation.severity).toBe('warning')
@@ -20,3 +20,14 @@ describe 'Violation', ->
         expect ->
           new Violation('foo', bufferRange, 'This is a message')
         .toThrow()
+
+  describe '::getHTML', ->
+    it 'escapes HTML entities in the message', ->
+      violation = new Violation('warning', bufferRange, 'Do not use <font> tag.')
+      expect(violation.getHTML()).toBe('Do not use &lt;font&gt; tag.')
+
+    it 'marks up backquotes with <code> tag', ->
+      message = 'Favor `unless` over `if` for negative conditions.'
+      violation = new Violation('warning', bufferRange, message)
+      expect(violation.getHTML())
+        .toBe('Favor <code>unless</code> over <code>if</code> for negative conditions.')

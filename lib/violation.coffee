@@ -11,4 +11,5 @@ class Violation
       throw new Error(message)
 
   getHTML: ->
-    null
+    HTML = _.escape(@message)
+    HTML.replace(/`(.+?)`/g, '<code>$1</code>')
