@@ -1,6 +1,7 @@
 {Range, Point} = require 'atom'
 CommandRunner = require '../command-runner'
 Violation = require '../violation'
+util = require '../util'
 
 DIAGNOSTIC_PATTERN = ///
 ^(.+):(\d+):(\d+):\s*(\d+):(\d+) # file / line1 / column1 / line2 / column2
@@ -44,6 +45,9 @@ class Rustc
       startPoint = new Point(parseInt(lineNumber - 1), parseInt(columnNumber - 1))
       endPoint = new Point(parseInt(lineNumber2 - 1), parseInt(columnNumber2 - 1))
       bufferRange = new Range(startPoint, endPoint)
+
+      message = util.punctuate(util.capitalize(message))
+
       new Violation(severity, bufferRange, message)
 
   buildCommand: ->
