@@ -26,6 +26,7 @@ More linters will be supported in the future.
 * [ShellCheck](https://github.com/koalaman/shellcheck) for shell script
 * [Clang](http://clang.llvm.org) for C/C++/Objective-C
 * [rustc](http://www.rust-lang.org/) for Rust
+  (Installation of [language-rust](https://atom.io/packages/language-rust) package is required)
 
 ## Features
 
