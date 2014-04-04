@@ -25,6 +25,7 @@ More linters will be supported in the future.
   (Installation of [language-puppet](https://atom.io/packages/language-puppet) package is required)
 * [ShellCheck](https://github.com/koalaman/shellcheck) for shell script
 * [Clang](http://clang.llvm.org) for C/C++/Objective-C
+* [rustc](http://www.rust-lang.org/) for Rust
 
 ## Features
 
@@ -94,6 +95,8 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
     'path': '/path/to/bin/puppet-lint'
   'rubocop':
     'path': '/path/to/bin/rubocop'
+  'rustc':
+    'path': '/path/to/bin/rustc'
   'scss-lint':
     'path': '/path/to/bin/scss-lint'
   'shellcheck':

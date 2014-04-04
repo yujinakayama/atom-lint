@@ -14,3 +14,4 @@
 'source.c++': 'clang'
 'source.objc': 'clang'
 'source.objc++': 'clang'
+'source.rust': 'rustc'
