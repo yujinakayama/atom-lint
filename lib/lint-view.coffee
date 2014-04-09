@@ -40,6 +40,9 @@ class LintView extends View
   onLinterActivation: ->
     # http://discuss.atom.io/t/decorating-the-left-gutter/1321/4
     @editorDisplayUpdateSubscription = @subscribe @editorView, 'editor:display-updated', =>
+      if @pendingViolations?
+        @addViolationViews(@pendingViolations)
+        @pendingViolations = null
       @updateGutterMarkers()
 
   onLinterDeactivation: ->
@@ -52,8 +55,13 @@ class LintView extends View
 
     if error?
       console.log(error)
-    else
+    else if @editorView.active
       @addViolationViews(violations)
+    else
+      # ViolationViews won't be placed properly when the editor (tab) is not active and the file is
+      # reloaded by a modification by another process. So we make them pending for now and place
+      # them when the editor become active.
+      @pendingViolations = violations
 
     @updateGutterMarkers()
 

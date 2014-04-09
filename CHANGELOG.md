@@ -2,6 +2,10 @@
 
 ## Development
 
+## v0.11.1
+
+* Fix a bug where violation highlights weren't placed properly when the editor (tab) is not active and the file is reloaded by a modification by another process. ([@yujinakayama])
+
 ## v0.11.0
 
 * [#44](https://github.com/yujinakayama/atom-lint/pull/44): Add Rust support via rustc. ([@shtirlic])
