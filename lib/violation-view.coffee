@@ -40,7 +40,7 @@ class ViolationView extends View
 
   prepareTooltip: ->
     HTML = @violation.getHTML()
-    @violationTooltip
+    @tooltip
       title: HTML || @violation.message
       html: HTML?
       container: @lintView
@@ -99,7 +99,7 @@ class ViolationView extends View
           @scheduleDeferredShowHighlight()
       else
         @hideHighlight()
-        @violationTooltip('hide')
+        @tooltip('hide')
 
   isVisibleMarkerChange: (event) ->
     editorFirstVisibleRow = @editorView.getFirstVisibleScreenRow()
@@ -112,7 +112,7 @@ class ViolationView extends View
       if @isValid
         @toggleTooltipWithCursorPosition()
       else
-        @violationTooltip('hide')
+        @tooltip('hide')
 
   showHighlight: ->
     @updateHighlight()
@@ -154,9 +154,9 @@ class ViolationView extends View
 
     if cursorPosition.row is @screenStartPosition.row &&
        cursorPosition.column is @screenStartPosition.column
-      @violationTooltip('show')
+      @tooltip('show')
     else
-      @violationTooltip('hide')
+      @tooltip('hide')
 
   getCurrentBufferStartPosition: ->
     @editor.bufferPositionForScreenPosition(@screenStartPosition)
@@ -164,7 +164,7 @@ class ViolationView extends View
   getCurrentScreenRange: ->
     new Range(@screenStartPosition, @screenEndPosition)
 
-  violationTooltip: (option) ->
+  tooltip: (option) ->
     violationView = this
     @each ->
       $this = $(this)
@@ -179,4 +179,4 @@ class ViolationView extends View
 
   beforeRemove: ->
     @marker?.destroy()
-    @violationTooltip('destroy')
+    @tooltip('destroy')
