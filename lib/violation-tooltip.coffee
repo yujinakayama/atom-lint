@@ -80,26 +80,23 @@ class ViolationTooltip extends Tooltip
     @applyAdditionalStyle()
 
   autoPlace: (orgPlacement, actualWidth, actualHeight) ->
-    $parent = @$element.parent()
+    $editor = @getEditorUnderLayer()
+    editorWidth = $editor.outerWidth()
+    editorHeight = $editor.outerHeight()
+    editorLeft = $editor.offset().left
 
-    parentWidth =
-      if @options.container == 'body' then window.innerWidth  else $parent.outerWidth()
-    parentHeight =
-      if @options.container == 'body' then window.innerHeight else $parent.outerHeight()
-    parentLeft =
-      if @options.container == 'body' then 0                  else $parent.offset().left
     pos = @getLogicalPosition()
 
     placement = orgPlacement.split('-')
 
-    if      placement[0] == 'bottom' && (pos.top + pos.height + actualHeight > parentHeight)
+    if      placement[0] == 'bottom' && (pos.top + pos.height + actualHeight > editorHeight)
       placement[0] = 'top'
     else if placement[0] == 'top'    && (pos.top - actualHeight < 0)
       placement[0] = 'bottom'
 
-    if      placement[1] == 'right'  && (pos.right + actualWidth > parentWidth)
+    if      placement[1] == 'right'  && (pos.right + actualWidth > editorWidth)
       placement[1] = 'left'
-    else if placement[1] == 'left'   && (pos.left - actualWidth < parentLeft)
+    else if placement[1] == 'left'   && (pos.left - actualWidth < editorLeft)
       placement[1] = 'right'
 
     placement.join('-')
@@ -213,6 +210,9 @@ class ViolationTooltip extends Tooltip
       $code.css('color', frontColor.clone().rgbaString())
       $code.css('background-color', frontColor.clone().clearer(0.96).rgbaString())
       $code.css('border-color', frontColor.clone().clearer(0.86).rgbaString())
+
+  getEditorUnderLayer: ->
+    @editorUnderlayer ?= @getEditorView().find('.underlayer')
 
   getEditorView: ->
     @getViolationView().lintView.editorView
