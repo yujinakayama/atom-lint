@@ -2,6 +2,10 @@
 
 ## Development
 
+## v0.11.3
+
+* Fix a bug where singlequotes used as apostrophe in violation messages were marked up as code snippets. ([@yujinakayama])
+
 ## v0.11.2
 
 * [#45](https://github.com/yujinakayama/atom-lint/issues/45): Fix a bug where the tooltip was cut off by the top of the editor when the file has only a few lines. ([@yujinakayama])

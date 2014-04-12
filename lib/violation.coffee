@@ -14,4 +14,4 @@ class Violation
   getHTML: ->
     HTML = util.punctuate(util.capitalize(@message))
     HTML = _.escape(HTML)
-    HTML.replace(/(`|&#39;)(.+?)\1/g, '<code>$2</code>')
+    HTML.replace(/(^|\s)(`|&#39;)(.+?)\2([\s\.\,\:\;\!\?\)]|$)/g, '$1<code>$3</code>$4')
