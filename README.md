@@ -4,7 +4,7 @@
 
 Generic code linting support for [Atom](https://atom.io).
 
-![Screenshot](https://cloud.githubusercontent.com/assets/83656/2583539/7e1c25b0-b9d2-11e3-9549-ffe576b9a41e.png)
+![Screenshot](https://cloud.githubusercontent.com/assets/83656/2719884/196c7e02-c568-11e3-8455-4ee4ba095752.png)
 
 Atom-Lint is currently in beta development.
 
