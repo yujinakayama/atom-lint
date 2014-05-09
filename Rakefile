@@ -9,7 +9,12 @@ end
 desc 'Run package specs'
 task :spec do
   puts 'Running package specs...'
-  system('apm test') || fail
+  command = if ENV['CI']
+              'curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh'
+            else
+              'apm test'
+            end
+  system(command) || fail
 end
 
 desc 'Run CoffeeLint'
@@ -19,6 +24,4 @@ task :lint do
 end
 
 task default: [:compile, :spec, :lint]
-
-# Cannot run `apm test` on CI since Atom is still closed beta.
-task ci: [:compile, :lint]
+task ci: [:compile, :spec, :lint]
