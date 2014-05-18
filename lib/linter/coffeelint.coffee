@@ -16,7 +16,8 @@ class CoffeeLint extends XmlBase
     else
       command.push('coffeelint')
 
-    command.push('--checkstyle')
+    command.push('--reporter')
+    command.push('checkstyle')
     command.push(@filePath)
     command
 
