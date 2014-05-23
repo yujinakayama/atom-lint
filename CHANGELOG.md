@@ -2,6 +2,8 @@
 
 ## Development
 
+* [#58](https://github.com/yujinakayama/atom-lint/pull/58): Address deprecation warning “parameter --checkstyle is deprecated. Use --reporter checkstyle instead” in CoffeeLint. ([@skevy])
+
 ## v0.11.3
 
 * Fix a bug where singlequotes used as apostrophe in violation messages were marked up as code snippets. ([@yujinakayama])
@@ -118,3 +120,4 @@
 [@jonrohan]: https://github.com/jonrohan
 [@wesbland]: https://github.com/wesbland
 [@shtirlic]: https://github.com/shtirlic
+[@skevy]: https://github.com/skevy
