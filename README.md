@@ -11,7 +11,6 @@ Atom-Lint is currently in beta development.
 ## Supported Linters
 
 More linters will be supported in the future.
-
 * [RuboCop](https://github.com/bbatsov/rubocop) for Ruby
 * [flake8](https://flake8.readthedocs.org/) for Python
 * [HLint](http://community.haskell.org/~ndm/hlint/) for Haskell
@@ -27,6 +26,9 @@ More linters will be supported in the future.
 * [Clang](http://clang.llvm.org) for C/C++/Objective-C
 * [rustc](http://www.rust-lang.org/) for Rust
   (Installation of [language-rust](https://atom.io/packages/language-rust) package is required)
+* [erlc](http://www.erlang.org/) for Erlang
+  (Installation of [language-erlang](https://atom.io/packages/language-erlang) package is required)
+
 
 ## Features
 
@@ -84,6 +86,8 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
     ]
   'csslint':
     'path': '/path/to/bin/csslint'
+  'erlc':
+    'path': '/path/to/bin/erlc'
   'flake8':
     'path': '/path/to/bin/flake8'
   'gc':
