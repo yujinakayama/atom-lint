@@ -86,6 +86,12 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
     ]
   'csslint':
     'path': '/path/to/bin/csslint'
+    'rules': # @see http://csslint.net/about.html for rules
+      'ignore': [
+        'adjoining-classes'
+      ]
+      'errors': []
+      'warnings': []
   'erlc':
     'path': '/path/to/bin/erlc'
   'flake8':
