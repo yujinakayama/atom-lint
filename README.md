@@ -26,9 +26,8 @@ More linters will be supported in the future.
 * [Clang](http://clang.llvm.org) for C/C++/Objective-C
 * [rustc](http://www.rust-lang.org/) for Rust
   (Installation of [language-rust](https://atom.io/packages/language-rust) package is required)
-* [erlc](http://www.erlang.org/) for Erlang
+* [erlc](http://erlang.org/doc/man/erlc.html) for Erlang
   (Installation of [language-erlang](https://atom.io/packages/language-erlang) package is required)
-
 
 ## Features
 
