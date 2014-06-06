@@ -1,9 +1,9 @@
+path = require 'path'
 {Range, Point} = require 'atom'
 CommandRunner = require '../command-runner'
 Violation = require '../violation'
-path = require 'path'
 
-DIAGNOSTIC_PATTERN = ///
+ERROR_PATTERN = ///
 ^(.+):(\d+):  # file / line
 \s*([^]+) # message
 ///
@@ -28,12 +28,12 @@ class Erlc
       return callback(error) if error?
 
       if result.exitCode == 0 || result.exitCode == 1
-        violations = @parseDiagnostics(result.stdout)
+        violations = @parseLog(result.stdout)
         callback(null, violations)
       else
         callback(new Error("Process exited with code #{result.exitCode}"))
 
-  parseDiagnostics: (log) ->
+  parseLog: (log) ->
     # Example of erlc output
     # $ erlc <options> hello.erl
     # hello.erl:3: function goofy/1 undefined          # an error
@@ -44,14 +44,14 @@ class Erlc
     for line in lines
       continue unless line
 
-      matches = line.match(DIAGNOSTIC_PATTERN)
+      matches = line.match(ERROR_PATTERN)
       continue unless matches
       [_, filePath, lineNumber, message] = matches
 
-      severity = "error"
+      severity = 'error'
 
-      if message.startsWith("Warning: ")
-        severity = "warning"
+      if message.startsWith('Warning: ')
+        severity = 'warning'
 
       bufferPoint = new Point(parseInt(lineNumber) - 1, 0)
       bufferRange = new Range(bufferPoint, bufferPoint)
@@ -62,21 +62,21 @@ class Erlc
     # Our build command works in the same way as erlang-flymake.el
     # see: https://github.com/erlang/otp/blob/maint/lib/tools/emacs/erlang-flymake.el
     command = []
-    userErlcPath = atom.config.get('atom-lint.erlc.path')
 
-    fileFullPath = @filePath
-    filePathPart = path.dirname(fileFullPath)
+    userErlcPath = atom.config.get('atom-lint.erlc.path')
 
     if userErlcPath?
       command.push(userErlcPath)
     else
       command.push('erlc')
 
-    if filePathPart.endsWith("/src")
-      parentPathPart = filePathPart.replace('/src', '/')
-      command.push('-I', "#{ parentPathPart }include/")
-      command.push('-I', "#{ parentPathPart }deps/")
-      command.push('-pa', "#{ parentPathPart }ebin/")
+    directoryPath = path.dirname(@filePath)
+
+    if directoryPath.endsWith('/src')
+      projectRoot = path.dirname(projectRoot)
+      command.push('-I', path.join(projectRoot, 'include'))
+      command.push('-I', path.join(projectRoot, 'deps'))
+      command.push('-pa', path.join(projectRoot, 'ebin'))
 
     command.push('-Wall')
     command.push('+warn_obsolete_guard')
@@ -85,6 +85,5 @@ class Erlc
     command.push('+warn_export_vars')
     command.push('+strong_validation')
     command.push('+report')
-    command.push(fileFullPath)
-    # console.log(command.join(' ')) # Show the command
+    command.push(@filePath)
     command
