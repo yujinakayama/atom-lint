@@ -2,6 +2,8 @@
 
 ## Development
 
+## v0.12.0
+
 * [#59](https://github.com/yujinakayama/atom-lint/pull/59): Add Erlang support via `erlc`. ([@bryanhunter])
 * [#55](https://github.com/yujinakayama/atom-lint/pull/55): Add configuration `atom-lint.csslint.rules` which allows you to customize CSSLint rules. ([@elrolito])
 
