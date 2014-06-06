@@ -6,8 +6,6 @@ Generic code linting support for [Atom](https://atom.io).
 
 ![Screenshot](https://cloud.githubusercontent.com/assets/83656/2719884/196c7e02-c568-11e3-8455-4ee4ba095752.png)
 
-Atom-Lint is currently in beta development.
-
 ## Supported Linters
 
 More linters will be supported in the future.
@@ -80,12 +78,9 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
     'headerSearchPaths': ['/path/to/include','/path2/to/include']
   'coffeelint':
     'path': '/path/to/bin/coffeelint'
-    'ignoredNames': [
-      'coffeelint/specific/excluded/file.coffee'
-    ]
   'csslint':
     'path': '/path/to/bin/csslint'
-    'rules': # @see http://csslint.net/about.html for rules
+    'rules': # See http://csslint.net/about.html for rules
       'ignore': [
         'adjoining-classes'
       ]
@@ -117,6 +112,7 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
 
 * `atom-lint.LINTER.path`
 
+Normally you can omit this setting.
 By default Atom-Lint automatically refers the environment variable `PATH` of your login shell
 if it's `bash` or `zsh`, and then invokes the command.
 Thus, if you're using a language version manager such as [rbenv](https://github.com/sstephenson/rbenv),
