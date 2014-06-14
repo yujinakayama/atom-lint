@@ -83,7 +83,6 @@ class Clang
     else
       command.push('clang')
 
-    command.push('-cc1')
     command.push('-fsyntax-only')
     command.push('-fno-caret-diagnostics')
 
