@@ -76,7 +76,7 @@ class Clang
 
     userClangPath = atom.config.get('atom-lint.clang.path')
     userHeaderSearchPaths = atom.config.get('atom-lint.clang.headerSearchPaths')
-    addConfigToDiscoveredFlags = atom.config.get('atom-lint.clang.addConfigToDiscoveredFlags')
+    addConfigToDiscoveredFlags = atom.config.get('atom-lint.clang.mergeAtomLintConfigIntoAutoDiscoveredFlags')
 
     if userClangPath?
       command.push(userClangPath)
@@ -86,8 +86,7 @@ class Clang
     command.push('-fsyntax-only')
     command.push('-fno-caret-diagnostics')
 
-    currentFile = atom.workspace.getActiveEditor().getPath()
-    currentFileFlags = ClangFlags.getClangFlags(currentFile)
+    currentFileFlags = ClangFlags.getClangFlags(@filePath)
 
     if currentFileFlags.length > 0
       command = command.concat currentFileFlags

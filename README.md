@@ -76,7 +76,7 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
   'clang':
     'path': '/path/to/bin/clang'
     'headerSearchPaths': ['/path/to/include','/path2/to/include']
-    'addConfigToDiscoveredFlags': true # If you want to add defaults to discovered project-specific clang flags
+    'mergeAtomLintConfigIntoAutoDiscoveredFlags': true # If you want to add defaults to discovered project-specific clang flags
   'coffeelint':
     'path': '/path/to/bin/coffeelint'
   'csslint':
