@@ -73,7 +73,7 @@ class Erlc
     directoryPath = path.dirname(@filePath)
 
     if directoryPath.endsWith('/src')
-      projectRoot = path.dirname(projectRoot)
+      projectRoot = path.dirname(directoryPath)
       command.push('-I', path.join(projectRoot, 'include'))
       command.push('-I', path.join(projectRoot, 'deps'))
       command.push('-pa', path.join(projectRoot, 'ebin'))
