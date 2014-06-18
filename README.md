@@ -148,6 +148,36 @@ The pattern must be relative to the project root directory.
 The pattern format is basically the same as the shell expansion and `.gitignore`.
 See [`minimatch`](https://github.com/isaacs/minimatch) for more details.
 
+### Clang Specific Configuration
+
+#### Header Search Paths
+
+* `atom-lint.clang.headerSearchPaths`
+
+Specify additional header search paths. These paths are passed to `clang` with `-I` option.
+
+#### Project-Specific Flags and Atom-Lint's configuration
+
+* `atom-lint.clang.mergeAtomLintConfigIntoAutoDiscoveredFlags`
+
+Atom-Lint automatically picks up your project-specific compiler flags
+(currenly [`.clang-complete` format](https://github.com/Rip-Rip/clang_complete/blob/master/doc/clang_complete.txt) is supported)
+via [`clang-flags`](https://github.com/Kev/clang-flags) module.
+By default, if a custom flag file is found, Atom-Lint uses only the flags specified in the file
+and ignores other configuration (e.g. the `headerSearchPaths` above).
+If you want to use both the project-specific flags and Atom-Lint's configuration,
+set this `mergeAtomLintConfigIntoAutoDiscoveredFlags` to `true`.
+
+### CSSLint Specific Configuration
+
+#### Custom Rules
+
+* `atom-lint.csslint.rules.errors`
+* `atom-lint.csslint.rules.warnings`
+* `atom-lint.csslint.rules.ignore`
+
+These are passed to `csslint` with [`--errors`, `--warnings` or `--ignore` option](https://github.com/CSSLint/csslint/wiki/Command-line-interface#options).
+
 ## Contributors
 
 Here's a [list](https://github.com/yujinakayama/atom-lint/graphs/contributors) of all contributors to Atom-Lint.
