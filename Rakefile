@@ -18,7 +18,17 @@ task :lint do
   sh 'coffeelint lib spec'
 end
 
-task default: [:compile, :spec, :lint]
+namespace :travis do
+  task :prepare do
+    sh 'npm install --global coffee-script coffeelint'
+    sh 'gem install --no-document rubocop'
+    sh 'sudo pip install flake8'
+  end
 
-# Cannot run `apm test` on CI since Atom is still closed beta.
-task ci: [:compile, :lint]
+  task :spec do
+    sh 'curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh'
+  end
+end
+
+task default: [:compile, :spec, :lint]
+task travis: ['travis:prepare', :compile, 'travis:spec', :lint]
