@@ -162,6 +162,14 @@ describe 'CommandRunner', ->
       run ['echo', '-n', 'foo   bar'], (error, result) ->
         expect(result.stdout).toBe('foo   bar')
 
+    it 'passes the executed command', ->
+      run ['echo', '-n', 'foo'], (error, result) ->
+        expect(result.command).toEqual(['echo', '-n', 'foo'])
+
+    it 'passes the environment variables', ->
+      run ['echo', '-n', 'foo'], (error, result) ->
+        expect(result.env.PATH).toContain('/bin')
+
     describe 'when the command run successfully', ->
       it 'passes stdout', ->
         run ['echo', '-n', 'foo'], (error, result) ->

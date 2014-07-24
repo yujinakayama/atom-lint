@@ -79,9 +79,11 @@ class CommandRunner
       @runWithEnv(env, callback)
 
   runWithEnv: (env, callback) ->
-    proc = child_process.spawn(@command[0], @command.splice(1), { env: env })
+    proc = child_process.spawn(@command[0], @command.slice(1), { env: env })
 
     result =
+      command: @command
+      env: env
       stdout: ''
       stderr: ''
 
