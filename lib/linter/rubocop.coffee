@@ -1,6 +1,7 @@
 {Range, Point} = require 'atom'
 CommandRunner = require '../command-runner'
 Violation = require '../violation'
+LinterError = require '../linter-error'
 
 module.exports =
 class Rubocop
@@ -45,9 +46,10 @@ class Rubocop
         try
           callback(null, JSON.parse(result.stdout))
         catch error
-          callback(error)
+          escapedStdout = JSON.stringify(result.stdout)
+          callback(new LinterError("Failed parsing RuboCop's JSON output #{escapedStdout}", result))
       else
-        callback(new Error("Process exited with code #{result.exitCode}"))
+        callback(new LinterError("rubocop exited with code #{result.exitCode}", result))
 
   buildCommand: ->
     command = []
@@ -59,5 +61,5 @@ class Rubocop
     else
       command.push('rubocop')
 
-    command.push('--format', 'json', @filePath)
+    command.push('--formata', 'json', @filePath)
     command

@@ -2,6 +2,8 @@
 
 ## Development
 
+* Dump detailed debug outputs on linter errors. ([@yujinakayama])
+
 ## v0.13.0
 
 * [#70](https://github.com/yujinakayama/atom-lint/pull/70): Detect project-specific Clang flags automatically. ([@Kev])

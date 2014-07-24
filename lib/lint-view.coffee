@@ -54,6 +54,7 @@ class LintView extends View
     @removeViolationViews()
 
     if error?
+      console.log(error.toString())
       console.log(error.stack)
     else if @editorView.active
       @addViolationViews(violations)

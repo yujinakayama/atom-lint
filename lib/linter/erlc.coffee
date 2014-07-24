@@ -2,6 +2,7 @@ path = require 'path'
 {Range, Point} = require 'atom'
 CommandRunner = require '../command-runner'
 Violation = require '../violation'
+LinterError = require '../linter-error'
 
 ERROR_PATTERN = ///
 ^(.+):(\d+):  # file / line
@@ -31,7 +32,7 @@ class Erlc
         violations = @parseLog(result.stdout)
         callback(null, violations)
       else
-        callback(new Error("Process exited with code #{result.exitCode}"))
+        callback(new LinterError("erlc exited with code #{result.exitCode}", result))
 
   parseLog: (log) ->
     # Example of erlc output

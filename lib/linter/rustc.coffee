@@ -1,6 +1,7 @@
 {Range, Point} = require 'atom'
 CommandRunner = require '../command-runner'
 Violation = require '../violation'
+LinterError = require '../linter-error'
 util = require '../util'
 
 DIAGNOSTIC_PATTERN = ///
@@ -32,7 +33,7 @@ class Rustc
         violations = @parseDiagnostics(result.stderr)
         callback(null, violations)
       else
-        callback(new Error("Process exited with code #{result.exitCode}"))
+        callback(new LinterError("rustc exited with code #{result.exitCode}", result))
 
   parseDiagnostics: (log) ->
     lines = log.split('\n')

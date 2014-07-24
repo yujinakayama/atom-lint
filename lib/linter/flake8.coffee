@@ -1,6 +1,7 @@
 {Range, Point} = require 'atom'
 CommandRunner = require '../command-runner'
 Violation = require '../violation'
+LinterError = require '../linter-error'
 
 module.exports =
 class Flake8
@@ -45,7 +46,7 @@ class Flake8
 
         callback(null, violations)
       else
-        callback(new Error("Process exited with code #{result.exitCode}"))
+        callback(new LinterError("flake8 exited with code #{result.exitCode}", result))
 
   buildCommand: ->
     command = []

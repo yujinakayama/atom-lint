@@ -1,5 +1,6 @@
 xml2js = require 'xml2js'
 CommandRunner = require '../command-runner'
+LinterError = require '../linter-error'
 
 module.exports =
 class XmlBase
@@ -11,7 +12,7 @@ class XmlBase
       return callback(commandError) if commandError?
 
       unless @isValidExitCode(result.exitCode)
-        return callback(new Error("Process exited with code #{result.exitCode}"))
+        return callback(new LinterError("Process exited with code #{result.exitCode}", result))
 
       xml2js.parseString result.stdout, (xmlError, xml) =>
         return callback(xmlError) if xmlError?

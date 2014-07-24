@@ -1,6 +1,7 @@
 {Range, Point} = require 'atom'
 CommandRunner = require '../command-runner'
 Violation = require '../violation'
+LinterError = require '../linter-error'
 
 module.exports =
 class ShellCheck
@@ -34,7 +35,7 @@ class ShellCheck
         catch error
           callback(error)
       else
-        callback(new Error("Process exited with code #{result.exitCode}"))
+        callback(new LinterError("shellcheck exited with code #{result.exitCode}", result))
 
   buildCommand: ->
     command = []

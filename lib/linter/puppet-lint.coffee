@@ -1,6 +1,7 @@
 {Range, Point} = require 'atom'
 CommandRunner = require '../command-runner'
 Violation = require '../violation'
+LinterError = require '../linter-error'
 util = require '../util'
 
 module.exports =
@@ -17,7 +18,7 @@ class PuppetLint
 
       # puppet-lint returns 0 even if there are violations unless --fail-on-warnings is specified.
       unless result.exitCode == 0
-        return callback(new Error("Process exited with code #{result.exitCode}"))
+        return callback(new LinterError("puppet-lint exited with code #{result.exitCode}", result))
 
       violations = @parseLog(result.stdout)
       callback(null, violations)

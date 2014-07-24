@@ -2,6 +2,7 @@
 _ = require 'lodash'
 CommandRunner = require '../command-runner'
 Violation = require '../violation'
+LinterError = require '../linter-error'
 util = require '../util'
 
 module.exports =
@@ -42,7 +43,7 @@ class HLint
 
         callback(null, violations)
       else
-        callback(new Error("Process exited with code #{result.exitCode}"))
+        callback(new LinterError("hlint exited with code #{result.exitCode}", result))
 
   buildCommand: ->
     command = []
