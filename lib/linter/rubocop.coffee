@@ -61,5 +61,5 @@ class Rubocop
     else
       command.push('rubocop')
 
-    command.push('--formata', 'json', @filePath)
+    command.push('--format', 'json', @filePath)
     command

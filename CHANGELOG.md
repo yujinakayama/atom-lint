@@ -2,6 +2,10 @@
 
 ## Development
 
+## v0.14.1
+
+* Fix regression of RuboCop execution in 0.14.0. ([@yujinakayama])
+
 ## v0.14.0
 
 * Dump detailed debug outputs on linter errors. ([@yujinakayama])
