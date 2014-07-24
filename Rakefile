@@ -2,20 +2,20 @@
 desc 'Compile all CoffeeScript files'
 task :compile do
   puts 'Compiling all CoffeeScript files...'
-  system('coffee -o tmp -c lib spec') || fail
+  sh 'coffee -o tmp -c lib spec'
   puts 'Done.'
 end
 
 desc 'Run package specs'
 task :spec do
   puts 'Running package specs...'
-  system('apm test') || fail
+  sh 'apm test'
 end
 
 desc 'Run CoffeeLint'
 task :lint do
   puts 'Running CoffeeLint...'
-  system('coffeelint lib spec') || fail
+  sh 'coffeelint lib spec'
 end
 
 task default: [:compile, :spec, :lint]
