@@ -2,6 +2,7 @@
 path = require 'path'
 fs = require 'fs'
 temp = require 'temp'
+_ = require 'lodash'
 
 window.prepareWorkspace = (options = {}) ->
   projectPath = temp.mkdirSync('lint-runner-spec-')
@@ -46,9 +47,15 @@ window.expectEventNotToBeEmitted = (targetObject, eventName, context) ->
     expect(emitted).toBe(false)
 
 window.loadGrammar = (languageName) ->
-  # See /usr/local/bin/atom
-  atomAppPath = process.env.ATOM_PATH || '/Applications/Atom.app'
-  builtinPackageDir = path.join(atomAppPath, 'Contents/Resources/app/node_modules')
-  relativeGrammarFilePath = "language-#{languageName}/grammars/#{languageName}.json"
-  absoluteGrammarFilePath = path.join(builtinPackageDir, relativeGrammarFilePath)
-  atom.syntax.loadGrammarSync(absoluteGrammarFilePath)
+  packageName = "language-#{languageName}"
+  atom.packages.loadPackage(packageName)
+  aPackage = atom.packages.getLoadedPackage(packageName)
+
+  return null unless aPackage
+
+  aPackage.loadGrammarsSync()
+
+  scopeName = "source.#{languageName}"
+
+  _.find aPackage.grammars, (grammar) ->
+    grammar.scopeName == scopeName
