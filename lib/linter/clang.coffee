@@ -77,7 +77,7 @@ class Clang
 
     userClangPath = atom.config.get('atom-lint.clang.path')
     userHeaderSearchPaths = atom.config.get('atom-lint.clang.headerSearchPaths')
-    addConfigToDiscoveredFlags = atom.config.get('atom-lint.clang.mergeAtomLintConfigIntoAutoDiscoveredFlags')
+    alwaysUseConfig = atom.config.get('atom-lint.clang.mergeAtomLintConfigIntoAutoDiscoveredFlags')
 
     if userClangPath?
       command.push(userClangPath)
@@ -91,7 +91,7 @@ class Clang
 
     if currentFileFlags.length > 0
       command = command.concat currentFileFlags
-    if currentFileFlags.length == 0 || addConfigToDiscoveredFlags
+    if currentFileFlags.length == 0 || alwaysUseConfig
       command.push('-Wall')
 
       if userHeaderSearchPaths?
