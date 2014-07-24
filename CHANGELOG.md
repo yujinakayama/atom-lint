@@ -2,6 +2,8 @@
 
 ## Development
 
+## v0.14.0
+
 * Dump detailed debug outputs on linter errors. ([@yujinakayama])
 
 ## v0.13.0
