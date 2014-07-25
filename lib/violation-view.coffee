@@ -66,6 +66,9 @@ class ViolationView extends View
     #     region in any way. This is the most fragile strategy.
     options = { invalidation: 'inside', persistent: false }
     @marker = @editor.markScreenRange(@getCurrentScreenRange(), options)
+
+    @editor.decorateMarker(@marker, { type: 'gutter', class: "lint-#{@violation.severity}" })
+
     @marker.on 'changed', (event) =>
       # Head and Tail: Markers always have a head and sometimes have a tail.
       # If you think of a marker as an editor selection, the tail is the part that's stationary
