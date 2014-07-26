@@ -1,12 +1,28 @@
+os = require 'os'
+path = require 'path'
+fs = require 'fs'
+rimraf = require 'rimraf'
 CommandRunner = require '../lib/command-runner'
 
 describe 'CommandRunner', ->
-  originalPath = process.env.PATH
-  originalShell = process.env.SHELL
+  workingDir = path.join(os.tmpdir(), 'atom-lint-spec')
+  originalWorkingDirectory = process.cwd()
+  originalHOME = process.env.HOME
+  originalPATH = process.env.PATH
+  originalSHELL = process.env.SHELL
+
+  beforeEach ->
+    rimraf.sync(workingDir) if fs.existsSync(workingDir)
+    fs.mkdirSync(workingDir)
+    process.env.HOME = workingDir
+    process.chdir(workingDir)
 
   afterEach ->
-    process.env.PATH = originalPath
-    process.env.SHELL = originalShell
+    process.chdir(originalWorkingDirectory)
+    process.env.HOME = originalHOME
+    process.env.PATH = originalPATH
+    process.env.SHELL = originalSHELL
+    rimraf.sync(workingDir)
 
   describe '.fetchEnvOfLoginShell', ->
     itPassesAnObjectContainingAllEnvironementVariables = ->
