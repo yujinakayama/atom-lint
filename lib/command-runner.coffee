@@ -3,7 +3,6 @@ os = require 'os'
 path = require 'path'
 fs = require 'fs'
 _ = require 'lodash'
-{$} = require 'atom'
 
 each_slice = (array, size, callback) ->
   for i in [0..array.length] by size
