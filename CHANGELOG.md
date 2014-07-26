@@ -2,6 +2,8 @@
 
 ## Development
 
+## v0.14.2
+
 * Fix a bug where linters could not be run when the login shell is zsh and zsh option `CLOBBER` is unset. ([@yujinakayama])
 
 ## v0.14.1
