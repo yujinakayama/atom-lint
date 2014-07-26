@@ -51,6 +51,12 @@ describe 'CommandRunner', ->
 
       itPassesAnObjectContainingAllEnvironementVariables()
 
+      describe 'and CLOBBER option is unset', ->
+        beforeEach ->
+          fs.writeFileSync('.zshrc', 'unsetopt CLOBBER')
+
+        itPassesAnObjectContainingAllEnvironementVariables()
+
     describe 'when the login shell is tcsh', ->
       beforeEach ->
         process.env.SHELL = '/bin/tcsh'

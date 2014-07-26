@@ -23,6 +23,8 @@ class CommandRunner
       return callback(new Error("#{process.env.SHELL} is not supported."))
 
     outputPath = path.join(os.tmpdir(), 'CommandRunner_fetchEnvOfLoginShell.txt')
+    fs.unlinkSync(outputPath) if fs.existsSync(outputPath)
+
     # Running non-shell-builtin command with -i (interactive) option causes shell to freeze with
     # CPU 100%. So we run it in subshell to make it non-interactive.
     command = "#{process.env.SHELL} -l -i -c '$(printenv > #{outputPath})'"
