@@ -77,7 +77,6 @@ class CommandRunner
 
   run: (callback) ->
     CommandRunner.getEnv (env) =>
-      env ?= process.env
       @runWithEnv(env, callback)
 
   runWithEnv: (env, callback) ->
