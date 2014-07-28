@@ -69,6 +69,7 @@ class CommandRunner
       @fetchEnvOfLoginShell (error, env) =>
         env ?= {}
         @_cachedEnv = @mergePathEnvs(env, process.env)
+        @_cachedEnv['HOME'] = process.env.HOME
         callback(@_cachedEnv)
     else
       callback(@_cachedEnv)
