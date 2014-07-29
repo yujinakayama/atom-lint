@@ -1,7 +1,7 @@
 {
   "name": "atom-lint",
   "main": "./lib/atom-lint",
-  "version": "0.14.2",
+  "version": "0.14.3",
   "private": true,
   "description": "Generic code linting support, including RuboCop, flake8, JSHint, CoffeeLint, etc.",
   "repository": "https://github.com/yujinakayama/atom-lint",
