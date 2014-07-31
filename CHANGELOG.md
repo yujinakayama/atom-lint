@@ -3,6 +3,7 @@
 ## Development
 
 * [#80](https://github.com/yujinakayama/atom-lint/pull/80): Fix a bug where fetching login shell's environment variables fails when zsh option `CLOBBER` is unset and a linter is run twice at the same time on launch of Atom. ([@yujinakayama])
+* [#80](https://github.com/yujinakayama/atom-lint/pull/80): Fallback to Atom's environment variables rather than empty ones when failed fetching login shell's ones. ([@yujinakayama])
 
 ## v0.14.3
 

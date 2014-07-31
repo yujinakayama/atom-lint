@@ -165,6 +165,16 @@ describe 'CommandRunner', ->
 
         itReturnsCachedResultOfFetchEnvOfLoginShell()
 
+        it 'returns the env of Atom alternatively', ->
+          hasGotten = false
+
+          CommandRunner.getEnv (env) ->
+            expect(env.HOME).toBe(process.env.HOME)
+            hasGotten = true
+
+          waitsFor ->
+            hasGotten
+
   describe 'run', ->
     beforeEach ->
       CommandRunner._cachedEnv = undefined

@@ -75,9 +75,12 @@ class CommandRunner
     if @_cachedEnv == undefined
       @fetchEnvOfLoginShell (error, env) =>
         console.log(error.stack) if error?
-        env ?= {}
-        @_cachedEnv = @mergePathEnvs(env, process.env)
-        @_cachedEnv['HOME'] = process.env.HOME
+
+        if env?
+          @_cachedEnv = @mergePathEnvs(env, process.env)
+        else
+          @_cachedEnv = process.env
+
         callback(@_cachedEnv)
     else
       callback(@_cachedEnv)
