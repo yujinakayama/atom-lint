@@ -2,6 +2,10 @@
 XmlBase = require './xml-base'
 Violation = require '../violation'
 
+# https://github.com/causes/scss-lint/blob/v0.26.2/lib/scss_lint/cli.rb#L13-L21
+# https://github.com/causes/scss-lint/commit/a5f69c1a1b39bb00aacfdba75fb06f77097fc6a8
+VALID_EXIT_CODES = [0, 1, 2, 65]
+
 module.exports =
 class SCSSLint extends XmlBase
   @canonicalName = 'SCSS-Lint'
@@ -21,8 +25,7 @@ class SCSSLint extends XmlBase
     command
 
   isValidExitCode: (exitCode) ->
-    # https://github.com/causes/scss-lint/blob/v0.20.0/lib/scss_lint/cli.rb#L12-L17
-    exitCode == 0 || exitCode == 65
+    VALID_EXIT_CODES.indexOf(exitCode) >= 0
 
   createViolationsFromXml: (xml) ->
     return [] unless xml.lint.file?
