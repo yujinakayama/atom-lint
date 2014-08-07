@@ -12,8 +12,6 @@ each_slice = (array, size, callback) ->
 
 module.exports =
 class CommandRunner
-  @_cachedEnv = undefined
-
   @fetchEnvOfLoginShell: (callback) ->
     if !process.env.SHELL
       return callback(new Error("SHELL environment variable is not set."))
@@ -72,18 +70,18 @@ class CommandRunner
     _.uniq(paths).join(':')
 
   @getEnv: (callback) ->
-    if @_cachedEnv == undefined
+    if @cachedEnv == undefined
       @fetchEnvOfLoginShell (error, env) =>
         console.log(error.stack) if error?
 
         if env?
-          @_cachedEnv = @mergePathEnvs(env, process.env)
+          @cachedEnv = @mergePathEnvs(env, process.env)
         else
-          @_cachedEnv = process.env
+          @cachedEnv = process.env
 
-        callback(@_cachedEnv)
+        callback(@cachedEnv)
     else
-      callback(@_cachedEnv)
+      callback(@cachedEnv)
 
   constructor: (@command) ->
 

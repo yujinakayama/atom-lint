@@ -115,7 +115,7 @@ describe 'CommandRunner', ->
 
   describe 'getEnv', ->
     beforeEach ->
-      CommandRunner._cachedEnv = undefined
+      CommandRunner.cachedEnv = undefined
 
     describe 'on first invocation', ->
       it 'invokes .fetchEnvOfLoginShell, merges PATHs of login shell and Atom,
@@ -177,7 +177,7 @@ describe 'CommandRunner', ->
 
   describe 'run', ->
     beforeEach ->
-      CommandRunner._cachedEnv = undefined
+      CommandRunner.cachedEnv = undefined
 
     run = (command, callback) ->
       hasRun = false
