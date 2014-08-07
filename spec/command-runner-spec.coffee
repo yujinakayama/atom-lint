@@ -11,6 +11,8 @@ describe 'CommandRunner', ->
   originalPATH = process.env.PATH
   originalSHELL = process.env.SHELL
 
+  CommandRunner.supressError = true
+
   beforeEach ->
     rimraf.sync(workingDir) if fs.existsSync(workingDir)
     fs.mkdirSync(workingDir)
