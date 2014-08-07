@@ -80,23 +80,18 @@ class ViolationTooltip extends Tooltip
     @applyAdditionalStyle()
 
   autoPlace: (orgPlacement, actualWidth, actualHeight) ->
-    $editor = @getEditorUnderLayer()
-    editorWidth = $editor.outerWidth()
-    editorHeight = $editor.outerHeight()
-    editorLeft = $editor.offset().left
-
+    editorRegion = @getEditorRegion()
     pos = @getLogicalPosition()
-
     placement = orgPlacement.split('-')
 
-    if      placement[0] == 'bottom' && (pos.top + pos.height + actualHeight > editorHeight)
+    if      placement[0] == 'bottom' && (pos.top + pos.height + actualHeight > editorRegion.height)
       placement[0] = 'top'
     else if placement[0] == 'top'    && (pos.top - actualHeight < 0)
       placement[0] = 'bottom'
 
-    if      placement[1] == 'right'  && (pos.right + actualWidth > editorWidth)
+    if      placement[1] == 'right'  && (pos.right + actualWidth > editorRegion.width)
       placement[1] = 'left'
-    else if placement[1] == 'left'   && (pos.left - actualWidth < editorLeft)
+    else if placement[1] == 'left'   && (pos.left - actualWidth < editorRegion.left)
       placement[1] = 'right'
 
     placement.join('-')
@@ -214,11 +209,23 @@ class ViolationTooltip extends Tooltip
       $code.css('background-color', frontColor.clone().clearer(0.96).rgbaString())
       $code.css('border-color', frontColor.clone().clearer(0.86).rgbaString())
 
-  getEditorUnderLayer: ->
-    @editorUnderlayer ?= @getEditorView().find('.underlayer')
+  getEditorRegion: ->
+    return @editorRegion if @editorRegion?
+
+    # In non-React editor, EditorView's .overlayer which LintView placed in fits to its content
+    # (i.e. if the editor's content is only one line, the .overlayer's height will be equal to the
+    # line height). However what we want now is the entire editor region rather than the content
+    # region (see https://github.com/yujinakayama/atom-lint/issues/45). So we use .underlayer's
+    # region which indicates the entire editor region properly.
+    # In React editor, the .overlayer indicates the entire editor region though .underlayer is still
+    # supported.
+    # The reason why we don't use the region of EditorView itself is that the region is _outside_
+    # of the scroll view.
+    underlayer = @getEditorView().find('.underlayer')
+    @editorRegion =
+      width: underlayer.outerWidth()
+      height: underlayer.outerHeight()
+      left: underlayer.offset().left
 
   getEditorView: ->
-    @getViolationView().lintView.editorView
-
-  getViolationView: ->
-    @options.violationView
+    @options.editorView

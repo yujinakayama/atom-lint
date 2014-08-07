@@ -45,6 +45,7 @@ class ViolationView extends View
       html: HTML?
       container: @lintView
       selector: @find('.violation-area')
+      editorView: @editorView
 
   trackEdit: ->
     # :persistent -
@@ -165,12 +166,10 @@ class ViolationView extends View
     new Range(@screenStartPosition, @screenEndPosition)
 
   tooltip: (option) ->
-    violationView = this
     @each ->
       $this = $(this)
       data = $this.data('bs.tooltip')
       options = typeof option == 'object' && option
-      options.violationView = violationView
 
       if !data
         $this.data('bs.tooltip', (data = new ViolationTooltip(this, options)))
