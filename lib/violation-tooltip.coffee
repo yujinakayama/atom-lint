@@ -200,6 +200,9 @@ class ViolationTooltip extends Tooltip
   applyAdditionalStyle: ->
     $tip = @tip()
 
+    # There are several syntax themes that don't define Less variable @syntax-background-color in
+    # the wild. So we generate colors here by referencing applied style in runtime rather than
+    # style definition in CSS.
     editorBackgroundColor = Color(@getEditorView().css('background-color'))
     shadow = "0 0 3px #{editorBackgroundColor.clearer(0.1).rgbaString()}"
     $tip.find('.tooltip-inner').css('box-shadow', shadow)
