@@ -11,7 +11,10 @@ class Violation
       message += "#{@severity} is passed."
       throw new Error(message)
 
-  getHTML: ->
+  getMessageHTML: ->
     HTML = util.punctuate(util.capitalize(@message))
     HTML = _.escape(HTML)
     HTML.replace(/(^|\s)(`|&#39;)(.+?)\2([\s\.\,\:\;\!\?\)]|$)/g, '$1<code>$3</code>$4')
+
+  getAttachmentHTML: ->
+    null

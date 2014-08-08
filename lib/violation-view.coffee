@@ -39,10 +39,8 @@ class ViolationView extends View
     @isValid = true
 
   prepareTooltip: ->
-    HTML = @violation.getHTML()
     @tooltip
-      title: HTML || @violation.message
-      html: HTML?
+      violation: @violation
       container: @lintView
       selector: @find('.violation-area')
       editorView: @editorView

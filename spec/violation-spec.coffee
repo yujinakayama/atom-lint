@@ -21,33 +21,38 @@ describe 'Violation', ->
           new Violation('foo', bufferRange, 'This is a message')
         .toThrow()
 
-  describe '::getHTML', ->
+  describe '::getMessageHTML', ->
     it 'escapes HTML entities in the message', ->
       violation = new Violation('warning', bufferRange, 'Do not use <font> tag.')
-      expect(violation.getHTML()).toBe('Do not use &lt;font&gt; tag.')
+      expect(violation.getMessageHTML()).toBe('Do not use &lt;font&gt; tag.')
 
     it 'marks up backquotes with <code> tag', ->
       message = 'Favor `unless` over `if` for negative conditions.'
       violation = new Violation('warning', bufferRange, message)
-      expect(violation.getHTML())
+      expect(violation.getMessageHTML())
         .toBe('Favor <code>unless</code> over <code>if</code> for negative conditions.')
 
     it 'marks up single quotes with <code> tag', ->
       message = "Background image 'bg_fallback.png' was used multiple times, " +
                 'first declared at line 42, col 2.'
       violation = new Violation('warning', bufferRange, message)
-      expect(violation.getHTML())
+      expect(violation.getMessageHTML())
         .toBe("Background image <code>bg_fallback.png</code> was used multiple times, " +
               'first declared at line 42, col 2.')
 
     it 'does not confuse single quotes used as apostrophe with quotation', ->
       message = "I don't and won't do this."
       violation = new Violation('warning', bufferRange, message)
-      expect(violation.getHTML())
+      expect(violation.getMessageHTML())
         .toBe("I don&#39;t and won&#39;t do this.")
 
     it 'handles single quotes from the beginning to the end of the message', ->
       message = "'this_is_a_snippet'"
       violation = new Violation('warning', bufferRange, message)
-      expect(violation.getHTML())
+      expect(violation.getMessageHTML())
         .toBe('<code>this_is_a_snippet</code>.')
+
+  describe '::getAttachmentHTML', ->
+    it 'returns null by default', ->
+      violation = new Violation('warning', bufferRange, 'This is a message.')
+      expect(violation.getAttachmentHTML()).toBeNull()
