@@ -79,11 +79,14 @@ class HLintViolation extends Violation
 
   getAttachmentHTML: ->
     return null unless @foundCode?
-    HTML  = '<p class="code-label">Found:</p>'
-    HTML += @formatSnippet(@foundCode)
-    HTML += '<p class="code-label">Why not:</p>'
-    HTML += @formatSnippet(@alternativeCode)
-    HTML
+    '<figure>' +
+      '<figcaption>Found:</figcaption>' +
+      @formatSnippet(@foundCode) +
+    '</figure>' +
+    '<figure>' +
+      '<figcaption>Why not:</figcaption>' +
+      @formatSnippet(@alternativeCode) +
+    '</figure>'
 
   formatSnippet: (snippet) ->
     lines = snippet.split('\n')
