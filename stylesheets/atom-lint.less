@@ -134,6 +134,23 @@
       white-space: pre-wrap;
       text-align: left;
 
+      .tag {
+        margin-left: 7px;
+        padding: 2px 4px;
+        font-size: 10px;
+        font-weight: bold;
+        text-shadow: none;
+        border-radius: 2px;
+
+        color: @text-color-selected;
+        background-color: desaturate(@background-color-info, 25%);
+      }
+
+      .info-color {
+        display: none;
+        background-color: @background-color-info;
+      }
+
       .attachment {
         margin-top: 5px;
       }
