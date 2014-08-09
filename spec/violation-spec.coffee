@@ -56,3 +56,16 @@ describe 'Violation', ->
     it 'returns null by default', ->
       violation = new Violation('warning', bufferRange, 'This is a message.')
       expect(violation.getAttachmentHTML()).toBeNull()
+
+  describe '::getTagsHTML', ->
+    it 'returns span elements for each tag', ->
+      tags = ['foo', 'bar']
+      violation = new Violation('warning', bufferRange, 'This is a message.', tags)
+      expect(violation.getTagsHTML())
+        .toBe('<span class="tag">foo</span><span class="tag">bar</span>')
+
+    it 'escapes HTML entities in the tags', ->
+      tags = ['<foo>']
+      violation = new Violation('warning', bufferRange, 'This is a message.', tags)
+      expect(violation.getTagsHTML())
+        .toBe('<span class="tag">&lt;foo&gt;</span>')

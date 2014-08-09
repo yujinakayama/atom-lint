@@ -9,9 +9,8 @@ class ViolationTooltip extends AnnotationTooltip
     template: '<div class="tooltip">' +
                 '<div class="tooltip-arrow"></div>' +
                 '<div class="tooltip-inner">' +
-                  '<div class="message"></div>' +
+                  '<span class="message"></span><span class="tags"></span>' +
                   '<div class="attachment"></div>' +
-                  '<div class="metadata"></div>' +
                 '</div>' +
               '</div>'
   })
@@ -23,7 +22,8 @@ class ViolationTooltip extends AnnotationTooltip
     $content = @tip().find('.tooltip-inner')
     violation = @options.violation
 
-    $content.find('.message').html(violation.getMessageHTML())
+    $content.find('.message').html(violation.getMessageHTML() || '')
+    $content.find('.tags').html(violation.getTagsHTML() || '')
 
     $attachment = $content.find('.attachment')
     attachment = violation.getAttachmentHTML()
@@ -40,11 +40,12 @@ class ViolationTooltip extends AnnotationTooltip
   applyAdditionalStyle: ->
     super()
 
-    $tip = @tip()
-    $code = $tip.find('.tooltip-inner code, pre')
+    $content = @tip().find('.tooltip-inner')
+
+    $code = $content.find('code, pre')
 
     if $code.length > 0
-      frontColor = Color($tip.find('.tooltip-inner').css('color'))
+      frontColor = Color($content.css('color'))
       $code.css('color', frontColor.clone().rgbaString())
       $code.css('background-color', frontColor.clone().clearer(0.96).rgbaString())
       $code.css('border-color', frontColor.clone().clearer(0.86).rgbaString())
