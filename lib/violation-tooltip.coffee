@@ -9,7 +9,7 @@ class ViolationTooltip extends AnnotationTooltip
     template: '<div class="tooltip">' +
                 '<div class="tooltip-arrow"></div>' +
                 '<div class="tooltip-inner">' +
-                  '<span class="message"></span><span class="tags"></span>' +
+                  '<span class="message"></span><wbr><span class="tags"></span>' +
                   '<div class="attachment"></div>' +
                 '</div>' +
               '</div>'
