@@ -15,37 +15,46 @@ class ViolationTooltip extends AnnotationTooltip
               '</div>'
   })
 
+  init: (type, element, options) ->
+    super(type, element, options)
+    @violation = options.violation
+
   getDefaults: ->
     ViolationTooltip.DEFAULTS
 
   setContent: ->
-    $content = @tip().find('.tooltip-inner')
-    violation = @options.violation
+    @setMessageContent()
+    @setTagsContent()
+    @setAttachmentContent()
+    @tip().removeClass('fade in top bottom left right')
 
-    $content.find('.message').html(violation.getMessageHTML() || '')
-    $content.find('.tags').html(violation.getTagsHTML() || '')
+  setMessageContent: ->
+    @content().find('.message').html(@violation.getMessageHTML() || '')
 
-    $attachment = $content.find('.attachment')
-    attachment = violation.getAttachmentHTML()
-    if attachment?
-      $attachment.html(attachment)
+  setTagsContent: ->
+    @content().find('.tags').html(@violation.getTagsHTML() || '')
+
+  setAttachmentContent: ->
+    $attachment = @content().find('.attachment')
+    HTML = @violation.getAttachmentHTML()
+    if HTML?
+      $attachment.html(HTML)
     else
       $attachment.hide()
 
-    @tip().removeClass('fade in top bottom left right')
-
   hasContent: ->
-    @options.violation?
+    @violation?
 
   applyAdditionalStyle: ->
     super()
 
-    $content = @tip().find('.tooltip-inner')
-
-    $code = $content.find('code, pre')
+    $code = @content().find('code, pre')
 
     if $code.length > 0
-      frontColor = Color($content.css('color'))
+      frontColor = Color(@content().css('color'))
       $code.css('color', frontColor.clone().rgbaString())
       $code.css('background-color', frontColor.clone().clearer(0.96).rgbaString())
       $code.css('border-color', frontColor.clone().clearer(0.86).rgbaString())
+
+  content: ->
+    @contentElement ?= @tip().find('.tooltip-inner')
