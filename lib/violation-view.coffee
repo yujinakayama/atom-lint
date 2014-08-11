@@ -18,7 +18,6 @@ class ViolationView extends View
     @initializeSubviews()
     @initializeStates()
 
-    @prepareTooltip()
     @trackEdit()
     @trackCursor()
     @showHighlight()
@@ -37,13 +36,6 @@ class ViolationView extends View
     @screenEndPosition = screenRange.end
 
     @isValid = true
-
-  prepareTooltip: ->
-    @tooltip
-      violation: @violation
-      container: @lintView
-      selector: @find('.violation-area')
-      editorView: @editorView
 
   trackEdit: ->
     # :persistent -
@@ -98,7 +90,7 @@ class ViolationView extends View
           @scheduleDeferredShowHighlight()
       else
         @hideHighlight()
-        @tooltip('hide')
+        @violationTooltip?.hide()
 
   isVisibleMarkerChange: (event) ->
     editorFirstVisibleRow = @editorView.getFirstVisibleScreenRow()
@@ -111,7 +103,7 @@ class ViolationView extends View
       if @isValid
         @toggleTooltipWithCursorPosition()
       else
-        @tooltip('hide')
+        @violationTooltip?.hide()
 
   showHighlight: ->
     @updateHighlight()
@@ -153,9 +145,11 @@ class ViolationView extends View
 
     if cursorPosition.row is @screenStartPosition.row &&
        cursorPosition.column is @screenStartPosition.column
-      @tooltip('show')
+      # @tooltip conflicts with View's @tooltip function.
+      @violationTooltip ?= @createViolationTooltip()
+      @violationTooltip.show()
     else
-      @tooltip('hide')
+      @violationTooltip?.hide()
 
   getCurrentBufferStartPosition: ->
     @editor.bufferPositionForScreenPosition(@screenStartPosition)
@@ -163,17 +157,15 @@ class ViolationView extends View
   getCurrentScreenRange: ->
     new Range(@screenStartPosition, @screenEndPosition)
 
-  tooltip: (option) ->
-    @each ->
-      $this = $(this)
-      data = $this.data('bs.tooltip')
-      options = typeof option == 'object' && option
-
-      if !data
-        $this.data('bs.tooltip', (data = new ViolationTooltip(this, options)))
-      if typeof option == 'string'
-        data[option]()
-
   beforeRemove: ->
     @marker?.destroy()
-    @tooltip('destroy')
+    @violationTooltip?.destroy()
+
+  createViolationTooltip: ->
+    options =
+      violation: @violation
+      container: @lintView
+      selector: @find('.violation-area')
+      editorView: @editorView
+
+    new ViolationTooltip(this, options)
