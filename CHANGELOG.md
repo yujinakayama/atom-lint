@@ -2,9 +2,13 @@
 
 ## Development
 
+## v0.15.0
+
+* [#81](https://github.com/yujinakayama/atom-lint/issues/81): Update `clang-flags` npm module dependency to `^0.1.2` and required Atom version to `>=0.121.0` due to an breaking change in Atom 0.121.0. ([@yujinakayama])
+
 ## v0.14.5
 
-*  Conform to the change of exit code in SCSSLint 0.26. ([@yujinakayama])
+* Conform to the change of exit code in SCSSLint 0.26. ([@yujinakayama])
 
 ## v0.14.4
 
