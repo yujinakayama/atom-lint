@@ -2,6 +2,10 @@
 
 ## Development
 
+## v0.15.1
+
+* [#83](https://github.com/yujinakayama/atom-lint/issues/83): Specify `pathwatcher` package dependency tentatively to solve incompatibility issue with Atom 0.121.0 on installation of `atom-lint`. ([@yujinakayama])
+
 ## v0.15.0
 
 * [#81](https://github.com/yujinakayama/atom-lint/issues/81): Update `clang-flags` npm module dependency to `^0.1.2` and required Atom version to `>=0.121.0` due to an breaking change in Atom 0.121.0. ([@yujinakayama])
