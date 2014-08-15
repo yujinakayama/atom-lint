@@ -1,13 +1,13 @@
 minimatch = require 'minimatch'
 
 module.exports =
-class LinterConfig
+class Config
   @ROOT_KEY = 'atom-lint'
 
   constructor: (@linterKey) ->
 
   getKeyPathForSubKeys: (keys...) ->
-    keys.unshift(LinterConfig.ROOT_KEY)
+    keys.unshift(Config.ROOT_KEY)
     keys.join('.')
 
   getLinterSetting: (key) ->

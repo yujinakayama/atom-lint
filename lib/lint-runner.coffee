@@ -1,7 +1,7 @@
 path = require 'path'
 CSON = require 'season'
 {Emitter, Subscriber} = require 'emissary'
-LinterConfig = require './linter-config'
+Config = require './config'
 
 LINTER_MAP = CSON.readFileSync(path.join(__dirname, 'linter-map.cson'))
 
@@ -42,7 +42,7 @@ class LintRunner
 
     return @deactivate() unless linterName
 
-    linterConfig = new LinterConfig(linterName)
+    linterConfig = new Config(linterName)
     return @deactivate() unless linterConfig.isFileToLint(@getFilePath())
 
     @activate(linterName)

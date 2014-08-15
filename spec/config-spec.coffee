@@ -1,14 +1,14 @@
-LinterConfig = require '../lib/linter-config'
+Config = require '../lib/config'
 path = require 'path'
 require './spec-helper'
 
-describe 'LinterConfig', ->
+describe 'Config', ->
   linterConfig = null
   originalAtomLintConfig = atom.config.get('atom-lint')
 
   beforeEach ->
     atom.config.set('atom-lint', null)
-    linterConfig = new LinterConfig('some-linter')
+    linterConfig = new Config('some-linter')
 
   afterEach ->
     atom.config.set('atom-lint', originalAtomLintConfig)

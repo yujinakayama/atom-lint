@@ -1,7 +1,7 @@
 # Minimize additional startup time of Atom caused by atom-lint.
 LintView = null
 LintStatusView = null
-LinterConfig = null
+Config = null
 
 module.exports =
   activate: ->
@@ -23,8 +23,8 @@ module.exports =
     atom.packages.once 'activated', =>
       @injectLintStatusViewIntoStatusBar()
 
-    LinterConfig ?= require './linter-config'
-    @configSubscription = atom.config.observe LinterConfig.ROOT_KEY, callNow: false, =>
+    Config ?= require './config'
+    @configSubscription = atom.config.observe Config.ROOT_KEY, callNow: false, =>
       for lintView in @lintViews
         lintView.refresh()
 
