@@ -2,25 +2,25 @@ minimatch = require 'minimatch'
 
 module.exports =
 class Config
-  @ROOT_KEY = 'atom-lint'
+  @ROOT_KEY: 'atom-lint'
 
-  constructor: (@linterKey) ->
-
-  getKeyPathForSubKeys: (keys...) ->
-    keys.unshift(Config.ROOT_KEY)
+  @getAbsoluteKeyPath: (keys...) ->
+    keys.unshift(@ROOT_KEY)
     keys.join('.')
 
-  getLinterSetting: (key) ->
-    keyPath = @getKeyPathForSubKeys(@linterKey, key)
-    atom.config.get(keyPath)
+  @get: (keyPath) ->
+    absoluteKeyPath = @getAbsoluteKeyPath(keyPath)
+    atom.config.get(absoluteKeyPath)
 
-  getGlobalSetting: (key) ->
-    keyPath = @getKeyPathForSubKeys(key)
-    atom.config.get(keyPath)
+  constructor: (@subKey) ->
+
+  get: (keyPath) ->
+    absoluteKeyPath = Config.getAbsoluteKeyPath(@subKey, keyPath)
+    atom.config.get(absoluteKeyPath)
 
   isFileToLint: (absolutePath) ->
-    linterIgnoredNames = @getLinterSetting('ignoredNames') || []
-    globalIgnoredNames = @getGlobalSetting('ignoredNames') || []
+    linterIgnoredNames = @get('ignoredNames') || []
+    globalIgnoredNames = Config.get('ignoredNames') || []
     ignoredNames = linterIgnoredNames.concat(globalIgnoredNames)
 
     relativePath = atom.project.relativize(absolutePath)
