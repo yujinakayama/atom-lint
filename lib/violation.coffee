@@ -5,7 +5,7 @@ module.exports =
 class Violation
   @SEVERITIES = ['warning', 'error']
 
-  constructor: (@severity, @bufferRange, @message, @tags = []) ->
+  constructor: (@severity, @bufferRange, @message, @metadata = []) ->
     unless _.contains(Violation.SEVERITIES, @severity)
       message  = "Severity must be any of #{Violation.SEVERITIES.join(',')}. "
       message += "#{@severity} is passed."
@@ -19,6 +19,6 @@ class Violation
   getAttachmentHTML: ->
     null
 
-  getTagsHTML: ->
-    elements = ("<span class=\"tag\">#{_.escape(tag)}</span>" for tag in @tags)
+  getMetadataHTML: ->
+    elements = ("<span class=\"item\">#{_.escape(item)}</span>" for item in @metadata)
     elements.join('')

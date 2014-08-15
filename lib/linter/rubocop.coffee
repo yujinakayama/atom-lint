@@ -34,9 +34,9 @@ class Rubocop
       else
         'warning'
 
-    tags = [offense.cop_name]
+    metadata = [offense.cop_name]
 
-    new Violation(severity, bufferRange, offense.message, tags)
+    new Violation(severity, bufferRange, offense.message, metadata)
 
   runRubocop: (callback) ->
     runner = new CommandRunner(@buildCommand())

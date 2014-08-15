@@ -9,7 +9,7 @@ class ViolationTooltip extends AnnotationTooltip
     template: '<div class="tooltip">' +
                 '<div class="tooltip-arrow"></div>' +
                 '<div class="tooltip-inner">' +
-                  '<span class="message"></span><wbr><span class="tags"></span>' +
+                  '<span class="message"></span><wbr><span class="metadata"></span>' +
                   '<div class="attachment"></div>' +
                 '</div>' +
               '</div>'
@@ -24,15 +24,15 @@ class ViolationTooltip extends AnnotationTooltip
 
   setContent: ->
     @setMessageContent()
-    @setTagsContent()
+    @setMetadataContent()
     @setAttachmentContent()
     @tip().removeClass('fade in top bottom left right')
 
   setMessageContent: ->
     @content().find('.message').html(@violation.getMessageHTML() || '')
 
-  setTagsContent: ->
-    @content().find('.tags').html(@violation.getTagsHTML() || '')
+  setMetadataContent: ->
+    @content().find('.metadata').html(@violation.getMetadataHTML() || '')
 
   setAttachmentContent: ->
     $attachment = @content().find('.attachment')
@@ -56,42 +56,42 @@ class ViolationTooltip extends AnnotationTooltip
       $code.css('background-color', frontColor.clone().clearer(0.96).rgbaString())
       $code.css('border-color', frontColor.clone().clearer(0.86).rgbaString())
 
-    # It looks good when tags fit in the last line of message:
+    # It looks good when metadata fit in the last line of message:
     #                                                                          | Max width
     # | Prefer single-quoted strings when you don't need string interpolation  | Actual width
     # | or special symbols. [ Style/StringLiterals ]
-    #                       ~~~~~ inline .tags ~~~~~
+    #                       ~~~ inline .metadata ~~~
 
-    # However there's an ugly padding when tags don't fit in the last line:
+    # However there's an ugly padding when metadata don't fit in the last line:
     #                                                                          | Max width
     # | Missing top-level module documentation comment.                        | Actual width
     # | [ Style/Documentation ]                         ~~~~~ugly padding~~~~~~
-    #   ~~~~~ inline tags ~~~~~
+    #   ~~~ inline metadata ~~~
 
-    # Clear the padding by making the tags block element:
+    # Clear the padding by making the metadata block element:
     #                                                                          | Max width
     # | Missing top-level module documentation comment. | Actual width
     # | [ Style/Documentation ]
-    #   ~~~~~ block tags ~~~~~~
-    unless @tagsFitsInLastLineOfMessage()
-      @content().find('.tags').addClass('block-tags')
+    #   ~~~ block metadata ~~~~
+    unless @metadataFitInLastLineOfMessage()
+      @content().find('.metadata').addClass('block-metadata')
 
-  tagsFitsInLastLineOfMessage: ->
-    return @fits if @fits?
+  metadataFitInLastLineOfMessage: ->
+    return @fit if @fit?
 
-    # Make .tags inline element to check if it fits in the last line of message
-    $tags = @content().find('.tags')
-    $tags.css('display', 'inline')
+    # Make .metadata inline element to check if it fits in the last line of message
+    $metadata = @content().find('.metadata')
+    $metadata.css('display', 'inline')
 
     $message = @content().find('.message')
     messageBottom = $message.position().top + $message.height()
 
-    $tags = @content().find('.tags')
-    tagsBottom = $tags.position().top + $tags.height()
+    $metadata = @content().find('.metadata')
+    metadataBottom = $metadata.position().top + $metadata.height()
 
-    $tags.css('display', '')
+    $metadata.css('display', '')
 
-    @fits = (messageBottom == tagsBottom)
+    @fit = (messageBottom == metadataBottom)
 
   content: ->
     @contentElement ?= @tip().find('.tooltip-inner')
