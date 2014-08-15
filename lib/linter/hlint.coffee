@@ -72,18 +72,21 @@ class HLintViolation extends Violation
     (\x20{2}[\S\s]+)
   ///
 
-  getHTML: ->
-    matches = @message.match(HLintViolation.MESSAGE_PATTTERN)
-    return null unless matches?
-    [match, message, foundCode, alternativeCode] = matches
-    HTML = _.escape(util.punctuate(message))
-    HTML += '<div class="attachment">'
-    HTML += '<p class="code-label">Found:</p>'
-    HTML += @formatSnippet(foundCode)
-    HTML += '<p class="code-label">Why not:</p>'
-    HTML += @formatSnippet(alternativeCode)
-    HTML += '</div>'
-    HTML
+  constructor: (severity, bufferRange, message) ->
+    matches = message.match(HLintViolation.MESSAGE_PATTTERN)
+    [_match, message, @foundCode, @alternativeCode] = matches if matches?
+    super(severity, bufferRange, message)
+
+  getAttachmentHTML: ->
+    return null unless @foundCode?
+    '<figure>' +
+      '<figcaption>Found:</figcaption>' +
+      @formatSnippet(@foundCode) +
+    '</figure>' +
+    '<figure>' +
+      '<figcaption>Why not:</figcaption>' +
+      @formatSnippet(@alternativeCode) +
+    '</figure>'
 
   formatSnippet: (snippet) ->
     lines = snippet.split('\n')

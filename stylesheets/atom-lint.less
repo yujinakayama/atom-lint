@@ -134,12 +134,13 @@
       white-space: pre-wrap;
       text-align: left;
 
-      .attachment {
-        margin-top: 5px;
+      .info-color {
+        display: none;
+        background-color: @background-color-info;
       }
 
-      .code-label {
-        margin: 0;
+      .attachment {
+        margin-top: 5px;
       }
 
       code, pre {
@@ -159,6 +160,27 @@
         font-size: 10px;
         background-color: transparent;
         border: 1px solid transparent;
+      }
+
+      @metadata-item-margin: 7px;
+
+      .block-metadata {
+        display: block;
+        margin-left: -@metadata-item-margin;
+      }
+
+      .metadata {
+        .item {
+          margin-left: @metadata-item-margin;
+          padding: 2px 4px;
+          font-size: 10px;
+          font-weight: bold;
+          text-shadow: none;
+          border-radius: 2px;
+
+          color: @text-color-selected;
+          background-color: desaturate(@background-color-info, 25%);
+        }
       }
     }
   }
