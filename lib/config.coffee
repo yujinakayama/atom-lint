@@ -12,6 +12,14 @@ class Config
     absoluteKeyPath = @getAbsoluteKeyPath(keyPath)
     atom.config.get(absoluteKeyPath)
 
+  @observe: (args...) ->
+    callback = args.pop()
+    keyPath = args
+
+    absoluteKeyPath = @getAbsoluteKeyPath(keyPath...)
+    options = { callNow: false }
+    atom.config.observe(absoluteKeyPath, options, callback)
+
   constructor: (@subKey) ->
 
   get: (keyPath) ->

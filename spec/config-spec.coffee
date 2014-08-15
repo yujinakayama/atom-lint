@@ -13,6 +13,37 @@ describe 'Config', ->
   afterEach ->
     atom.config.set('atom-lint', originalAtomLintConfig)
 
+  describe '.observe', ->
+    it 'returns an subscription object', ->
+      subscription = Config.observe 'foo', ->
+      expect(subscription.off).not.toBeNull()
+      subscription.off()
+
+    it 'invokes the callback when the key path under `atom-lint` key is modified', ->
+      invoked = false
+
+      subscription = Config.observe 'foo', ->
+        invoked = true
+        subscription.off()
+
+      atom.config.set('atom-lint.foo', 'bar')
+
+      waitsFor ->
+        invoked
+
+    describe 'when no key path is passed', ->
+      it 'invokes the callback when any key under `atom-lint` namespace is modified', ->
+        invoked = false
+
+        subscription = Config.observe ->
+          invoked = true
+          subscription.off()
+
+        atom.config.set('atom-lint.foo', 'bar')
+
+        waitsFor ->
+          invoked
+
   describe '::isFileToLint', ->
     describe 'when "atom-lint.some-linter.ignoredNames" is not set', ->
       it 'returns true for "foo.txt" in the current project', ->

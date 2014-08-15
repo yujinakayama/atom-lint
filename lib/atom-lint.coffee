@@ -24,7 +24,7 @@ module.exports =
       @injectLintStatusViewIntoStatusBar()
 
     Config ?= require './config'
-    @configSubscription = atom.config.observe Config.ROOT_KEY, callNow: false, =>
+    @configSubscription = Config.observe =>
       for lintView in @lintViews
         lintView.refresh()
 
