@@ -26,3 +26,15 @@ describe 'atom-lint', ->
 
       it 'becomes enabled', ->
         expect(editorView.find('.lint').length).toBe(1)
+
+  describe 'after deactivation and re-activation', ->
+    beforeEach ->
+      atom.packages.deactivatePackage('atom-lint')
+      atom.packages.activatePackage('atom-lint')
+
+    describe 'and command "lint:toggle" is triggered', ->
+      beforeEach ->
+        atom.workspaceView.trigger('lint:toggle')
+
+      it 'becomes disabled', ->
+        expect(editorView.find('.lint').length).toBe(0)

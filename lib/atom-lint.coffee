@@ -10,6 +10,7 @@ module.exports =
     @enable()
 
   deactivate: ->
+    atom.workspaceView?.off('lint:toggle')
     @disable()
 
   enable: ->
