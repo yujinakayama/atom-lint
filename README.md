@@ -104,6 +104,7 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
     'path': '/path/to/bin/puppet-lint'
   'rubocop':
     'path': '/path/to/bin/rubocop'
+    'showDisplayCopNames': false
   'rustc':
     'path': '/path/to/bin/rustc'
   'scss-lint':
