@@ -2,6 +2,7 @@
 LintView = null
 LintStatusView = null
 Config = null
+_ = null
 
 module.exports =
   activate: ->
@@ -28,7 +29,8 @@ module.exports =
       @injectLintStatusViewIntoStatusBar()
 
     Config ?= require './config'
-    @configSubscription = Config.observe =>
+    @configSubscription = Config.observe (newValue, options) =>
+      return unless @shouldRefleshWithConfigChange(options.previous, newValue)
       for lintView in @lintViews
         lintView.refresh()
 
@@ -70,3 +72,8 @@ module.exports =
     LintStatusView ?= require './lint-status-view'
     @lintStatusView = new LintStatusView(statusBar)
     statusBar.prependRight(@lintStatusView)
+
+  shouldRefleshWithConfigChange: (previous, current) ->
+    previous.showViolationMetadata = current.showViolationMetadata = null
+    _ ?= require 'lodash'
+    !_.isEqual(previous, current)
