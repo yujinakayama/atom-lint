@@ -5,6 +5,10 @@ Config = null
 _ = null
 
 module.exports =
+  configDefaults:
+    ignoredNames: []
+    showViolationMetadata: true
+
   activate: ->
     atom.workspaceView.command 'lint:toggle', => @toggle()
     atom.workspaceView.command 'lint:toggle-violation-metadata', => @toggleViolationMetadata()
