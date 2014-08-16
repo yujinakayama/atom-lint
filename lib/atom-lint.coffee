@@ -6,10 +6,13 @@ Config = null
 module.exports =
   activate: ->
     atom.workspaceView.command 'lint:toggle', => @toggle()
+    atom.workspaceView.command 'lint:toggle-violation-metadata', => @toggleViolationMetadata()
+
     @lintViews = []
     @enable()
 
   deactivate: ->
+    atom.workspaceView?.off('lint:toggle-violation-metadata')
     atom.workspaceView?.off('lint:toggle')
     @disable()
 
@@ -46,6 +49,11 @@ module.exports =
       @disable()
     else
       @enable()
+
+  toggleViolationMetadata: ->
+    key = 'showViolationMetadata'
+    currentValue = Config.get(key)
+    Config.set(key, !currentValue)
 
   injectLintViewIntoEditorView: (editorView) ->
     return unless editorView.getPane()?
