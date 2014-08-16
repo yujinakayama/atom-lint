@@ -55,7 +55,7 @@ class ViolationView extends View
     # * 'inside':
     #     The marker is invalidated by a change that touches the marked
     #     region in any way. This is the most fragile strategy.
-    options = { invalidation: 'inside', persistent: false }
+    options = { invalidate: 'inside', persistent: false }
     @marker = @editor.markScreenRange(@getCurrentScreenRange(), options)
     @marker.on 'changed', (event) =>
       # Head and Tail: Markers always have a head and sometimes have a tail.

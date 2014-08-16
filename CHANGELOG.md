@@ -7,6 +7,7 @@
 * Add new keymap `lint:toggle-violation-metadata` (Ctrl-Alt-M) for toggling configuration `atom-lint.showViolationMetadata`. ([@yujinakayama])
 * [#82](https://github.com/yujinakayama/atom-lint/pull/82): Display RuboCop's cop names as metadata. ([@yujinakayama])
 * Fix a bug where global toggling was executed twice for a `lint:toggle` command invocation after `atom-lint` is deactivated and then re-activated. ([@yujinakayama])
+* Handle deprecation warning “The option `invalidation` is deprecated, use `invalidate` instead”. ([@yujinakayama])
 
 ## v0.15.1
 
