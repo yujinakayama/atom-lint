@@ -2,6 +2,8 @@
 
 ## Development
 
+## v0.16.0
+
 * Add support for displaying violation metadata in the tooltip. ([@yujinakayama])
 * Add new configuration `atom-lint.showViolationMetadata` for switching metadata display in tooltip. ([@yujinakayama])
 * Add new keymap `lint:toggle-violation-metadata` (Ctrl-Alt-M) for toggling configuration `atom-lint.showViolationMetadata`. ([@yujinakayama])
