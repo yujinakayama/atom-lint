@@ -50,12 +50,14 @@ You can see the detail of the violation by moving the cursor to it.
 * `Ctrl-Alt-L`: Global toggle
 * `Ctrl-Alt-[`: Move to Previous Violation
 * `Ctrl-Alt-]`: Move to Next Violation
+* `Ctrl-Alt-M`: Toggle Violation Metadata (toggle configuration `atom-lint.showViolationMetadata`)
 
 Also you can customize keymaps by editing `~/.atom/keymap.cson` (choose **Open Your Keymap** in **Atom** menu):
 
 ```coffeescript
 '.workspace':
   'ctrl-alt-l': 'lint:toggle'
+  'ctrl-alt-m': 'lint:toggle-violation-metadata'
 '.editor':
   'ctrl-alt-[': 'lint:move-to-previous-violation'
   'ctrl-alt-]': 'lint:move-to-next-violation'
@@ -73,6 +75,7 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
   'ignoredNames': [
     'tmp/**'
   ]
+  'showViolationMetadata': true
   'clang':
     'path': '/path/to/bin/clang'
     'headerSearchPaths': ['/path/to/include','/path2/to/include']

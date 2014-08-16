@@ -1,15 +1,24 @@
 # Minimize additional startup time of Atom caused by atom-lint.
 LintView = null
 LintStatusView = null
-LinterConfig = null
+Config = null
+_ = null
 
 module.exports =
+  configDefaults:
+    ignoredNames: []
+    showViolationMetadata: true
+
   activate: ->
     atom.workspaceView.command 'lint:toggle', => @toggle()
+    atom.workspaceView.command 'lint:toggle-violation-metadata', => @toggleViolationMetadata()
+
     @lintViews = []
     @enable()
 
   deactivate: ->
+    atom.workspaceView?.off('lint:toggle-violation-metadata')
+    atom.workspaceView?.off('lint:toggle')
     @disable()
 
   enable: ->
@@ -23,8 +32,9 @@ module.exports =
     atom.packages.once 'activated', =>
       @injectLintStatusViewIntoStatusBar()
 
-    LinterConfig ?= require './linter-config'
-    @configSubscription = atom.config.observe LinterConfig.ROOT_KEY, callNow: false, =>
+    Config ?= require './config'
+    @configSubscription = Config.observe (newValue, options) =>
+      return unless @shouldRefleshWithConfigChange(options.previous, newValue)
       for lintView in @lintViews
         lintView.refresh()
 
@@ -46,6 +56,11 @@ module.exports =
     else
       @enable()
 
+  toggleViolationMetadata: ->
+    key = 'showViolationMetadata'
+    currentValue = Config.get(key)
+    Config.set(key, !currentValue)
+
   injectLintViewIntoEditorView: (editorView) ->
     return unless editorView.getPane()?
     return unless editorView.attached
@@ -61,3 +76,8 @@ module.exports =
     LintStatusView ?= require './lint-status-view'
     @lintStatusView = new LintStatusView(statusBar)
     statusBar.prependRight(@lintStatusView)
+
+  shouldRefleshWithConfigChange: (previous, current) ->
+    previous.showViolationMetadata = current.showViolationMetadata = null
+    _ ?= require 'lodash'
+    !_.isEqual(previous, current)

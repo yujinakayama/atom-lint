@@ -1,6 +1,7 @@
 Color = require 'color'
 {$} = require 'atom'
 AnnotationTooltip = require './annotation-tooltip'
+Config = require './config'
 
 module.exports =
 class ViolationTooltip extends AnnotationTooltip
@@ -17,7 +18,11 @@ class ViolationTooltip extends AnnotationTooltip
 
   init: (type, element, options) ->
     super(type, element, options)
+
     @violation = options.violation
+
+    @configSubscription = Config.observe 'showViolationMetadata', (newValue) =>
+      @content().find('.metadata').toggle(newValue)
 
   getDefaults: ->
     ViolationTooltip.DEFAULTS
@@ -56,29 +61,33 @@ class ViolationTooltip extends AnnotationTooltip
       $code.css('background-color', frontColor.clone().clearer(0.96).rgbaString())
       $code.css('border-color', frontColor.clone().clearer(0.86).rgbaString())
 
-    # It looks good when metadata fit in the last line of message:
-    #                                                                          | Max width
-    # | Prefer single-quoted strings when you don't need string interpolation  | Actual width
-    # | or special symbols. [ Style/StringLiterals ]
-    #                       ~~~ inline .metadata ~~~
+    if @shouldShowMetadata()
+      # It looks good when metadata fit in the last line of message:
+      #                                                                          | Max width
+      # | Prefer single-quoted strings when you don't need string interpolation  | Actual width
+      # | or special symbols. [ Style/StringLiterals ]
+      #                       ~~~ inline .metadata ~~~
 
-    # However there's an ugly padding when metadata don't fit in the last line:
-    #                                                                          | Max width
-    # | Missing top-level module documentation comment.                        | Actual width
-    # | [ Style/Documentation ]                         ~~~~~ugly padding~~~~~~
-    #   ~~~ inline metadata ~~~
+      # However there's an ugly padding when metadata don't fit in the last line:
+      #                                                                          | Max width
+      # | Missing top-level module documentation comment.                        | Actual width
+      # | [ Style/Documentation ]                         ~~~~~ugly padding~~~~~~
+      #   ~~~ inline metadata ~~~
 
-    # Clear the padding by making the metadata block element:
-    #                                                                          | Max width
-    # | Missing top-level module documentation comment. | Actual width
-    # | [ Style/Documentation ]
-    #   ~~~ block metadata ~~~~
-    unless @metadataFitInLastLineOfMessage()
-      @content().find('.metadata').addClass('block-metadata')
+      # Clear the padding by making the metadata block element:
+      #                                                                          | Max width
+      # | Missing top-level module documentation comment. | Actual width
+      # | [ Style/Documentation ]
+      #   ~~~ block metadata ~~~~
+      unless @metadataFitInLastLineOfMessage()
+        @content().find('.metadata').addClass('block-metadata')
+    else
+      @content().find('.metadata').hide()
+
+  shouldShowMetadata: ->
+    Config.get('showViolationMetadata')
 
   metadataFitInLastLineOfMessage: ->
-    return @fit if @fit?
-
     # Make .metadata inline element to check if it fits in the last line of message
     $metadata = @content().find('.metadata')
     $metadata.css('display', 'inline')
@@ -91,7 +100,11 @@ class ViolationTooltip extends AnnotationTooltip
 
     $metadata.css('display', '')
 
-    @fit = (messageBottom == metadataBottom)
+    messageBottom == metadataBottom
 
   content: ->
     @contentElement ?= @tip().find('.tooltip-inner')
+
+  destroy: ->
+    super()
+    @configSubscription.off()

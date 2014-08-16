@@ -3,7 +3,10 @@
 ## Development
 
 * Add support for displaying violation metadata in the tooltip. ([@yujinakayama])
+* Add new configuration `atom-lint.showViolationMetadata` for switching metadata display in tooltip. ([@yujinakayama])
+* Add new keymap `lint:toggle-violation-metadata` (Ctrl-Alt-M) for toggling configuration `atom-lint.showViolationMetadata`. ([@yujinakayama])
 * [#82](https://github.com/yujinakayama/atom-lint/pull/82): Display RuboCop's cop names as metadata. ([@yujinakayama])
+* Fix a bug where global toggling was executed twice for a `lint:toggle` command invocation after `atom-lint` is deactivated and then re-activated. ([@yujinakayama])
 
 ## v0.15.1
 
