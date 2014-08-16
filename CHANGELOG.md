@@ -2,6 +2,9 @@
 
 ## Development
 
+* Add support for displaying violation metadata in the tooltip. ([@yujinakayama])
+* [#82](https://github.com/yujinakayama/atom-lint/pull/82): Display RuboCop's cop names as metadata. ([@yujinakayama])
+
 ## v0.15.1
 
 * [#83](https://github.com/yujinakayama/atom-lint/issues/83): Specify `pathwatcher` package dependency tentatively to solve incompatibility issue with Atom 0.121.0 on installation of `atom-lint`. ([@yujinakayama])
