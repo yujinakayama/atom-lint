@@ -88,8 +88,6 @@ class ViolationTooltip extends AnnotationTooltip
     Config.get('showViolationMetadata')
 
   metadataFitInLastLineOfMessage: ->
-    return @fit if @fit?
-
     # Make .metadata inline element to check if it fits in the last line of message
     $metadata = @content().find('.metadata')
     $metadata.css('display', 'inline')
@@ -102,7 +100,7 @@ class ViolationTooltip extends AnnotationTooltip
 
     $metadata.css('display', '')
 
-    @fit = (messageBottom == metadataBottom)
+    messageBottom == metadataBottom
 
   content: ->
     @contentElement ?= @tip().find('.tooltip-inner')
