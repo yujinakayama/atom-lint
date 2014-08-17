@@ -2,6 +2,10 @@
 
 ## Development
 
+## v0.16.1
+
+* Fix an inconsistent view layout when `lint:toggle-violation-metadata` is run. ([@yujinakayama])
+
 ## v0.16.0
 
 * Add support for displaying violation metadata in the tooltip. ([@yujinakayama])

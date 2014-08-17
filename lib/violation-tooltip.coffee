@@ -22,7 +22,7 @@ class ViolationTooltip extends AnnotationTooltip
     @violation = options.violation
 
     @configSubscription = Config.observe 'showViolationMetadata', (newValue) =>
-      @content().find('.metadata').toggle(newValue)
+      @switchMetadataDisplay()
 
   getDefaults: ->
     ViolationTooltip.DEFAULTS
@@ -61,6 +61,9 @@ class ViolationTooltip extends AnnotationTooltip
       $code.css('background-color', frontColor.clone().clearer(0.96).rgbaString())
       $code.css('border-color', frontColor.clone().clearer(0.86).rgbaString())
 
+    @switchMetadataDisplay()
+
+  switchMetadataDisplay: ->
     if @shouldShowMetadata()
       # It looks good when metadata fit in the last line of message:
       #                                                                          | Max width
