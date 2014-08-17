@@ -90,7 +90,11 @@ class CommandRunner
       @runWithEnv(env, callback)
 
   runWithEnv: (env, callback) ->
-    proc = child_process.spawn(@command[0], @command.slice(1), { env: env })
+    options =
+      env: env
+      cwd: atom.project.path
+
+    proc = child_process.spawn(@command[0], @command.slice(1), options)
 
     result =
       command: @command
