@@ -80,6 +80,7 @@ class LintView extends View
       violationView.isValid
 
   updateGutterMarkers: ->
+    return if @gutterView.length == 0
     return unless @gutterView.isVisible()
 
     for severity in Violation.SEVERITIES
