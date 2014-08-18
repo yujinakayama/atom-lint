@@ -3,6 +3,7 @@ path = require 'path'
 fs = require 'fs'
 rimraf = require 'rimraf'
 CommandRunner = require '../lib/command-runner'
+child_process = require 'child_process'
 
 describe 'CommandRunner', ->
   workingDir = path.join(os.tmpdir(), 'atom-lint-spec')
@@ -18,6 +19,7 @@ describe 'CommandRunner', ->
     fs.mkdirSync(workingDir)
     process.env.HOME = workingDir
     process.chdir(workingDir)
+    atom.project.path = workingDir
 
   afterEach ->
     process.chdir(originalWorkingDirectory)
@@ -268,3 +270,52 @@ describe 'CommandRunner', ->
         process.env.SHELL = ''
         run ['perl', '-e', 'print $ENV{PATH}'], (error, result) ->
           expect(result.stdout).toBe(process.env.PATH)
+
+  describe 'runWithEnv', ->
+    beforeEach ->
+      @orginalProjectPath = atom.project.path
+      @command = 'echo'
+      @flags = ['-n', 'foo   bar']
+
+      @child_process_obj =
+        stderr:
+          on: ->
+        stdout:
+          on: ->
+        spawn: -> this
+        on: ->
+
+      @commandRunner = new CommandRunner(['echo', '-n', 'foo   bar'])
+      @cb = ->
+        works = true
+
+    afterEach ->
+      atom.project.path = @orginalProjectPath
+
+    describe 'and echo is the command', ->
+      describe 'and the project exists', ->
+        it 'will add the CWD to the options', ->
+          spyOn(child_process, 'spawn').andReturn(@child_process_obj)
+          env = process.env
+          options =
+            env: env
+            cwd: @orginalProjectPath
+
+          @commandRunner.runWithEnv(env, @cb)
+          expect(child_process.spawn)
+            .toHaveBeenCalledWith(@command, @flags, options)
+
+      describe 'and the project does not exists', ->
+        beforeEach ->
+          atom.project.path = null
+
+        it 'won`t add the CWD to the options', ->
+          spyOn(child_process, 'spawn').andReturn(@child_process_obj)
+          env = process.env
+          options =
+            env: env
+            cwd: null
+
+          @commandRunner.runWithEnv(env, @cb)
+          expect(child_process.spawn)
+            .toHaveBeenCalledWith(@command, @flags, options)
