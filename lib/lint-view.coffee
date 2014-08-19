@@ -16,7 +16,6 @@ class LintView extends View
     @editorView.overlayer.append(this)
 
     @editor = @editorView.getEditor()
-    @gutterView = @editorView.gutter
 
     @violationViews = []
 
@@ -80,18 +79,19 @@ class LintView extends View
       violationView.isValid
 
   updateGutterMarkers: ->
-    return if @gutterView.length == 0
-    return unless @gutterView.isVisible()
+    gutterView = @editorView.gutter
+    return if gutterView.length == 0
+    return unless gutterView.isVisible()
 
     for severity in Violation.SEVERITIES
-      @gutterView.removeClassFromAllLines("lint-#{severity}")
+      gutterView.removeClassFromAllLines("lint-#{severity}")
 
     return if @violationViews.length == 0
 
     for violationView in @getValidViolationViews()
       line = violationView.getCurrentBufferStartPosition().row
       klass = "lint-#{violationView.violation.severity}"
-      @gutterView.addClassToLine(line, klass)
+      gutterView.addClassToLine(line, klass)
 
   moveToNextViolation: ->
     @moveToNeighborViolation('next')
