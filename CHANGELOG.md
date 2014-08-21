@@ -2,6 +2,8 @@
 
 ## Development
 
+* Disable automatic `.clang-complete` discovery feature temporarily. ([@yujinakayama])
+
 ## v0.16.1
 
 * Fix an inconsistent view layout when `lint:toggle-violation-metadata` is run. ([@yujinakayama])

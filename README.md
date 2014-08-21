@@ -161,6 +161,8 @@ Specify additional header search paths. These paths are passed to `clang` with `
 
 #### Project-Specific Flags and Atom-Lint's configuration
 
+**This feature is temporarily disabled now.**
+
 * `atom-lint.clang.mergeAtomLintConfigIntoAutoDiscoveredFlags`
 
 Atom-Lint automatically picks up your project-specific compiler flags
