@@ -2,6 +2,11 @@
 
 ## Development
 
+## v0.17.0
+
+* Always run linters in the current project root directory. ([@richrace])
+* Run RuboCop on RSpec syntax sources. ([@richrace])
+* Fix crash when line numbers and indent guide are hidden. ([@raviraa])
 * Disable automatic `.clang-complete` discovery feature temporarily. ([@yujinakayama])
 
 ## v0.16.1
@@ -186,3 +191,5 @@
 [@elrolito]: https://github.com/elrolito
 [@Kev]: https://github.com/Kev
 [@rochefort]: https://github.com/rochefort
+[@richrace]: https://github.com/richrace
+[@raviraa]: https://github.com/raviraa
