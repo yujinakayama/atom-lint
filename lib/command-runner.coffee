@@ -14,7 +14,10 @@ module.exports =
 class CommandRunner
   @fetchEnvOfLoginShell: (callback) ->
     if !process.env.SHELL
-      return callback(new Error("SHELL environment variable is not set."))
+      if process.platform == 'win32'
+        return callback(null, null)
+      else
+        return callback(new Error("SHELL environment variable is not set."))
 
     if process.env.SHELL.match(/csh$/)
       # csh/tcsh does not allow to execute a command (-c) in a login shell (-l).
@@ -90,11 +93,16 @@ class CommandRunner
       @runWithEnv(env, callback)
 
   runWithEnv: (env, callback) ->
-    options =
-      env: env
-      cwd: atom.project.path
-
-    proc = child_process.spawn(@command[0], @command.slice(1), options)
+    if process.platform == 'win32'
+      proc = child_process.spawn('cmd', ['/s', '/c', '"' + @command.join(' ') + '"'], {
+        windowsVerbatimArguments: true,
+        env: env
+      })
+    else
+      options =
+        env: env
+        cwd: atom.project.path
+      proc = child_process.spawn(@command[0], @command.slice(1), options)
 
     result =
       command: @command
