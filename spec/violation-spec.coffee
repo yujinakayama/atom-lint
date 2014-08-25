@@ -52,6 +52,13 @@ describe 'Violation', ->
       expect(violation.getMessageHTML())
         .toBe('<code>this_is_a_snippet</code>.')
 
+    it 'handles backquotes next to non-whitespaces', ->
+      message = 'Another good alternative is the usage of control flow `&&`/`||`.'
+      violation = new Violation('warning', bufferRange, message)
+      expect(violation.getMessageHTML())
+        .toBe('Another good alternative is ' +
+              'the usage of control flow <code>&amp;&amp;</code>/<code>||</code>.')
+
   describe '::getAttachmentHTML', ->
     it 'returns null by default', ->
       violation = new Violation('warning', bufferRange, 'This is a message.')
