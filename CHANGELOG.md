@@ -2,6 +2,8 @@
 
 ## Development
 
+* Use Decoration API for gutter markers instead of the deprecated `EditorView::removeClassFromAllLines`. This drops the support for non-React editors. ([@yujinakayama])
+
 ## v0.17.0
 
 * Always run linters in the current project root directory. ([@richrace])

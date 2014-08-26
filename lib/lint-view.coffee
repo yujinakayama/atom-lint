@@ -42,12 +42,10 @@ class LintView extends View
       if @pendingViolations?
         @addViolationViews(@pendingViolations)
         @pendingViolations = null
-      @updateGutterMarkers()
 
   onLinterDeactivation: ->
     @editorDisplayUpdateSubscription?.off()
     @removeViolationViews()
-    @updateGutterMarkers()
 
   onLint: (error, violations) ->
     @removeViolationViews()
@@ -63,8 +61,6 @@ class LintView extends View
       # them when the editor become active.
       @pendingViolations = violations
 
-    @updateGutterMarkers()
-
   addViolationViews: (violations) ->
     for violation in violations
       violationView = new ViolationView(violation, this)
@@ -77,21 +73,6 @@ class LintView extends View
   getValidViolationViews: ->
     @violationViews.filter (violationView) ->
       violationView.isValid
-
-  updateGutterMarkers: ->
-    gutterView = @editorView.gutter
-    return if gutterView.length == 0
-    return unless gutterView.isVisible()
-
-    for severity in Violation.SEVERITIES
-      gutterView.removeClassFromAllLines("lint-#{severity}")
-
-    return if @violationViews.length == 0
-
-    for violationView in @getValidViolationViews()
-      line = violationView.getCurrentBufferStartPosition().row
-      klass = "lint-#{violationView.violation.severity}"
-      gutterView.addClassToLine(line, klass)
 
   moveToNextViolation: ->
     @moveToNeighborViolation('next')
