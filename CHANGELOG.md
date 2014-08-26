@@ -2,7 +2,11 @@
 
 ## Development
 
+## v0.18.0
+
+* Add basic support for Windows. ([@guillaume86])
 * Use Decoration API for gutter markers instead of the deprecated `EditorView::removeClassFromAllLines`. This drops the support for non-React editors. ([@yujinakayama])
+* Improve violation message mark-up. ([@yujinakayama])
 
 ## v0.17.0
 
@@ -195,3 +199,4 @@
 [@rochefort]: https://github.com/rochefort
 [@richrace]: https://github.com/richrace
 [@raviraa]: https://github.com/raviraa
+[@guillaume86]: https://github.com/guillaume86
