@@ -3,7 +3,6 @@ path = require 'path'
 fs = require 'fs'
 rimraf = require 'rimraf'
 CommandRunner = require '../lib/command-runner'
-child_process = require 'child_process'
 
 describe 'CommandRunner', ->
   workingDir = path.join(os.tmpdir(), 'atom-lint-spec')
@@ -15,11 +14,7 @@ describe 'CommandRunner', ->
   CommandRunner.supressError = true
 
   beforeEach ->
-    rimraf.sync(workingDir) if fs.existsSync(workingDir)
-    fs.mkdirSync(workingDir)
-    process.env.HOME = workingDir
-    process.chdir(workingDir)
-    atom.project.path = workingDir
+    atom.project.path = process.cwd()
 
   afterEach ->
     process.chdir(originalWorkingDirectory)
@@ -206,6 +201,24 @@ describe 'CommandRunner', ->
       run ['echo', '-n', 'foo'], (error, result) ->
         expect(result.env.PATH).toContain('/bin')
 
+    describe 'when atom.project.path is set', ->
+      beforeEach ->
+        rimraf.sync(workingDir) if fs.existsSync(workingDir)
+        fs.mkdirSync(workingDir)
+        atom.project.path = workingDir
+
+      it 'runs the command there', ->
+        run ['pwd'], (error, result) ->
+          expect(result.stdout.trim()).toBe(fs.realpathSync(atom.project.path))
+
+    describe 'when atom.project.path is not set', ->
+      beforeEach ->
+        atom.project.path = null
+
+      it 'runs the command in the current working directory', ->
+        run ['pwd'], (error, result) ->
+          expect(result.stdout.trim()).toBe(process.cwd())
+
     describe 'when the command run successfully', ->
       it 'passes stdout', ->
         run ['echo', '-n', 'foo'], (error, result) ->
@@ -253,69 +266,3 @@ describe 'CommandRunner', ->
       it 'passes ENOENT error', ->
         run ['non-existent-command'], (error, result) ->
           expect(error.code).toBe('ENOENT')
-
-    describe 'when environment variables of the login shell can be fetched', ->
-      it 'runs the command with the env', ->
-        process.env.PATH = '/usr/bin'
-        run ['perl', '-e', 'print $ENV{PATH}'], (error, result) ->
-          expect(result.stdout).not.toBe('/usr/bin')
-
-      it 'does not modify the env of the current process', ->
-        process.env.PATH = '/usr/bin'
-        run ['perl', '-e', 'print $ENV{PATH}'], (error, result) ->
-          expect(process.env.PATH).toBe('/usr/bin')
-
-    describe 'when environment variables of the login shell cannot be fetched', ->
-      it 'runs the command with the current env', ->
-        process.env.SHELL = ''
-        run ['perl', '-e', 'print $ENV{PATH}'], (error, result) ->
-          expect(result.stdout).toBe(process.env.PATH)
-
-  describe 'runWithEnv', ->
-    beforeEach ->
-      @orginalProjectPath = atom.project.path
-      @command = 'echo'
-      @flags = ['-n', 'foo   bar']
-
-      @child_process_obj =
-        stderr:
-          on: ->
-        stdout:
-          on: ->
-        spawn: -> this
-        on: ->
-
-      @commandRunner = new CommandRunner(['echo', '-n', 'foo   bar'])
-      @cb = ->
-        works = true
-
-    afterEach ->
-      atom.project.path = @orginalProjectPath
-
-    describe 'and echo is the command', ->
-      describe 'and the project exists', ->
-        it 'will add the CWD to the options', ->
-          spyOn(child_process, 'spawn').andReturn(@child_process_obj)
-          env = process.env
-          options =
-            env: env
-            cwd: @orginalProjectPath
-
-          @commandRunner.runWithEnv(env, @cb)
-          expect(child_process.spawn)
-            .toHaveBeenCalledWith(@command, @flags, options)
-
-      describe 'and the project does not exists', ->
-        beforeEach ->
-          atom.project.path = null
-
-        it 'won`t add the CWD to the options', ->
-          spyOn(child_process, 'spawn').andReturn(@child_process_obj)
-          env = process.env
-          options =
-            env: env
-            cwd: null
-
-          @commandRunner.runWithEnv(env, @cb)
-          expect(child_process.spawn)
-            .toHaveBeenCalledWith(@command, @flags, options)
