@@ -39,10 +39,15 @@ More linters will be supported in the future.
 $ apm install atom-lint
 ```
 
+If the current Atom has been launched via GUI (e.g. Dock/Finder on OS X),
+once quit and re-launch it from your shell with the `atom` command.
+This is required only once and important to handle `PATH` environment variable properly.
+See [Linter Executable Paths](#linter-executable-paths) for more details.
+
 ## Usage
 
-Your source will be linted on open and on save automatically,
-and the detected violations will be displayed as arrows in the editor.
+Your source will be linted on open and on save automatically.
+The detected violations will be displayed as arrows in the editor.
 You can see the detail of the violation by moving the cursor to it.
 
 ## Keymaps
@@ -117,9 +122,15 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
 * `atom-lint.LINTER.path`
 
 Normally you can omit this setting.
-By default Atom-Lint automatically refers the environment variable `PATH` of your login shell
-if it's `bash` or `zsh`, and then invokes the linter command.
-Thus, if you're using a language version manager such as [rbenv](https://github.com/sstephenson/rbenv),
+
+There's an issue that
+environment variables in Atom varies depending on whether it's launched via shell or GUI.
+If it's launched via GUI, it cannot get the environment variables set in your shell rc files like `PATH`.
+To handle this issue,
+when Atom is launched via shell, Atom-Lint automatically saves the environment variables,
+and from then on it will use the saved variables on linter invocation even if Atom is launched via GUI.
+
+If you're using a language version manager such as [rbenv](https://github.com/sstephenson/rbenv),
 linters need be installed in the default/global environment of the version manager
 (i.e. the environment where you opened a new terminal).
 If you need to use a non-default executable, use this setting.
