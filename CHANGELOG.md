@@ -2,6 +2,10 @@
 
 ## Development
 
+## v0.19.0
+
+* [#52](https://github.com/yujinakayama/atom-lint/issues/52): Redesign handling of environment variables to handle 100% CPU usage issue. ([@yujinakayama])
+
 ## v0.18.0
 
 * Add basic support for Windows. ([@guillaume86])
