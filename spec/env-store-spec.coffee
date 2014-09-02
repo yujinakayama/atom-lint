@@ -18,6 +18,15 @@ describe 'EnvStore', ->
         expect(EnvStore.get().PATH).toBe(process.env.PATH)
         expect(EnvStore.get().PATH).toBe(process.env.PATH)
 
+      describe 'and the current env is empty', ->
+        beforeEach ->
+          process.env = {}
+
+        it 'does not raise error', ->
+          expect ->
+            EnvStore.get()
+          .not.toThrow()
+
     describe 'when an env is cached on disk and new Atom instance is launched', ->
       cache = ->
         EnvStore.get()

@@ -30,7 +30,7 @@ module.exports =
     return cached if cached.SHLVL?
 
     if @getKeyCount(current) == @getKeyCount(cached)
-      if current.PATH.length >= cached.PATH.length
+      if current.PATH?.length >= cached.PATH?.length
         current
       else
         cached
