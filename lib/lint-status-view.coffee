@@ -12,9 +12,16 @@ class LintStatusView extends View
     @update()
 
     @subscribe @statusBarView, 'active-buffer-changed', =>
-      @unsubscribeFromLintRunner()
-      @subscribeToLintRunner()
-      @update()
+      # There's a possibility that this `active-buffer-changed` event is emitted
+      # before LintRunner is instantiated and attached to the active editor
+      # view. In that case we cannot subscribe to LintRunner and display the
+      # information on the status bar. So we wait a bit here for the
+      # instantiation of LintRunner.
+      # TODO: More robust solution.
+      process.nextTick =>
+        @unsubscribeFromLintRunner()
+        @subscribeToLintRunner()
+        @update()
 
   getActiveLintRunner: ->
     editorView = atom.workspaceView.getActiveView()

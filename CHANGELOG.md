@@ -2,6 +2,10 @@
 
 ## Development
 
+## v0.19.2
+
+* Fix an issue where no information is displayed on the status bar when a new editor tab is opened on Atom 0.125.0. ([@yujinakayama])
+
 ## v0.19.1
 
 * Fix an error when environment variable `PATH` is not set. ([@yujinakayama])
