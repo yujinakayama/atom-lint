@@ -52,11 +52,15 @@ class Flake8
     command = []
 
     userFlake8Path = atom.config.get('atom-lint.flake8.path')
+    userFlake8Config = atom.config.get('atom-lint.flake8.configPath')
 
     if userFlake8Path?
       command.push(userFlake8Path)
     else
       command.push('flake8')
+
+    if userFlake8Config?
+      command.push("--config=#{userFlake8Config}")
 
     command.push(@filePath)
     command
