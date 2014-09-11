@@ -99,6 +99,7 @@ You can configure Atom-Lint by editing `~/.atom/config.cson` (choose **Open Your
     'path': '/path/to/bin/erlc'
   'flake8':
     'path': '/path/to/bin/flake8'
+    'configPath': '/path/to/your/config' # Passed to flake 8 via --config option
   'gc':
     'path': '/path/to/bin/go'
   'hlint':

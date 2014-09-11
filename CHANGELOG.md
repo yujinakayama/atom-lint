@@ -2,6 +2,10 @@
 
 ## Development
 
+## v0.20.0
+
+* [#96](https://github.com/yujinakayama/atom-lint/pull/96): Allow specifying a config file for `flake8` via config `atom-lint.flake8.configPath`. ([@anaconda])
+
 ## v0.19.2
 
 * Fix an issue where no information is displayed on the status bar when a new editor tab is opened on Atom 0.125.0. ([@yujinakayama])
@@ -212,3 +216,4 @@
 [@richrace]: https://github.com/richrace
 [@raviraa]: https://github.com/raviraa
 [@guillaume86]: https://github.com/guillaume86
+[@anaconda]: https://github.com/anaconda
