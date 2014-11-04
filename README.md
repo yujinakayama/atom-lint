@@ -41,8 +41,18 @@ $ apm install atom-lint
 
 If the current Atom has been launched via GUI (e.g. Dock/Finder on OS X),
 once quit and re-launch it from your shell with the `atom` command.
-This is required only once and important to handle `PATH` environment variable properly.
+This is required only once and important to handle the `PATH` environment variable properly.
 See [Linter Executable Paths](#linter-executable-paths) for more details.
+
+### Workaround on OS X Yosemite
+
+On OS X Yosemite, the `PATH` environment variable in Atom is _not_ properly inherited from your login shell
+even if it's launched from the shell.
+To handle this issue, you need to run the following script in your shell once:
+
+```bash
+$ echo "process.env.PATH = '$PATH'" >> ~/.atom/init.coffee
+```
 
 ## Usage
 
