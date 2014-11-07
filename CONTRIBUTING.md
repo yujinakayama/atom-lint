@@ -8,8 +8,7 @@ Provide the following information:
 
 * Version of Atom (`atom --version`)
 * Version of atom-lint (`apm list | grep atom-lint`)
-* Whether using React editor (See **Use React Editor** checkbox in **Core Settings**)
-* Backtrace
+* Backtrace of the error if available
 
 ## Pull Requests
 
