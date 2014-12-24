@@ -33,8 +33,8 @@ module.exports =
       @injectLintStatusViewIntoStatusBar()
 
     Config ?= require './config'
-    @configSubscription = Config.observe (newValue, options) =>
-      return unless @shouldRefleshWithConfigChange(options.previous, newValue)
+    @configSubscription = Config.onDidChange (event) =>
+      return unless @shouldRefleshWithConfigChange(event.oldValue, event.newValue)
       for lintView in @lintViews
         lintView.refresh()
 

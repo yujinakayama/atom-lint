@@ -13,16 +13,16 @@ describe 'Config', ->
   afterEach ->
     atom.config.set('atom-lint', originalAtomLintConfig)
 
-  describe '.observe', ->
+  describe '.onDidChange', ->
     it 'returns an subscription object', ->
-      subscription = Config.observe 'foo', ->
+      subscription = Config.onDidChange 'foo', ->
       expect(subscription.off).not.toBeNull()
       subscription.off()
 
     it 'invokes the callback when the key path under `atom-lint` key is modified', ->
       invoked = false
 
-      subscription = Config.observe 'foo', ->
+      subscription = Config.onDidChange 'foo', ->
         invoked = true
         subscription.off()
 
@@ -35,7 +35,7 @@ describe 'Config', ->
       it 'invokes the callback when any key under `atom-lint` namespace is modified', ->
         invoked = false
 
-        subscription = Config.observe ->
+        subscription = Config.onDidChange ->
           invoked = true
           subscription.off()
 

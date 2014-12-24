@@ -21,7 +21,7 @@ class ViolationTooltip extends AnnotationTooltip
 
     @violation = options.violation
 
-    @configSubscription = Config.observe 'showViolationMetadata', (newValue) =>
+    @configSubscription = Config.onDidChange 'showViolationMetadata', (event) =>
       @switchMetadataDisplay()
 
   getDefaults: ->

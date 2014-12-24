@@ -16,13 +16,12 @@ class Config
     absoluteKeyPath = @getAbsoluteKeyPath(keyPath)
     atom.config.set(absoluteKeyPath, value)
 
-  @observe: (args...) ->
+  @onDidChange: (args...) ->
     callback = args.pop()
     keyPath = args
 
     absoluteKeyPath = @getAbsoluteKeyPath(keyPath...)
-    options = { callNow: false }
-    atom.config.observe(absoluteKeyPath, options, callback)
+    atom.config.onDidChange(absoluteKeyPath, callback)
 
   constructor: (@subKey) ->
 
