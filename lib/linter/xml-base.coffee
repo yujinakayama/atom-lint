@@ -25,7 +25,7 @@ class XmlBase
     throw new Error('::isValidExitCode must be overridden')
 
   createViolationsFromXml: (xml) ->
-    return [] unless xml? and xml.checkstyle.file?
+    return [] unless xml?.checkstyle?.file?
     for element in xml.checkstyle.file[0].error
       @createViolationFromElement(element)
 
