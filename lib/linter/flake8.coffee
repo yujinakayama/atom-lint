@@ -29,7 +29,9 @@ class Flake8
         for item in result.stdout.split '\n'
           if not item then continue
 
-          [file, line, col, msg] = (x.trim() for x in item.split ':')
+          elements = (x.trim() for x in item.split(':'))
+          continue unless elements.length == 4
+          [file, line, col, msg] = elements
 
           bufferPoint = new Point(parseInt(line) - 1, parseInt(col) - 1)
           bufferRange = new Range(bufferPoint, bufferPoint)
