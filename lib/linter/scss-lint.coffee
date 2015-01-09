@@ -14,11 +14,15 @@ class SCSSLint extends XmlBase
     command = []
 
     userSCSSLintPath = atom.config.get('atom-lint.scss-lint.path')
+    userSCSSLintConfig = atom.config.get('atom-lint.scss-lint.config')
 
     if userSCSSLintPath?
       command.push(userSCSSLintPath)
     else
       command.push('scss-lint')
+
+    if userSCSSLintConfig?
+      command.push('--config', userSCSSLintConfig)
 
     command.push('--format', 'XML')
     command.push(@filePath)

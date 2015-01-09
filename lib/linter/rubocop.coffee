@@ -59,11 +59,15 @@ class Rubocop
     command = []
 
     userRubocopPath = atom.config.get('atom-lint.rubocop.path')
+    userRubocopConfig = atom.config.get('atom-lint.rubocop.config')
 
     if userRubocopPath?
       command.push(userRubocopPath)
     else
       command.push('rubocop')
+
+    if userRubocopConfig?
+      command.push('--config', userRubocopConfig)
 
     command.push('--format', 'json', @filePath)
     command
