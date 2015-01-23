@@ -30,7 +30,9 @@ class Flake8
           if not item then continue
 
           elements = (x.trim() for x in item.split(':'))
-          continue unless elements.length == 4
+          if elements.length is 5
+            elements = elements.slice(0,3).concat([elements.slice(3,5).join(' ')])
+          continue unless elements.length is 4
           [file, line, col, msg] = elements
 
           bufferPoint = new Point(parseInt(line) - 1, parseInt(col) - 1)
