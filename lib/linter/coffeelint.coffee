@@ -10,11 +10,15 @@ class CoffeeLint extends XmlBase
     command = []
 
     userCoffeeLintPath = atom.config.get('atom-lint.coffeelint.path')
+    userCoffeeLintConfig = atom.config.get('atom-lint.coffeelint.config')
 
     if userCoffeeLintPath?
       command.push(userCoffeeLintPath)
     else
       command.push('coffeelint')
+
+    if userCoffeeLintConfig?
+      command.push('--file', userCoffeeLintConfig)
 
     command.push('--reporter')
     command.push('checkstyle')
