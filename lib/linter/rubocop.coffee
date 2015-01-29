@@ -11,13 +11,14 @@ class Rubocop
 
   run: (callback) ->
     @runRubocop (error, result) =>
-      if error?
-        callback(error)
-      else
-        file = result.files[0]
-        offenses = file.offenses || file.offences
-        violations = offenses.map(@createViolationFromOffense)
-        callback(null, violations)
+      callback(error) if error?
+
+      file = result.files[0]
+      return callback(null, []) unless file
+
+      offenses = file.offenses || file.offences
+      violations = offenses.map(@createViolationFromOffense)
+      callback(null, violations)
 
   createViolationFromOffense: (offense) ->
     location = offense.location
