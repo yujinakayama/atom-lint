@@ -65,5 +65,5 @@ class Rubocop
     else
       command.push('rubocop')
 
-    command.push('--format', 'json', @filePath)
+    command.push('--force-exclusion', '--format', 'json', @filePath)
     command
