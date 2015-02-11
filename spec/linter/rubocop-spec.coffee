@@ -17,10 +17,10 @@ describe 'Rubocop', ->
         it 'returns ["/path/to/rubocop", "--format", "json", "/path/to/target.rb"]', ->
           atom.config.set('atom-lint.rubocop.path', '/path/to/rubocop')
           expect(rubocop.buildCommand())
-            .toEqual(['/path/to/rubocop', '--format', 'json', '/path/to/target.rb'])
+            .toEqual(['/path/to/rubocop', '--force-exclusion', '--format', 'json', '/path/to/target.rb'])
 
       describe 'and config "atom-lint.rubocop.path" is not set', ->
         it 'returns ["rubocop", "--format", "json", "/path/to/target.rb"]', ->
           atom.config.set('atom-lint.rubocop.path', null)
           expect(rubocop.buildCommand())
-            .toEqual(['rubocop', '--format', 'json', '/path/to/target.rb'])
+            .toEqual(['rubocop', '--force-exclusion', '--format', 'json', '/path/to/target.rb'])
