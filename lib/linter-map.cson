@@ -2,6 +2,7 @@
 'source.ruby.rails': 'rubocop'
 'source.ruby.rspec': 'rubocop'
 'source.python': 'flake8'
+'source.cython': 'flake8'
 'source.js': 'jshint'
 'source.haskell': 'hlint'
 'text.tex.latex.haskell': 'hlint'
