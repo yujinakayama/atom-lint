@@ -12,8 +12,12 @@
 'source.puppet': 'puppet-lint'
 'source.shell': 'shellcheck'
 'source.c': 'clang'
-'source.c++': 'clang'
+'source.cpp': 'clang'
 'source.objc': 'clang'
-'source.objc++': 'clang'
+'source.objcpp': 'clang'
 'source.rust': 'rustc'
 'source.erlang': 'erlc'
+
+# For backwards compatibility with Atom versions < 0.166
+'source.c++': 'clang'
+'source.objc++': 'clang'
