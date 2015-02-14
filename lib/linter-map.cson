@@ -3,6 +3,8 @@
 'source.ruby.rspec': 'rubocop'
 'source.python': 'flake8'
 'source.js': 'jshint'
+'source.php': 'phpcs'
+'text.html.php': 'phpcs'
 'source.haskell': 'hlint'
 'text.tex.latex.haskell': 'hlint'
 'source.coffee': 'coffeelint'
