@@ -7,9 +7,9 @@
 
 # For more detailed documentation see
 # https://atom.io/docs/latest/advanced/keymaps
-'.workspace':
+'.atom-workspace':
   'ctrl-alt-l': 'lint:toggle'
   'ctrl-alt-m': 'lint:toggle-violation-metadata'
-'.editor':
+'.atom-text-editor':
   'ctrl-alt-[': 'lint:move-to-previous-violation'
   'ctrl-alt-]': 'lint:move-to-next-violation'
