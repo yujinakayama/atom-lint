@@ -39,7 +39,7 @@ class CommandRunner
 
   createChildProcess: (env) ->
     options = { env: env }
-    options.cwd = atom.project.path if atom.project.path
+    options.cwd = atom.project.getPaths()[0]
 
     if process.platform == 'win32'
       options.windowsVerbatimArguments = true
