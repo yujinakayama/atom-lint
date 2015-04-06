@@ -12,7 +12,7 @@ describe 'CommandRunner', ->
 
   beforeEach ->
     originalEnv = $.extend(true, {}, process.env)
-    atom.project.path = process.cwd()
+    atom.project.getPaths = -> [process.cwd()]
 
   afterEach ->
     process.env = originalEnv
@@ -46,19 +46,19 @@ describe 'CommandRunner', ->
       run ['echo', '-n', 'foo'], (error, result) ->
         expect(result.env.PATH).toContain('/bin')
 
-    describe 'when atom.project.path is set', ->
+    describe 'when atom.project.getPaths() returns at least one path', ->
       beforeEach ->
         rimraf.sync(workingDir) if fs.existsSync(workingDir)
         fs.mkdirSync(workingDir)
-        atom.project.path = workingDir
+        atom.project.getPaths = -> [workingDir]
 
       it 'runs the command there', ->
         run ['pwd'], (error, result) ->
-          expect(result.stdout.trim()).toBe(fs.realpathSync(atom.project.path))
+          expect(result.stdout.trim()).toBe(fs.realpathSync(workingDir))
 
-    describe 'when atom.project.path is not set', ->
+    describe 'when atom.project.getPaths() returns no paths', ->
       beforeEach ->
-        atom.project.path = null
+        atom.project.getPaths = -> []
 
       it 'runs the command in the current working directory', ->
         run ['pwd'], (error, result) ->
