@@ -7,8 +7,8 @@ class CommandRunner
 
   run: (callback) ->
     env = Object.create(EnvStore.get())
-    npm_bin = atom.project.getPaths().map (p) -> "#{path.join(p, 'node_modules', '.bin')}:"
-    env.PATH = "#{npm_bin.join()}#{env.PATH}"
+    npm_bin = atom.project.getPaths().map (p) -> path.join(p, 'node_modules', '.bin')
+    env.PATH = npm_bin.concat(env.PATH).join(':')
     @runWithEnv(env, callback)
 
   runWithEnv: (env, callback) ->
