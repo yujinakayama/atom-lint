@@ -17,3 +17,4 @@
 'source.objc++': 'clang'
 'source.rust': 'rustc'
 'source.erlang': 'erlc'
+'source.d': 'dscanner'

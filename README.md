@@ -26,6 +26,7 @@ More linters will be supported in the future.
   (Installation of [language-rust](https://atom.io/packages/language-rust) package is required)
 * [erlc](http://erlang.org/doc/man/erlc.html) for Erlang
   (Installation of [language-erlang](https://atom.io/packages/language-erlang) package is required)
+* [Dscanner](https://github.com/Hackerpilot/Dscanner) for [D](http://dlang.org) (Installation of [atom-dlang](https://atom.io/packages/atom-dlang) package is required)
 
 ## Features
 
